@@ -1,1 +1,3 @@
-User-agent: *\nAllow: /\n
+User-agent: *
+Allow: /
+Sitemap: https://daslatamcea.vercel.app/sitemap.xml

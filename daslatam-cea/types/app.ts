@@ -31,6 +31,8 @@ export type SearchApiResponse = {
   query: string;
   summary: SearchSummary;
   items: AnalyzedItem[];
+  source?: "api" | "html-fallback" | "browser-fallback";
+  warning?: string;
 };
 
 export type SavedSearchRow = {

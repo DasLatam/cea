@@ -6,11 +6,7 @@ type SearchSummaryProps = {
   data: SearchApiResponse | null;
 };
 
-export default function SearchSummary({
-  query,
-  loading = false,
-  data,
-}: SearchSummaryProps) {
+export default function SearchSummary({ query, loading = false, data }: SearchSummaryProps) {
   if (loading) {
     return (
       <section className="panel">
@@ -26,17 +22,23 @@ export default function SearchSummary({
       <section className="panel">
         <p className="section-label">Resumen</p>
         <h3>Listo para analizar</h3>
-        <p className="muted">
-          Ejecutá una búsqueda para ver métricas, insights y productos destacados.
-        </p>
+        <p className="muted">Ejecutá una búsqueda para ver métricas, insights y productos destacados.</p>
       </section>
     );
   }
+
+  const sourceLabel =
+    data.source === "html-fallback"
+      ? "Respaldo HTML público"
+      : data.source === "browser-fallback"
+        ? "Respaldo desde navegador"
+        : "API pública";
 
   return (
     <section className="panel">
       <p className="section-label">Resumen de búsqueda</p>
       <h3>{data.query || query}</h3>
+      <p className="muted small-text">Fuente utilizada: {sourceLabel}</p>
       <div className="summary-grid">
         <div>
           <span className="muted">Resultados analizados</span>

@@ -7,6 +7,7 @@ import SavedSearches from "@/components/dashboard/SavedSearches";
 import ResultsTable from "@/components/results/ResultsTable";
 import SearchBar from "@/components/search/SearchBar";
 import SearchSummary from "@/components/search/SearchSummary";
+import { analyzeSearchResults } from "@/lib/ml/analyzeSearchResults";
 import { getOrCreateSessionId } from "@/lib/utils/session";
 import type { SavedSearchRow, SearchApiResponse } from "@/types/app";
 
@@ -14,6 +15,28 @@ async function parseJsonSafely<T>(response: Response): Promise<T | null> {
   const text = await response.text();
   if (!text) return null;
   return JSON.parse(text) as T;
+}
+
+async function browserFallbackSearch(query: string): Promise<SearchApiResponse> {
+  const response = await fetch(
+    `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(query)}&limit=30`,
+    {
+      headers: {
+        Accept: "application/json, text/plain, */*",
+      },
+    }
+  );
+
+  const json = await parseJsonSafely<Record<string, unknown>>(response);
+  if (!response.ok || !json) {
+    throw new Error("La API pública de Mercado Libre también rechazó la búsqueda desde el navegador.");
+  }
+
+  return {
+    ...analyzeSearchResults(query, json),
+    source: "browser-fallback",
+    warning: "La búsqueda fue resuelta desde el navegador porque el servidor recibió un rechazo upstream.",
+  };
 }
 
 export default function DashboardClient() {
@@ -91,11 +114,26 @@ export default function DashboardClient() {
       const response = await fetch(`/api/ml/search?q=${encodeURIComponent(cleanQuery)}`);
       const json = await parseJsonSafely<SearchApiResponse & { error?: string; details?: string }>(response);
 
+      let payload: SearchApiResponse;
+
       if (!response.ok || !json) {
-        throw new Error(json?.details ? `${json?.error ?? "La búsqueda devolvió un error."} ${json.details}` : (json?.error ?? "La búsqueda devolvió un error."));
+        if (response.status === 502) {
+          payload = await browserFallbackSearch(cleanQuery);
+        } else {
+          throw new Error(
+            json?.details
+              ? `${json?.error ?? "La búsqueda devolvió un error."} ${json.details}`
+              : json?.error ?? "La búsqueda devolvió un error."
+          );
+        }
+      } else {
+        payload = json;
       }
 
-      setData(json);
+      setData(payload);
+      if (payload.warning) {
+        setSaveNotice(payload.warning);
+      }
 
       if (sessionId) {
         const saveResponse = await fetch("/api/searches", {
@@ -105,20 +143,18 @@ export default function DashboardClient() {
           },
           body: JSON.stringify({
             sessionId,
-            payload: json,
+            payload,
           }),
         });
 
         if (saveResponse.ok) {
-          setSaveNotice("Búsqueda guardada en Supabase.");
           await loadSavedSearches(sessionId);
         } else {
           const saveJson = await parseJsonSafely<{ error?: string; details?: string }>(saveResponse);
-          setSaveNotice(
-            `No se pudo guardar la búsqueda automáticamente${
-              saveJson?.details ? `: ${saveJson.details}` : "."
-            }`
-          );
+          setSaveNotice((prev) => {
+            const extra = `No se pudo guardar la búsqueda automáticamente${saveJson?.details ? `: ${saveJson.details}` : "."}`;
+            return prev ? `${prev} ${extra}` : extra;
+          });
         }
       }
     } catch (err) {
@@ -181,22 +217,12 @@ export default function DashboardClient() {
   return (
     <div className="dashboard-grid">
       <section className="main-panel">
-        <SearchBar
-          loading={loading}
-          defaultValue="kit para yoga"
-          onSearch={runSearch}
-        />
-
+        <SearchBar loading={loading} defaultValue="kit para yoga" onSearch={runSearch} />
 
         {error ? <div className="alert alert-error">{error}</div> : null}
         {saveNotice ? <div className="alert alert-info">{saveNotice}</div> : null}
 
-        <SearchSummary
-          query={query}
-          loading={loading}
-          data={data}
-        />
-
+        <SearchSummary query={query} loading={loading} data={data} />
         <KPIGrid data={data} />
 
         <ResultsTable
@@ -208,17 +234,8 @@ export default function DashboardClient() {
       </section>
 
       <aside className="side-panel">
-        <InsightsPanel
-          loading={loading}
-          summary={data?.summary ?? null}
-          topInsights={topInsights}
-        />
-
-        <SavedSearches
-          loading={loadingHistory}
-          items={savedSearches}
-          onRepeatSearch={runSearch}
-        />
+        <InsightsPanel loading={loading} summary={data?.summary ?? null} topInsights={topInsights} />
+        <SavedSearches loading={loadingHistory} items={savedSearches} onRepeatSearch={runSearch} />
       </aside>
     </div>
   );
