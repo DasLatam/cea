@@ -11,19 +11,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
-
   return (
     <html lang="es">
-      <head>
-        {adsenseClient ? (
-          <script
-            async
-            crossOrigin="anonymous"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-          />
-        ) : null}
-      </head>
       <body>
         <div className="app-shell">
           <header className="site-header">

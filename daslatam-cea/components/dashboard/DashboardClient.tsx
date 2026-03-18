@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import AdBanner from "@/components/ads/AdBanner";
 import InsightsPanel from "@/components/dashboard/InsightsPanel";
 import KPIGrid from "@/components/dashboard/KPIGrid";
 import SavedSearches from "@/components/dashboard/SavedSearches";
@@ -49,12 +48,15 @@ export default function DashboardClient() {
       const json = await parseJsonSafely<{ searches?: SavedSearchRow[]; error?: string }>(response);
 
       if (!response.ok) {
-        if (response.status !== 200) throw new Error(json?.error ?? "No se pudo cargar el historial.");
+        console.warn("Historial deshabilitado o no disponible.", json);
+        setSavedSearches([]);
+        return;
       }
 
       setSavedSearches(json?.searches ?? []);
     } catch (err) {
-      console.error(err);
+      console.warn("No se pudo cargar el historial.", err);
+      setSavedSearches([]);
     } finally {
       setLoadingHistory(false);
     }
@@ -64,9 +66,15 @@ export default function DashboardClient() {
     try {
       const response = await fetch(`/api/saved-items?sessionId=${encodeURIComponent(id)}`);
       const json = await parseJsonSafely<{ items?: string[] }>(response);
+      if (!response.ok) {
+        console.warn("Favoritos deshabilitados o no disponibles.", json);
+        setSavedItemIds([]);
+        return;
+      }
       setSavedItemIds(json?.items ?? []);
     } catch (err) {
-      console.error(err);
+      console.warn("No se pudieron cargar los favoritos.", err);
+      setSavedItemIds([]);
     }
   }
 
@@ -179,7 +187,6 @@ export default function DashboardClient() {
           onSearch={runSearch}
         />
 
-        <AdBanner />
 
         {error ? <div className="alert alert-error">{error}</div> : null}
         {saveNotice ? <div className="alert alert-info">{saveNotice}</div> : null}

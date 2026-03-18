@@ -8,9 +8,7 @@ async function fetchMercadoLibre(url: string) {
   const headers = {
     Accept: "application/json, text/plain, */*",
     "Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
-    Referer: "https://www.mercadolibre.com.ar/",
-    Origin: "https://www.mercadolibre.com.ar",
+    "User-Agent": "DAS-LATAM-CEA/1.0 (+https://daslatamcea.vercel.app)",
   };
 
   let response = await fetch(url, {
@@ -51,6 +49,7 @@ export async function GET(req: Request) {
       return NextResponse.json(
         {
           error: "Mercado Libre respondió con error.",
+          upstreamStatus: mlResponse.status,
           details: `HTTP ${mlResponse.status}${responseText ? ` · ${responseText.slice(0, 240)}` : ""}`,
         },
         { status: 502 }

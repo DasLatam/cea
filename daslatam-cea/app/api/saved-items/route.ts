@@ -25,7 +25,7 @@ export async function GET(req: Request) {
   }
 
   if (!hasSupabaseAdminConfig()) {
-    return NextResponse.json({ items: [], storageDisabled: true });
+    return NextResponse.json({ items: [], storageDisabled: true, details: "Falta SUPABASE_SERVICE_ROLE_KEY en el servidor." }, { status: 503 });
   }
 
   try {
@@ -47,7 +47,7 @@ export async function GET(req: Request) {
     const message =
       error instanceof Error ? error.message : "No se pudieron cargar los favoritos.";
 
-    return NextResponse.json({ items: [], storageDisabled: true, details: message });
+    return NextResponse.json({ items: [], storageDisabled: true, details: message }, { status: 500 });
   }
 }
 
