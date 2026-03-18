@@ -81,3 +81,11 @@ Ejecutar en Supabase:
 npm install
 npm run dev
 ```
+
+
+## Mercado Libre OAuth rápido
+
+- `MERCADOLIBRE_REDIRECT_URI` debe coincidir exactamente con la URL configurada en Developers.
+- Para iniciar la autorización, visitá `/api/meli/redirect`.
+- Mercado Libre volverá a esa misma URL con `?code=...` y el endpoint intentará intercambiar el code por tokens.
+- `app/api/meli/callback/route.ts` queda reservado para notificaciones/webhooks.
