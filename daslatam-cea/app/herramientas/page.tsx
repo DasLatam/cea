@@ -13,9 +13,8 @@ export default function HerramientasPage() {
         <p className="section-label">Herramienta de análisis</p>
         <h1>Buscar, puntuar y documentar oportunidades</h1>
         <p className="hero-summary">
-          Esta primera versión ya organiza demanda, score, alertas y guardado de búsquedas. También deja a la vista
-          qué módulos están realmente operativos y cuáles siguen en roadmap: Google, Meta, Alibaba, discovery
-          automático, costos completos y tracking histórico.
+          Esta versión ya separa dos cosas distintas: producto y conectores. El dashboard muestra score, insights, favoritos,
+          historial y calendario comercial; además expone con precisión qué módulos están realmente operativos y cuáles exigen credenciales externas para dejar de fallar.
         </p>
       </section>
       <DashboardClient />

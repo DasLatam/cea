@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ProviderStatus } from "@/types/app";
 
 type SourceStatusPanelProps = {
@@ -8,6 +9,7 @@ function labelForStatus(status: ProviderStatus["status"]) {
   if (status === "ok") return "Operativo";
   if (status === "warning") return "Parcial";
   if (status === "disabled") return "No usado";
+  if (status === "action") return "Acción requerida";
   return "Planificado";
 }
 
@@ -17,7 +19,7 @@ export default function SourceStatusPanel({ items }: SourceStatusPanelProps) {
       <div className="panel-header">
         <div>
           <p className="section-label">Fuentes y módulos</p>
-          <h3>Estado operativo</h3>
+          <h3>Estado operativo real</h3>
         </div>
       </div>
 
@@ -29,6 +31,13 @@ export default function SourceStatusPanel({ items }: SourceStatusPanelProps) {
               <span className="status-badge">{labelForStatus(item.status)}</span>
             </div>
             <p>{item.detail}</p>
+            {item.actionHref && item.actionLabel ? (
+              <div className="status-action-row">
+                <Link href={item.actionHref} className="ghost-link">
+                  {item.actionLabel}
+                </Link>
+              </div>
+            ) : null}
           </article>
         ))}
       </div>

@@ -98,7 +98,6 @@ export function analyzeSearchResults(
       flags,
       insights,
       raw: item,
-      isDemo: Boolean((item as { _seed?: boolean })._seed),
     };
   });
 

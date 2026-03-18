@@ -187,6 +187,12 @@ async function fetchHtml(url: string) {
       Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       "Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
       "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+      Referer: "https://www.google.com/",
+      "Cache-Control": "no-cache",
+      Pragma: "no-cache",
+      "Sec-Fetch-Dest": "document",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-Site": "none",
     },
     cache: "no-store",
   });
@@ -201,6 +207,8 @@ export async function fetchMercadoLibreHtmlFallback(query: string): Promise<Html
   const slug = normalizeQuery(query);
   const urls = [
     { strategy: "slug", url: `https://listado.mercadolibre.com.ar/${slug}` },
+    { strategy: "query-encoded", url: `https://listado.mercadolibre.com.ar/${encodeURIComponent(query).replace(/%20/g, "-")}` },
+    { strategy: "search-query", url: `https://listado.mercadolibre.com.ar/_CustId_0?as_word=${encodeURIComponent(query)}` },
     { strategy: "jm-search", url: `https://www.mercadolibre.com.ar/jm/search?as_word=${encodeURIComponent(query)}` },
     { strategy: "site-search", url: `https://listado.mercadolibre.com.ar/${slug}_NoIndex_True` },
   ];

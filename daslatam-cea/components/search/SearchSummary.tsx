@@ -27,12 +27,7 @@ export default function SearchSummary({ query, loading = false, data }: SearchSu
     );
   }
 
-  const sourceLabel =
-    data.source === "html-fallback"
-      ? "Respaldo HTML público"
-      : data.source === "seed-fallback"
-        ? "Semilla interna · demo"
-        : "API pública";
+  const sourceLabel = data.source === "html-fallback" ? "Respaldo HTML público" : data.source === "api" ? "API de Mercado Libre" : "Sin resultados";
 
   return (
     <section className="panel">
@@ -41,6 +36,9 @@ export default function SearchSummary({ query, loading = false, data }: SearchSu
       <p className="muted small-text">Fuente utilizada: {sourceLabel}</p>
       {data.diagnostics?.upstreamStatus ? (
         <p className="muted small-text">Último status upstream detectado: HTTP {data.diagnostics.upstreamStatus}</p>
+      ) : null}
+      {data.diagnostics?.upstreamDetails ? (
+        <p className="muted small-text">Detalle upstream: {data.diagnostics.upstreamDetails}</p>
       ) : null}
       <div className="summary-grid">
         <div>

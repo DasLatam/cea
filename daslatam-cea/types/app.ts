@@ -1,15 +1,18 @@
-export type SearchSource = "api" | "html-fallback" | "seed-fallback";
+export type SearchSource = "api" | "html-fallback";
 
 export type ProviderStatus = {
   key: string;
   label: string;
-  status: "ok" | "warning" | "disabled" | "planned";
+  status: "ok" | "warning" | "disabled" | "planned" | "action";
   detail: string;
+  actionLabel?: string;
+  actionHref?: string;
 };
 
 export type SearchDiagnostics = {
   upstreamStatus?: number;
   strategiesTried: string[];
+  upstreamDetails?: string;
 };
 
 export type AnalyzedItem = {
@@ -27,7 +30,6 @@ export type AnalyzedItem = {
   flags: string[];
   insights: string[];
   raw?: Record<string, unknown>;
-  isDemo?: boolean;
 };
 
 export type SearchSummary = {
@@ -61,4 +63,15 @@ export type SavedSearchRow = {
   median_price: number | null;
   warning_count: number | null;
   created_at: string;
+};
+
+export type OpportunityEvent = {
+  slug: string;
+  title: string;
+  category: string;
+  eventDate: string;
+  buyDate: string;
+  signal: "seasonal" | "sports" | "commercial";
+  rationale: string;
+  examples: string[];
 };

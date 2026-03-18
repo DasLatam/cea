@@ -9,7 +9,7 @@ const phases = [
     bullets: [
       "Búsqueda en Mercado Libre con score, insights y guardado básico.",
       "Biblioteca editorial y metodología pública.",
-      "Respaldo HTML y modo demo para no dejar la UX vacía.",
+      "Respaldo HTML y diagnóstico transparente cuando el upstream bloquea la búsqueda.",
     ],
   },
   {

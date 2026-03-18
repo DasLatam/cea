@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import InsightsPanel from "@/components/dashboard/InsightsPanel";
 import KPIGrid from "@/components/dashboard/KPIGrid";
+import OpportunityCalendar from "@/components/dashboard/OpportunityCalendar";
 import SavedSearches from "@/components/dashboard/SavedSearches";
 import SourceStatusPanel from "@/components/dashboard/SourceStatusPanel";
 import ResultsTable from "@/components/results/ResultsTable";
@@ -22,7 +23,15 @@ const defaultProviderStatuses: ProviderStatus[] = [
     key: "ml-api",
     label: "Mercado Libre · API pública",
     status: "warning",
-    detail: "La herramienta intenta primero la fuente pública principal.",
+    detail: "La app intentará primero la fuente pública principal.",
+  },
+  {
+    key: "ml-auth",
+    label: "Mercado Libre · token OAuth propio",
+    status: "action",
+    detail: "Configurá un token server-side para salir del bloqueo 403 del upstream público.",
+    actionLabel: "Ver conectores",
+    actionHref: "/fuentes",
   },
   {
     key: "ml-html",
@@ -31,30 +40,49 @@ const defaultProviderStatuses: ProviderStatus[] = [
     detail: "Si la API pública falla, el sistema intenta reconstruir la búsqueda desde HTML público.",
   },
   {
-    key: "seed-mode",
-    label: "Modo semilla interna",
-    status: "disabled",
-    detail: "Sólo se usa cuando las fuentes externas fallan para no dejar la UX vacía.",
-  },
-  {
     key: "google-signals",
     label: "Google · demanda externa",
-    status: "planned",
-    detail: "Pendiente de integración de tendencias o proveedor autenticado.",
+    status: "action",
+    detail: "Requiere credenciales de Google Ads o acceso aprobado al Trends API.",
+    actionLabel: "Ver conectores",
+    actionHref: "/fuentes",
   },
   {
     key: "meta-signals",
     label: "Meta · audiencia",
-    status: "planned",
-    detail: "Pendiente de integración de audiencia o import manual de campañas.",
+    status: "action",
+    detail: "Requiere Meta Marketing API y un ad account real.",
+    actionLabel: "Ver conectores",
+    actionHref: "/fuentes",
   },
   {
     key: "alibaba-signals",
     label: "Alibaba · sourcing",
-    status: "planned",
-    detail: "Pendiente de módulo de precio FOB, MOQ y confiabilidad de proveedor.",
+    status: "action",
+    detail: "Requiere conector propio o credenciales del proveedor de sourcing.",
+    actionLabel: "Ver conectores",
+    actionHref: "/fuentes",
   },
 ];
+
+function emptyData(query: string, providerStatuses: ProviderStatus[] = defaultProviderStatuses): SearchApiResponse {
+  return {
+    query,
+    summary: {
+      totalResults: 0,
+      totalAvailableFromML: 0,
+      medianPrice: 0,
+      averageSold: 0,
+      averageScore: 0,
+      topScore: 0,
+      highScoreCount: 0,
+      warningCount: 0,
+      averageStock: 0,
+    },
+    items: [],
+    providerStatuses,
+  };
+}
 
 export default function DashboardClient() {
   const [sessionId, setSessionId] = useState("");
@@ -115,9 +143,14 @@ export default function DashboardClient() {
 
     try {
       const response = await fetch(`/api/ml/search?q=${encodeURIComponent(cleanQuery)}`);
-      const json = await parseJsonSafely<SearchApiResponse & { error?: string; details?: string }>(response);
+      const json = await parseJsonSafely<SearchApiResponse & { error?: string; details?: string; providerStatuses?: ProviderStatus[] }>(response);
 
-      if (!response.ok || !json) {
+      if (!response.ok) {
+        const providerStatuses = json?.providerStatuses ?? defaultProviderStatuses;
+        setData({
+          ...emptyData(cleanQuery, providerStatuses),
+          diagnostics: json?.diagnostics,
+        });
         throw new Error(
           json?.details
             ? `${json?.error ?? "La búsqueda devolvió un error."} ${json.details}`
@@ -125,21 +158,21 @@ export default function DashboardClient() {
         );
       }
 
+      if (!json) {
+        setData(emptyData(cleanQuery));
+        throw new Error("La búsqueda no devolvió un payload JSON válido.");
+      }
+
       setData(json);
       if (json.warning) {
         setSaveNotice(json.warning);
       }
 
-      if (sessionId) {
+      if (sessionId && json.items.length > 0) {
         const saveResponse = await fetch("/api/searches", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            sessionId,
-            payload: json,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sessionId, payload: json }),
         });
 
         if (saveResponse.ok) {
@@ -149,14 +182,13 @@ export default function DashboardClient() {
     } catch (err) {
       const message = err instanceof Error ? err.message : "No se pudo completar la búsqueda.";
       setError(message);
-      setData(null);
     } finally {
       setLoading(false);
     }
   }
 
   async function toggleSavedItem(item: SearchApiResponse["items"][number]) {
-    if (!sessionId || item.isDemo) return;
+    if (!sessionId) return;
 
     const alreadySaved = savedItemIds.includes(item.id);
 
@@ -167,17 +199,12 @@ export default function DashboardClient() {
           { method: "DELETE" }
         );
 
-        if (!response.ok) {
-          throw new Error("No se pudo quitar el favorito.");
-        }
-
+        if (!response.ok) throw new Error("No se pudo quitar el favorito.");
         setSavedItemIds((prev) => prev.filter((id) => id !== item.id));
       } else {
         const response = await fetch("/api/saved-items", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             sessionId,
             item: {
@@ -191,10 +218,7 @@ export default function DashboardClient() {
           }),
         });
 
-        if (!response.ok) {
-          throw new Error("No se pudo guardar el favorito.");
-        }
-
+        if (!response.ok) throw new Error("No se pudo guardar el favorito.");
         setSavedItemIds((prev) => [...prev, item.id]);
       }
     } catch (err) {
@@ -214,13 +238,9 @@ export default function DashboardClient() {
         <SearchSummary query={query} loading={loading} data={data} />
         <KPIGrid data={data} />
         <SourceStatusPanel items={data?.providerStatuses ?? defaultProviderStatuses} />
+        <OpportunityCalendar />
 
-        <ResultsTable
-          items={data?.items ?? []}
-          loading={loading}
-          savedIds={savedItemIds}
-          onToggleSave={toggleSavedItem}
-        />
+        <ResultsTable items={data?.items ?? []} loading={loading} savedIds={savedItemIds} onToggleSave={toggleSavedItem} />
       </section>
 
       <aside className="side-panel">

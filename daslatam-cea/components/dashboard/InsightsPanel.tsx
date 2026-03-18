@@ -12,37 +12,38 @@ type InsightsPanelProps = {
   topInsights: InsightRow[];
 };
 
-export default function InsightsPanel({
-  loading = false,
-  summary,
-  topInsights,
-}: InsightsPanelProps) {
+export default function InsightsPanel({ loading = false, summary, topInsights }: InsightsPanelProps) {
   return (
-    <section className="panel sticky-panel">
-      <p className="section-label">Insights automáticos</p>
+    <section className="panel">
+      <div className="panel-header compact-gap">
+        <div>
+          <p className="section-label">Insights automáticos</p>
+          <h3>Lectura rápida de la búsqueda</h3>
+        </div>
+      </div>
 
       {loading ? (
         <p className="muted">Procesando insights…</p>
       ) : summary ? (
         <>
-          <div className="insight-highlight">
-            <strong>Ticket de referencia</strong>
-            <span>{formatARS(summary.medianPrice)}</span>
+          <div className="insight-grid">
+            <div className="insight-highlight">
+              <strong>Ticket de referencia</strong>
+              <span>{formatARS(summary.medianPrice)}</span>
+            </div>
+            <div className="insight-highlight">
+              <strong>Zona fuerte</strong>
+              <span>{summary.highScoreCount} oportunidades con score alto</span>
+            </div>
+            <div className="insight-highlight">
+              <strong>Advertencias</strong>
+              <span>{summary.warningCount} flags detectados</span>
+            </div>
           </div>
 
-          <div className="insight-highlight">
-            <strong>Zona fuerte</strong>
-            <span>{summary.highScoreCount} oportunidades con score alto</span>
-          </div>
-
-          <div className="insight-highlight">
-            <strong>Advertencias</strong>
-            <span>{summary.warningCount} flags detectados</span>
-          </div>
-
-          <ul className="insight-list">
+          <ul className="insight-list compact-insight-list">
             {topInsights.length > 0 ? (
-              topInsights.map((entry, index) => (
+              topInsights.slice(0, 8).map((entry, index) => (
                 <li key={`${entry.itemTitle}-${index}`}>
                   <strong>{entry.itemTitle}</strong>
                   <span>{entry.insight}</span>
@@ -56,9 +57,7 @@ export default function InsightsPanel({
           </ul>
         </>
       ) : (
-        <p className="muted">
-          Acá se consolida la interpretación automática de la búsqueda actual.
-        </p>
+        <p className="muted">Acá se consolida la interpretación automática de la búsqueda actual.</p>
       )}
     </section>
   );

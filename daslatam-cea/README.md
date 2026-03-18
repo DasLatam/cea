@@ -1,52 +1,66 @@
 # DAS LATAM CEA
 
-Plataforma web para analizar oportunidades de productos en Mercado Libre Argentina con una combinación de herramienta, scoring, contenido original y roadmap de producto.
+Plataforma web para analizar oportunidades de productos en Mercado Libre Argentina con una combinación de herramienta, scoring, contenido original, calendario comercial y módulos externos por credenciales.
 
 ## Estado de esta entrega
 
-Esta versión corrige dos problemas estructurales de la iteración anterior:
+Esta versión corrige tres problemas de base:
 
-1. deja de hacer fallback directo del navegador a `api.mercadolibre.com`, que generaba `403` por restricciones del lado cliente;
-2. deja explícito el estado real de cada fuente y mantiene la UX operativa con un modo demo interno cuando las fuentes externas fallan.
+1. elimina el modo demo como fallback de resultados;
+2. deja explícito cuándo Mercado Libre está bloqueando el upstream con `403`;
+3. separa claramente UX, scoring y contenido de la capa de conectores externos.
 
-## Qué funciona
+## Qué funciona hoy
 
 - Home editorial con contenido original
 - Herramienta de búsqueda con score e insights
 - Guardado de búsquedas y favoritos en Supabase si está configurado
 - Guías, categorías, análisis, discovery editorial, roadmap y página de fuentes
 - Popup anti-adblock por detección de extensiones que bloquean anuncios
-- API de búsqueda con tres capas:
+- Calendario de oportunidades con alerta de compra 60 días antes
+- API de búsqueda con este orden:
   - Mercado Libre API pública
+  - Mercado Libre con token OAuth propio del backend
   - reconstrucción desde HTML público
-  - semilla interna demo claramente señalada
 
-## Qué sigue en roadmap
+## Qué no debe marcarse como operativo sin credenciales
 
 - Google demand signals
 - Meta audience signals
 - Alibaba sourcing
-- Discovery automático
-- Tracking histórico completo
-- Calculadora financiera avanzada
-- Newsletter
 
 ## Variables de entorno
 
 Copiá `.env.example` a `.env.local`.
 
-### Necesarias
+### Base mínima
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `NEXT_PUBLIC_SITE_URL`
 
-### Opcionales
+### Mercado Libre
 
-- `NEXT_PUBLIC_ADSENSE_CLIENT`
-- `RESEND_API_KEY`
-- `EMAIL_FROM`
+- `MERCADOLIBRE_ACCESS_TOKEN`
+
+### Google Ads
+
+- `GOOGLE_ADS_DEVELOPER_TOKEN`
+- `GOOGLE_ADS_CLIENT_ID`
+- `GOOGLE_ADS_CLIENT_SECRET`
+- `GOOGLE_ADS_REFRESH_TOKEN`
+- `GOOGLE_ADS_CUSTOMER_ID`
+
+### Meta
+
+- `META_ACCESS_TOKEN`
+- `META_AD_ACCOUNT_ID`
+
+### Alibaba
+
+- `ALIBABA_APP_KEY`
+- `ALIBABA_APP_SECRET`
 
 ## Base de datos
 
@@ -56,9 +70,10 @@ Ejecutar en Supabase:
 
 ## Notas importantes
 
-- Si Mercado Libre bloquea la consulta pública desde Vercel, la app intentará HTML público.
-- Si tampoco hay datos suficientes, la UI no queda vacía: entra en modo semilla interna demo.
-- Los ítems demo no se guardan como favoritos para no mezclar datos reales con simulados.
+- Si Mercado Libre responde `403` desde el upstream, la app ya no mostrará resultados demo.
+- La salida robusta para ese bloqueo es un token OAuth propio de Mercado Libre en backend.
+- Google Trends API no debe darse por hecho: el acceso oficial sigue siendo limitado y, para datos históricos accionables, conviene pensar Google Ads API.
+- Meta reach estimate requiere Marketing API y ad account real.
 
 ## Desarrollo
 

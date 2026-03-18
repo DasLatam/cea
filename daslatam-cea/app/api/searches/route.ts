@@ -54,7 +54,7 @@ export async function POST(req: Request) {
     const supabase = getSupabaseAdmin();
 
     const itemsToUpsert = payload.items
-      .filter((item) => !item.isDemo)
+      
       .map((item) => ({
         id: item.id,
         title: item.title,
@@ -94,7 +94,7 @@ export async function POST(req: Request) {
     }
 
     const snapshots = payload.items
-      .filter((item) => !item.isDemo)
+      
       .map((item) => ({
         search_run_id: searchRun.id,
         item_id: item.id,

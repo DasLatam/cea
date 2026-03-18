@@ -13,7 +13,6 @@ type SaveItemBody = {
     thumbnail?: string | null;
     categoryId?: string | null;
     categoryName?: string | null;
-    isDemo?: boolean;
   };
 };
 
@@ -51,10 +50,6 @@ export async function POST(req: Request) {
 
     if (!sessionId || !item?.id || !item.title || !item.link) {
       return NextResponse.json({ error: "Faltan sessionId o datos del ítem." }, { status: 400 });
-    }
-
-    if (item.isDemo) {
-      return NextResponse.json({ error: "Los ítems demo no se guardan." }, { status: 400 });
     }
 
     if (!hasSupabaseAdminConfig()) {
