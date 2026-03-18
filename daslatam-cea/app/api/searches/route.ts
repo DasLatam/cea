@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { getSupabaseAdmin, hasSupabaseAdminConfig } from "@/lib/supabase/server";
 import type { SearchApiResponse } from "@/types/app";
 
 export const runtime = "nodejs";
@@ -16,6 +16,10 @@ export async function GET(req: Request) {
 
   if (!sessionId) {
     return NextResponse.json({ searches: [] });
+  }
+
+  if (!hasSupabaseAdminConfig()) {
+    return NextResponse.json({ searches: [], storageDisabled: true });
   }
 
   try {
@@ -36,10 +40,7 @@ export async function GET(req: Request) {
     const message =
       error instanceof Error ? error.message : "No se pudieron cargar las búsquedas guardadas.";
 
-    return NextResponse.json(
-      { error: "No se pudieron cargar las búsquedas guardadas.", details: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ searches: [], storageDisabled: true, details: message });
   }
 }
 
@@ -53,6 +54,13 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { error: "Faltan sessionId o payload." },
         { status: 400 }
+      );
+    }
+
+    if (!hasSupabaseAdminConfig()) {
+      return NextResponse.json(
+        { error: "Persistencia deshabilitada.", details: "Falta configurar Supabase en el servidor." },
+        { status: 503 }
       );
     }
 
@@ -127,11 +135,9 @@ export async function POST(req: Request) {
     const message =
       error instanceof Error ? error.message : "No se pudo guardar la búsqueda.";
 
-    const status = message.includes("Supabase") ? 503 : 500;
-
     return NextResponse.json(
       { error: "No se pudo guardar la búsqueda.", details: message },
-      { status }
+      { status: 500 }
     );
   }
 }

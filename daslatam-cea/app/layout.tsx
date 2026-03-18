@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -16,6 +15,15 @@ export default function RootLayout({
 
   return (
     <html lang="es">
+      <head>
+        {adsenseClient ? (
+          <script
+            async
+            crossOrigin="anonymous"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+          />
+        ) : null}
+      </head>
       <body>
         <div className="app-shell">
           <header className="site-header">
@@ -35,16 +43,6 @@ export default function RootLayout({
             <span>comercioelectronico@daslatam.org</span>
           </footer>
         </div>
-
-        {adsenseClient ? (
-          <Script
-            id="adsense-script"
-            strategy="afterInteractive"
-            async
-            crossOrigin="anonymous"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-          />
-        ) : null}
       </body>
     </html>
   );

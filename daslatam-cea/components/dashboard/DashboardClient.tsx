@@ -49,7 +49,7 @@ export default function DashboardClient() {
       const json = await parseJsonSafely<{ searches?: SavedSearchRow[]; error?: string }>(response);
 
       if (!response.ok) {
-        throw new Error(json?.error ?? "No se pudo cargar el historial.");
+        if (response.status !== 200) throw new Error(json?.error ?? "No se pudo cargar el historial.");
       }
 
       setSavedSearches(json?.searches ?? []);
@@ -84,7 +84,7 @@ export default function DashboardClient() {
       const json = await parseJsonSafely<SearchApiResponse & { error?: string; details?: string }>(response);
 
       if (!response.ok || !json) {
-        throw new Error(json?.error ?? "La búsqueda devolvió un error.");
+        throw new Error(json?.details ? `${json?.error ?? "La búsqueda devolvió un error."} ${json.details}` : (json?.error ?? "La búsqueda devolvió un error."));
       }
 
       setData(json);

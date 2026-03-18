@@ -12,16 +12,26 @@ create table if not exists public.items (
 
 create table if not exists public.search_runs (
   id uuid primary key default gen_random_uuid(),
-  session_id text not null,
-  query text not null,
-  result_count integer not null default 0,
-  median_price numeric(14,2) default 0,
-  avg_score numeric(6,2) default 0,
-  top_score integer default 0,
-  warning_count integer default 0,
-  summary jsonb default '{}'::jsonb,
+  query text,
   created_at timestamptz default now()
 );
+
+alter table public.search_runs
+  add column if not exists session_id text,
+  add column if not exists result_count integer not null default 0,
+  add column if not exists median_price numeric(14,2) default 0,
+  add column if not exists avg_score numeric(6,2) default 0,
+  add column if not exists top_score integer default 0,
+  add column if not exists warning_count integer default 0,
+  add column if not exists summary jsonb default '{}'::jsonb;
+
+update public.search_runs
+set session_id = coalesce(session_id, 'legacy-' || id::text)
+where session_id is null;
+
+alter table public.search_runs
+  alter column session_id set not null,
+  alter column query set not null;
 
 create table if not exists public.item_snapshots (
   id uuid primary key default gen_random_uuid(),
@@ -41,11 +51,22 @@ create table if not exists public.item_snapshots (
 
 create table if not exists public.saved_items (
   id uuid primary key default gen_random_uuid(),
-  session_id text not null,
   item_id text not null references public.items(id) on delete cascade,
-  created_at timestamptz default now(),
-  unique (session_id, item_id)
+  created_at timestamptz default now()
 );
+
+alter table public.saved_items
+  add column if not exists session_id text;
+
+update public.saved_items
+set session_id = coalesce(session_id, 'legacy-' || id::text)
+where session_id is null;
+
+alter table public.saved_items
+  alter column session_id set not null;
+
+create unique index if not exists uq_saved_items_session_item
+  on public.saved_items(session_id, item_id);
 
 create index if not exists idx_search_runs_session_created
   on public.search_runs(session_id, created_at desc);

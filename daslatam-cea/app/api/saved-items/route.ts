@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { getSupabaseAdmin, hasSupabaseAdminConfig } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -24,6 +24,10 @@ export async function GET(req: Request) {
     return NextResponse.json({ items: [] });
   }
 
+  if (!hasSupabaseAdminConfig()) {
+    return NextResponse.json({ items: [], storageDisabled: true });
+  }
+
   try {
     const supabase = getSupabaseAdmin();
     const { data, error } = await supabase
@@ -43,10 +47,7 @@ export async function GET(req: Request) {
     const message =
       error instanceof Error ? error.message : "No se pudieron cargar los favoritos.";
 
-    return NextResponse.json(
-      { error: "No se pudieron cargar los favoritos.", details: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ items: [], storageDisabled: true, details: message });
   }
 }
 
@@ -60,6 +61,13 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { error: "Faltan sessionId o datos del ítem." },
         { status: 400 }
+      );
+    }
+
+    if (!hasSupabaseAdminConfig()) {
+      return NextResponse.json(
+        { error: "Persistencia deshabilitada.", details: "Falta configurar Supabase en el servidor." },
+        { status: 503 }
       );
     }
 
@@ -120,6 +128,13 @@ export async function DELETE(req: Request) {
       return NextResponse.json(
         { error: "Faltan sessionId o itemId." },
         { status: 400 }
+      );
+    }
+
+    if (!hasSupabaseAdminConfig()) {
+      return NextResponse.json(
+        { error: "Persistencia deshabilitada.", details: "Falta configurar Supabase en el servidor." },
+        { status: 503 }
       );
     }
 
