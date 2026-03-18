@@ -4,12 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import InsightsPanel from "@/components/dashboard/InsightsPanel";
 import KPIGrid from "@/components/dashboard/KPIGrid";
 import SavedSearches from "@/components/dashboard/SavedSearches";
+import SourceStatusPanel from "@/components/dashboard/SourceStatusPanel";
 import ResultsTable from "@/components/results/ResultsTable";
 import SearchBar from "@/components/search/SearchBar";
 import SearchSummary from "@/components/search/SearchSummary";
-import { analyzeSearchResults } from "@/lib/ml/analyzeSearchResults";
 import { getOrCreateSessionId } from "@/lib/utils/session";
-import type { SavedSearchRow, SearchApiResponse } from "@/types/app";
+import type { ProviderStatus, SavedSearchRow, SearchApiResponse } from "@/types/app";
 
 async function parseJsonSafely<T>(response: Response): Promise<T | null> {
   const text = await response.text();
@@ -17,27 +17,44 @@ async function parseJsonSafely<T>(response: Response): Promise<T | null> {
   return JSON.parse(text) as T;
 }
 
-async function browserFallbackSearch(query: string): Promise<SearchApiResponse> {
-  const response = await fetch(
-    `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(query)}&limit=30`,
-    {
-      headers: {
-        Accept: "application/json, text/plain, */*",
-      },
-    }
-  );
-
-  const json = await parseJsonSafely<Record<string, unknown>>(response);
-  if (!response.ok || !json) {
-    throw new Error("La API pública de Mercado Libre también rechazó la búsqueda desde el navegador.");
-  }
-
-  return {
-    ...analyzeSearchResults(query, json),
-    source: "browser-fallback",
-    warning: "La búsqueda fue resuelta desde el navegador porque el servidor recibió un rechazo upstream.",
-  };
-}
+const defaultProviderStatuses: ProviderStatus[] = [
+  {
+    key: "ml-api",
+    label: "Mercado Libre · API pública",
+    status: "warning",
+    detail: "La herramienta intenta primero la fuente pública principal.",
+  },
+  {
+    key: "ml-html",
+    label: "Mercado Libre · respaldo HTML",
+    status: "warning",
+    detail: "Si la API pública falla, el sistema intenta reconstruir la búsqueda desde HTML público.",
+  },
+  {
+    key: "seed-mode",
+    label: "Modo semilla interna",
+    status: "disabled",
+    detail: "Sólo se usa cuando las fuentes externas fallan para no dejar la UX vacía.",
+  },
+  {
+    key: "google-signals",
+    label: "Google · demanda externa",
+    status: "planned",
+    detail: "Pendiente de integración de tendencias o proveedor autenticado.",
+  },
+  {
+    key: "meta-signals",
+    label: "Meta · audiencia",
+    status: "planned",
+    detail: "Pendiente de integración de audiencia o import manual de campañas.",
+  },
+  {
+    key: "alibaba-signals",
+    label: "Alibaba · sourcing",
+    status: "planned",
+    detail: "Pendiente de módulo de precio FOB, MOQ y confiabilidad de proveedor.",
+  },
+];
 
 export default function DashboardClient() {
   const [sessionId, setSessionId] = useState("");
@@ -68,17 +85,9 @@ export default function DashboardClient() {
     setLoadingHistory(true);
     try {
       const response = await fetch(`/api/searches?sessionId=${encodeURIComponent(id)}`);
-      const json = await parseJsonSafely<{ searches?: SavedSearchRow[]; error?: string }>(response);
-
-      if (!response.ok) {
-        console.warn("Historial deshabilitado o no disponible.", json);
-        setSavedSearches([]);
-        return;
-      }
-
+      const json = await parseJsonSafely<{ searches?: SavedSearchRow[] }>(response);
       setSavedSearches(json?.searches ?? []);
-    } catch (err) {
-      console.warn("No se pudo cargar el historial.", err);
+    } catch {
       setSavedSearches([]);
     } finally {
       setLoadingHistory(false);
@@ -89,14 +98,8 @@ export default function DashboardClient() {
     try {
       const response = await fetch(`/api/saved-items?sessionId=${encodeURIComponent(id)}`);
       const json = await parseJsonSafely<{ items?: string[] }>(response);
-      if (!response.ok) {
-        console.warn("Favoritos deshabilitados o no disponibles.", json);
-        setSavedItemIds([]);
-        return;
-      }
       setSavedItemIds(json?.items ?? []);
-    } catch (err) {
-      console.warn("No se pudieron cargar los favoritos.", err);
+    } catch {
       setSavedItemIds([]);
     }
   }
@@ -114,25 +117,17 @@ export default function DashboardClient() {
       const response = await fetch(`/api/ml/search?q=${encodeURIComponent(cleanQuery)}`);
       const json = await parseJsonSafely<SearchApiResponse & { error?: string; details?: string }>(response);
 
-      let payload: SearchApiResponse;
-
       if (!response.ok || !json) {
-        if (response.status === 502) {
-          payload = await browserFallbackSearch(cleanQuery);
-        } else {
-          throw new Error(
-            json?.details
-              ? `${json?.error ?? "La búsqueda devolvió un error."} ${json.details}`
-              : json?.error ?? "La búsqueda devolvió un error."
-          );
-        }
-      } else {
-        payload = json;
+        throw new Error(
+          json?.details
+            ? `${json?.error ?? "La búsqueda devolvió un error."} ${json.details}`
+            : json?.error ?? "La búsqueda devolvió un error."
+        );
       }
 
-      setData(payload);
-      if (payload.warning) {
-        setSaveNotice(payload.warning);
+      setData(json);
+      if (json.warning) {
+        setSaveNotice(json.warning);
       }
 
       if (sessionId) {
@@ -143,18 +138,12 @@ export default function DashboardClient() {
           },
           body: JSON.stringify({
             sessionId,
-            payload,
+            payload: json,
           }),
         });
 
         if (saveResponse.ok) {
           await loadSavedSearches(sessionId);
-        } else {
-          const saveJson = await parseJsonSafely<{ error?: string; details?: string }>(saveResponse);
-          setSaveNotice((prev) => {
-            const extra = `No se pudo guardar la búsqueda automáticamente${saveJson?.details ? `: ${saveJson.details}` : "."}`;
-            return prev ? `${prev} ${extra}` : extra;
-          });
         }
       }
     } catch (err) {
@@ -167,7 +156,7 @@ export default function DashboardClient() {
   }
 
   async function toggleSavedItem(item: SearchApiResponse["items"][number]) {
-    if (!sessionId) return;
+    if (!sessionId || item.isDemo) return;
 
     const alreadySaved = savedItemIds.includes(item.id);
 
@@ -224,6 +213,7 @@ export default function DashboardClient() {
 
         <SearchSummary query={query} loading={loading} data={data} />
         <KPIGrid data={data} />
+        <SourceStatusPanel items={data?.providerStatuses ?? defaultProviderStatuses} />
 
         <ResultsTable
           items={data?.items ?? []}

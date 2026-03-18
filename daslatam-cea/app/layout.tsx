@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s | DAS LATAM CEA",
   },
   description:
-    "Herramientas y contenido original para analizar oportunidades de productos en Mercado Libre Argentina.",
+    "Plataforma de inteligencia comercial para Mercado Libre Argentina: scanner, scoring, contenido original y roadmap de producto.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -19,22 +19,24 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <AntiAdBlockGate />
         <div className="app-shell">
-          <header className="site-header">
-            <div className="brand-row">
-              <Link href="/" className="brand-block">
-                <span className="brand-badge">DAS LATAM</span>
-                <div>
-                  <h1>DAS LATAM CEA</h1>
-                  <p className="subtitle">
-                    Comercio Electrónico en Argentina · análisis, metodología y herramientas para Mercado Libre
-                  </p>
-                </div>
-              </Link>
-              <Link href="/herramientas" className="primary-button inline-button">
-                Abrir herramienta
-              </Link>
+          <header className="site-header-shell">
+            <div className="site-header">
+              <div className="brand-row">
+                <Link href="/" className="brand-block">
+                  <span className="brand-badge">DAS LATAM</span>
+                  <div>
+                    <h1>DAS LATAM CEA</h1>
+                    <p className="subtitle">
+                      Comercio Electrónico en Argentina · inteligencia comercial aplicada a Mercado Libre
+                    </p>
+                  </div>
+                </Link>
+                <Link href="/herramientas" className="primary-button inline-button header-cta">
+                  Abrir herramienta
+                </Link>
+              </div>
+              <SiteNav />
             </div>
-            <SiteNav />
           </header>
 
           <main className="site-main">{children}</main>
@@ -43,11 +45,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <div>
               <strong>DAS LATAM CEA</strong>
               <p className="muted footer-copy">
-                Contenido original, guías operativas y herramientas para evaluar oportunidades de venta en Mercado Libre Argentina.
+                Plataforma de inteligencia comercial, contenido original y herramientas para analizar oportunidades de venta en Argentina.
               </p>
             </div>
             <div className="footer-links">
               <Link href="/about">Sobre DAS LATAM</Link>
+              <Link href="/fuentes">Fuentes</Link>
               <Link href="/contacto">Contacto</Link>
               <Link href="/privacidad">Privacidad</Link>
               <Link href="/terminos">Términos</Link>

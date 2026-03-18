@@ -14,12 +14,8 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const sessionId = searchParams.get("sessionId")?.trim();
 
-  if (!sessionId) {
-    return NextResponse.json({ searches: [] });
-  }
-
-  if (!hasSupabaseAdminConfig()) {
-    return NextResponse.json({ searches: [], storageDisabled: true, details: "Falta SUPABASE_SERVICE_ROLE_KEY en el servidor." }, { status: 503 });
+  if (!sessionId || !hasSupabaseAdminConfig()) {
+    return NextResponse.json({ searches: [], storageDisabled: true });
   }
 
   try {
@@ -32,15 +28,12 @@ export async function GET(req: Request) {
       .limit(12);
 
     if (error) {
-      throw error;
+      return NextResponse.json({ searches: [], storageDisabled: true, details: error.message });
     }
 
     return NextResponse.json({ searches: data ?? [] });
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "No se pudieron cargar las búsquedas guardadas.";
-
-    return NextResponse.json({ searches: [], storageDisabled: true, details: message }, { status: 500 });
+  } catch {
+    return NextResponse.json({ searches: [], storageDisabled: true });
   }
 }
 
@@ -51,36 +44,29 @@ export async function POST(req: Request) {
     const payload = body.payload;
 
     if (!sessionId || !payload) {
-      return NextResponse.json(
-        { error: "Faltan sessionId o payload." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Faltan sessionId o payload." }, { status: 400 });
     }
 
     if (!hasSupabaseAdminConfig()) {
-      return NextResponse.json(
-        { error: "Persistencia deshabilitada.", details: "Falta configurar Supabase en el servidor." },
-        { status: 503 }
-      );
+      return NextResponse.json({ error: "Persistencia deshabilitada." }, { status: 503 });
     }
 
     const supabase = getSupabaseAdmin();
 
-    const itemsToUpsert = payload.items.map((item) => ({
-      id: item.id,
-      title: item.title,
-      category_id: item.categoryId ?? null,
-      category_name: item.categoryName ?? null,
-      permalink: item.link,
-      thumbnail: item.thumbnail ?? null,
-      last_seen_at: new Date().toISOString(),
-    }));
+    const itemsToUpsert = payload.items
+      .filter((item) => !item.isDemo)
+      .map((item) => ({
+        id: item.id,
+        title: item.title,
+        category_id: item.categoryId ?? null,
+        category_name: item.categoryName ?? null,
+        permalink: item.link,
+        thumbnail: item.thumbnail ?? null,
+        last_seen_at: new Date().toISOString(),
+      }));
 
     if (itemsToUpsert.length > 0) {
-      const { error: itemsError } = await supabase
-        .from("items")
-        .upsert(itemsToUpsert, { onConflict: "id" });
-
+      const { error: itemsError } = await supabase.from("items").upsert(itemsToUpsert, { onConflict: "id" });
       if (itemsError) {
         throw itemsError;
       }
@@ -107,24 +93,23 @@ export async function POST(req: Request) {
       throw searchRunError ?? new Error("No se pudo crear el search run.");
     }
 
-    const snapshots = payload.items.map((item) => ({
-      search_run_id: searchRun.id,
-      item_id: item.id,
-      price: item.price,
-      sold: item.sold,
-      stock: item.stock,
-      reviews: item.reviews,
-      score: item.score,
-      flags: item.flags,
-      insights: item.insights,
-      raw: item.raw ?? {},
-    }));
+    const snapshots = payload.items
+      .filter((item) => !item.isDemo)
+      .map((item) => ({
+        search_run_id: searchRun.id,
+        item_id: item.id,
+        price: item.price,
+        sold: item.sold,
+        stock: item.stock,
+        reviews: item.reviews,
+        score: item.score,
+        flags: item.flags,
+        insights: item.insights,
+        raw: item.raw ?? {},
+      }));
 
     if (snapshots.length > 0) {
-      const { error: snapshotsError } = await supabase
-        .from("item_snapshots")
-        .insert(snapshots);
-
+      const { error: snapshotsError } = await supabase.from("item_snapshots").insert(snapshots);
       if (snapshotsError) {
         throw snapshotsError;
       }
@@ -132,12 +117,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ saved: true, searchRunId: searchRun.id });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "No se pudo guardar la búsqueda.";
-
-    return NextResponse.json(
-      { error: "No se pudo guardar la búsqueda.", details: message },
-      { status: 500 }
-    );
+    const message = error instanceof Error ? error.message : "No se pudo guardar la búsqueda.";
+    return NextResponse.json({ error: "No se pudo guardar la búsqueda.", details: message }, { status: 500 });
   }
 }

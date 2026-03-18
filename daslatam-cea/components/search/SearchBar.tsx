@@ -8,11 +8,7 @@ type SearchBarProps = {
   defaultValue?: string;
 };
 
-export default function SearchBar({
-  onSearch,
-  loading = false,
-  defaultValue = "",
-}: SearchBarProps) {
+export default function SearchBar({ onSearch, loading = false, defaultValue = "" }: SearchBarProps) {
   const [query, setQuery] = useState(defaultValue);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -26,7 +22,8 @@ export default function SearchBar({
         <p className="section-label">Explorador de productos</p>
         <h2>Buscar oportunidades en Mercado Libre Argentina</h2>
         <p className="muted">
-          Analiza demanda, precio, rotación estimada, riesgos y score general.
+          El sistema intenta primero la API pública, luego una reconstrucción desde HTML público y, si todo falla,
+          mantiene operativa la experiencia con un modo demo claramente señalado.
         </p>
       </div>
 
@@ -35,7 +32,7 @@ export default function SearchBar({
           className="search-input"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Ej.: kit para yoga, freidora de aire, moldes de silicona"
+          placeholder="Ej.: kit para yoga, freidora de aire, organizador de cocina"
           aria-label="Buscar producto"
         />
         <button className="primary-button" disabled={loading} type="submit">

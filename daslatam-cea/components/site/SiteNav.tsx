@@ -5,10 +5,11 @@ const links = [
   { href: "/herramientas", label: "Herramientas" },
   { href: "/como-funciona", label: "Cómo funciona" },
   { href: "/metodologia", label: "Metodología" },
+  { href: "/discovery", label: "Discovery" },
+  { href: "/roadmap", label: "Roadmap" },
   { href: "/guias/validar-producto", label: "Guías" },
-  { href: "/categorias/fitness", label: "Categorías" },
   { href: "/analisis", label: "Análisis" },
-  { href: "/about", label: "Sobre DAS LATAM" },
+  { href: "/fuentes", label: "Fuentes" },
 ];
 
 export default function SiteNav() {

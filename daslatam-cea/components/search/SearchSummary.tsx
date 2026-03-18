@@ -11,7 +11,7 @@ export default function SearchSummary({ query, loading = false, data }: SearchSu
     return (
       <section className="panel">
         <p className="section-label">Resumen</p>
-        <h3>Consultando Mercado Libre…</h3>
+        <h3>Consultando fuentes disponibles…</h3>
         <p className="muted">Procesando resultados, score e insights.</p>
       </section>
     );
@@ -30,8 +30,8 @@ export default function SearchSummary({ query, loading = false, data }: SearchSu
   const sourceLabel =
     data.source === "html-fallback"
       ? "Respaldo HTML público"
-      : data.source === "browser-fallback"
-        ? "Respaldo desde navegador"
+      : data.source === "seed-fallback"
+        ? "Semilla interna · demo"
         : "API pública";
 
   return (
@@ -39,6 +39,9 @@ export default function SearchSummary({ query, loading = false, data }: SearchSu
       <p className="section-label">Resumen de búsqueda</p>
       <h3>{data.query || query}</h3>
       <p className="muted small-text">Fuente utilizada: {sourceLabel}</p>
+      {data.diagnostics?.upstreamStatus ? (
+        <p className="muted small-text">Último status upstream detectado: HTTP {data.diagnostics.upstreamStatus}</p>
+      ) : null}
       <div className="summary-grid">
         <div>
           <span className="muted">Resultados analizados</span>

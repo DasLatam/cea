@@ -93,11 +93,12 @@ export function analyzeSearchResults(
       link: String(item.permalink ?? "#"),
       thumbnail: String(item.thumbnail ?? ""),
       categoryId: item.category_id ? String(item.category_id) : null,
-      categoryName: null,
+      categoryName: item.category_name ? String(item.category_name) : null,
       score,
       flags,
       insights,
       raw: item,
+      isDemo: Boolean((item as { _seed?: boolean })._seed),
     };
   });
 

@@ -1,3 +1,17 @@
+export type SearchSource = "api" | "html-fallback" | "seed-fallback";
+
+export type ProviderStatus = {
+  key: string;
+  label: string;
+  status: "ok" | "warning" | "disabled" | "planned";
+  detail: string;
+};
+
+export type SearchDiagnostics = {
+  upstreamStatus?: number;
+  strategiesTried: string[];
+};
+
 export type AnalyzedItem = {
   id: string;
   title: string;
@@ -13,6 +27,7 @@ export type AnalyzedItem = {
   flags: string[];
   insights: string[];
   raw?: Record<string, unknown>;
+  isDemo?: boolean;
 };
 
 export type SearchSummary = {
@@ -31,8 +46,10 @@ export type SearchApiResponse = {
   query: string;
   summary: SearchSummary;
   items: AnalyzedItem[];
-  source?: "api" | "html-fallback" | "browser-fallback";
+  source?: SearchSource;
   warning?: string;
+  providerStatuses?: ProviderStatus[];
+  diagnostics?: SearchDiagnostics;
 };
 
 export type SavedSearchRow = {

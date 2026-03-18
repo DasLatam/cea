@@ -1,25 +1,74 @@
 import { NextResponse } from "next/server";
 import { analyzeSearchResults } from "@/lib/ml/analyzeSearchResults";
 import { fetchMercadoLibreHtmlFallback } from "@/lib/ml/fallbackHtmlSearch";
+import { buildSeedSearchPayload } from "@/lib/ml/seedSearchResults";
+import type { ProviderStatus } from "@/types/app";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 async function fetchMercadoLibreApi(url: string) {
-  const headers = {
-    Accept: "application/json, text/plain, */*",
-    "Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
-    "User-Agent":
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
-    Referer: "https://www.mercadolibre.com.ar/",
-    Origin: "https://www.mercadolibre.com.ar",
-  };
+  const response = await fetch(url, {
+    headers: {
+      Accept: "application/json",
+      "Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
+      "User-Agent": "DAS-LATAM-CEA/1.0 (+https://daslatam.org)",
+    },
+    cache: "no-store",
+  });
 
-  let response = await fetch(url, { headers, cache: "no-store" });
-  if (!response.ok && [403, 429, 500, 502, 503, 504].includes(response.status)) {
-    response = await fetch(url, { headers, cache: "no-store" });
-  }
   return response;
+}
+
+function buildProviderStatuses(input: {
+  apiOk: boolean;
+  htmlOk: boolean;
+  seedUsed: boolean;
+}): ProviderStatus[] {
+  return [
+    {
+      key: "ml-api",
+      label: "Mercado Libre · API pública",
+      status: input.apiOk ? "ok" : "warning",
+      detail: input.apiOk
+        ? "Consulta resuelta con la fuente pública principal."
+        : "La fuente principal respondió con error o bloqueo upstream.",
+    },
+    {
+      key: "ml-html",
+      label: "Mercado Libre · respaldo HTML",
+      status: input.htmlOk ? "ok" : "warning",
+      detail: input.htmlOk
+        ? "Se pudo reconstruir la búsqueda desde HTML público."
+        : "No se obtuvieron resultados suficientes desde HTML público.",
+    },
+    {
+      key: "seed-mode",
+      label: "Modo semilla interna",
+      status: input.seedUsed ? "warning" : "disabled",
+      detail: input.seedUsed
+        ? "Se usó una simulación determinística para no dejar la herramienta vacía mientras las fuentes externas fallan."
+        : "No fue necesario usar datos de semilla interna.",
+    },
+    {
+      key: "google-signals",
+      label: "Google · demanda externa",
+      status: "planned",
+      detail: "Pendiente de integrar proveedor o export manual para tendencias y volumen.",
+    },
+    {
+      key: "meta-signals",
+      label: "Meta · audiencia",
+      status: "planned",
+      detail: "Pendiente de integrar export o fuente autenticada para audiencias y señales sociales.",
+    },
+    {
+      key: "alibaba-signals",
+      label: "Alibaba · sourcing",
+      status: "planned",
+      detail: "Pendiente de módulo de costo FOB, MOQ y verificación de proveedores.",
+    },
+  ];
 }
 
 export async function GET(req: Request) {
@@ -30,41 +79,84 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Debe indicar un término de búsqueda." }, { status: 400 });
   }
 
+  const strategiesTried: string[] = [];
+
   try {
     const url = `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(query)}&limit=30`;
-    const mlResponse = await fetchMercadoLibreApi(url);
-    const responseText = await mlResponse.text();
+    strategiesTried.push("ml-api");
+    const apiResponse = await fetchMercadoLibreApi(url);
+    const responseText = await apiResponse.text();
 
-    if (mlResponse.ok && responseText) {
+    if (apiResponse.ok && responseText) {
       const rawData = JSON.parse(responseText) as Record<string, unknown>;
       const analyzed = analyzeSearchResults(query, rawData);
-      return NextResponse.json({ ...analyzed, source: "api" }, { status: 200 });
-    }
-
-    const htmlFallback = await fetchMercadoLibreHtmlFallback(query);
-    if (htmlFallback) {
-      const analyzed = analyzeSearchResults(query, htmlFallback);
       return NextResponse.json(
         {
           ...analyzed,
-          source: "html-fallback",
-          warning: "Mercado Libre rechazó la API pública desde el servidor y se utilizó una lectura de respaldo desde HTML público.",
-          upstreamStatus: mlResponse.status,
+          source: "api",
+          providerStatuses: buildProviderStatuses({ apiOk: true, htmlOk: false, seedUsed: false }),
+          diagnostics: { strategiesTried },
         },
         { status: 200 }
       );
     }
 
+    strategiesTried.push("ml-html");
+    const htmlFallback = await fetchMercadoLibreHtmlFallback(query);
+    if (htmlFallback.payload) {
+      const analyzed = analyzeSearchResults(query, htmlFallback.payload);
+      return NextResponse.json(
+        {
+          ...analyzed,
+          source: "html-fallback",
+          warning:
+            "La API pública rechazó la consulta. La lectura actual se reconstruyó desde HTML público y puede traer menos señales de stock o vendidos.",
+          providerStatuses: buildProviderStatuses({ apiOk: false, htmlOk: true, seedUsed: false }),
+          diagnostics: {
+            upstreamStatus: apiResponse.status,
+            strategiesTried: [...strategiesTried, htmlFallback.strategy ?? "html-unknown"],
+          },
+        },
+        { status: 200 }
+      );
+    }
+
+    strategiesTried.push("seed-fallback");
+    const seedPayload = buildSeedSearchPayload(query);
+    const analyzed = analyzeSearchResults(query, seedPayload);
     return NextResponse.json(
       {
-        error: "Mercado Libre respondió con error y el respaldo también falló.",
-        upstreamStatus: mlResponse.status,
-        details: `HTTP ${mlResponse.status}${responseText ? ` · ${responseText.slice(0, 240)}` : ""}`,
+        ...analyzed,
+        source: "seed-fallback",
+        warning:
+          "Las fuentes externas bloquearon la consulta. Se muestra una simulación interna de producto para que puedas probar score, UI, guardado e interpretación sin dejar la herramienta inutilizable.",
+        providerStatuses: buildProviderStatuses({ apiOk: false, htmlOk: false, seedUsed: true }),
+        diagnostics: {
+          upstreamStatus: apiResponse.status,
+          strategiesTried,
+        },
       },
-      { status: 502 }
+      { status: 200 }
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : "Error inesperado al consultar Mercado Libre.";
-    return NextResponse.json({ error: "No se pudo procesar la búsqueda.", details: message }, { status: 500 });
+
+    const analyzed = analyzeSearchResults(query, buildSeedSearchPayload(query));
+
+    return NextResponse.json(
+      {
+        ...analyzed,
+        source: "seed-fallback",
+        warning:
+          "No se pudo completar la consulta online. Se muestra una simulación interna para mantener operativo el flujo de análisis.",
+        providerStatuses: buildProviderStatuses({ apiOk: false, htmlOk: false, seedUsed: true }),
+        diagnostics: {
+          strategiesTried: [...strategiesTried, "seed-on-error"],
+        },
+        error: "No se pudo consultar la fuente online.",
+        details: message,
+      },
+      { status: 200 }
+    );
   }
 }

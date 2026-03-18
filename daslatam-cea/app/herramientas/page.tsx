@@ -3,7 +3,7 @@ import DashboardClient from "@/components/dashboard/DashboardClient";
 
 export const metadata: Metadata = {
   title: "Herramientas",
-  description: "Buscador y tablero de análisis de oportunidades para Mercado Libre Argentina.",
+  description: "Buscador, scoring e interpretación de oportunidades para Mercado Libre Argentina.",
 };
 
 export default function HerramientasPage() {
@@ -11,10 +11,11 @@ export default function HerramientasPage() {
     <div className="tool-theme page-stack">
       <section className="hero-card tool-surface">
         <p className="section-label">Herramienta de análisis</p>
-        <h1>Buscar, puntuar y guardar oportunidades</h1>
+        <h1>Buscar, puntuar y documentar oportunidades</h1>
         <p className="hero-summary">
-          Usá el buscador para leer señales de demanda, presión competitiva, riesgo operativo y guardado de
-          búsquedas. Si el servidor no consigue datos desde Mercado Libre, el sitio intenta una lectura directa desde el navegador como respaldo.
+          Esta primera versión ya organiza demanda, score, alertas y guardado de búsquedas. También deja a la vista
+          qué módulos están realmente operativos y cuáles siguen en roadmap: Google, Meta, Alibaba, discovery
+          automático, costos completos y tracking histórico.
         </p>
       </section>
       <DashboardClient />

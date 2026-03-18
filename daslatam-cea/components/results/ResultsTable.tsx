@@ -88,7 +88,9 @@ export default function ResultsTable({
                             alt={item.title}
                             className="product-thumb"
                           />
-                        ) : null}
+                        ) : (
+                          <div className="product-thumb product-thumb-fallback">ML</div>
+                        )}
 
                         <div>
                           <a
@@ -100,6 +102,7 @@ export default function ResultsTable({
                             {item.title}
                           </a>
                           <div className="muted small-text">{item.id}</div>
+                          {item.isDemo ? <div className="demo-chip">Demo interna</div> : null}
                         </div>
                       </div>
                     </td>
@@ -118,8 +121,10 @@ export default function ResultsTable({
                           className={isSaved ? "ghost-button active" : "ghost-button"}
                           type="button"
                           onClick={() => onToggleSave(item)}
+                          disabled={item.isDemo}
+                          title={item.isDemo ? "Los ítems de demo no se guardan como favoritos." : undefined}
                         >
-                          {isSaved ? "Guardado" : "Guardar"}
+                          {item.isDemo ? "Demo" : isSaved ? "Guardado" : "Guardar"}
                         </button>
                         <a
                           href={item.link}
@@ -127,7 +132,7 @@ export default function ResultsTable({
                           rel="noreferrer"
                           className="ghost-link"
                         >
-                          Ver
+                          {item.isDemo ? "Ver análisis" : "Ver"}
                         </a>
                       </div>
                     </td>

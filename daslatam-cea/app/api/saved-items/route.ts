@@ -13,6 +13,7 @@ type SaveItemBody = {
     thumbnail?: string | null;
     categoryId?: string | null;
     categoryName?: string | null;
+    isDemo?: boolean;
   };
 };
 
@@ -20,12 +21,8 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const sessionId = searchParams.get("sessionId")?.trim();
 
-  if (!sessionId) {
-    return NextResponse.json({ items: [] });
-  }
-
-  if (!hasSupabaseAdminConfig()) {
-    return NextResponse.json({ items: [], storageDisabled: true, details: "Falta SUPABASE_SERVICE_ROLE_KEY en el servidor." }, { status: 503 });
+  if (!sessionId || !hasSupabaseAdminConfig()) {
+    return NextResponse.json({ items: [], storageDisabled: true });
   }
 
   try {
@@ -37,17 +34,12 @@ export async function GET(req: Request) {
       .order("created_at", { ascending: false });
 
     if (error) {
-      throw error;
+      return NextResponse.json({ items: [], storageDisabled: true, details: error.message });
     }
 
-    return NextResponse.json({
-      items: (data ?? []).map((row) => row.item_id),
-    });
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "No se pudieron cargar los favoritos.";
-
-    return NextResponse.json({ items: [], storageDisabled: true, details: message }, { status: 500 });
+    return NextResponse.json({ items: (data ?? []).map((row) => row.item_id) });
+  } catch {
+    return NextResponse.json({ items: [], storageDisabled: true });
   }
 }
 
@@ -58,21 +50,18 @@ export async function POST(req: Request) {
     const item = body.item;
 
     if (!sessionId || !item?.id || !item.title || !item.link) {
-      return NextResponse.json(
-        { error: "Faltan sessionId o datos del ítem." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Faltan sessionId o datos del ítem." }, { status: 400 });
+    }
+
+    if (item.isDemo) {
+      return NextResponse.json({ error: "Los ítems demo no se guardan." }, { status: 400 });
     }
 
     if (!hasSupabaseAdminConfig()) {
-      return NextResponse.json(
-        { error: "Persistencia deshabilitada.", details: "Falta configurar Supabase en el servidor." },
-        { status: 503 }
-      );
+      return NextResponse.json({ error: "Persistencia deshabilitada." }, { status: 503 });
     }
 
     const supabase = getSupabaseAdmin();
-
     const { error: itemError } = await supabase
       .from("items")
       .upsert(
@@ -88,33 +77,18 @@ export async function POST(req: Request) {
         { onConflict: "id" }
       );
 
-    if (itemError) {
-      throw itemError;
-    }
+    if (itemError) throw itemError;
 
     const { error } = await supabase
       .from("saved_items")
-      .upsert(
-        {
-          session_id: sessionId,
-          item_id: item.id,
-        },
-        { onConflict: "session_id,item_id" }
-      );
+      .upsert({ session_id: sessionId, item_id: item.id }, { onConflict: "session_id,item_id" });
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     return NextResponse.json({ saved: true });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "No se pudo guardar el producto.";
-
-    return NextResponse.json(
-      { error: "No se pudo guardar el producto.", details: message },
-      { status: 500 }
-    );
+    const message = error instanceof Error ? error.message : "No se pudo guardar el producto.";
+    return NextResponse.json({ error: "No se pudo guardar el producto.", details: message }, { status: 500 });
   }
 }
 
@@ -125,39 +99,20 @@ export async function DELETE(req: Request) {
     const itemId = searchParams.get("itemId")?.trim();
 
     if (!sessionId || !itemId) {
-      return NextResponse.json(
-        { error: "Faltan sessionId o itemId." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Faltan sessionId o itemId." }, { status: 400 });
     }
 
     if (!hasSupabaseAdminConfig()) {
-      return NextResponse.json(
-        { error: "Persistencia deshabilitada.", details: "Falta configurar Supabase en el servidor." },
-        { status: 503 }
-      );
+      return NextResponse.json({ error: "Persistencia deshabilitada." }, { status: 503 });
     }
 
     const supabase = getSupabaseAdmin();
-
-    const { error } = await supabase
-      .from("saved_items")
-      .delete()
-      .eq("session_id", sessionId)
-      .eq("item_id", itemId);
-
-    if (error) {
-      throw error;
-    }
+    const { error } = await supabase.from("saved_items").delete().eq("session_id", sessionId).eq("item_id", itemId);
+    if (error) throw error;
 
     return NextResponse.json({ removed: true });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "No se pudo quitar el producto.";
-
-    return NextResponse.json(
-      { error: "No se pudo quitar el producto.", details: message },
-      { status: 500 }
-    );
+    const message = error instanceof Error ? error.message : "No se pudo quitar el producto.";
+    return NextResponse.json({ error: "No se pudo quitar el producto.", details: message }, { status: 500 });
   }
 }

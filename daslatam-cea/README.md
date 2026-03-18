@@ -1,48 +1,68 @@
-# DAS LATAM CEA v5
+# DAS LATAM CEA
 
-Aplicación web en Next.js para analizar oportunidades de productos en Mercado Libre Argentina.
+Plataforma web para analizar oportunidades de productos en Mercado Libre Argentina con una combinación de herramienta, scoring, contenido original y roadmap de producto.
 
-## Qué incluye esta versión
+## Estado de esta entrega
 
-- Home editorial con contenido original.
-- Página de herramientas separada del contenido.
-- Guías y páginas indexables para mejorar evaluación de calidad del sitio.
-- Diseño inspirado en la lógica visual amarillo / celeste / blanco.
-- Popup anti-AdBlock que bloquea el acceso hasta desactivar la extensión y revalidar.
-- Búsquedas guardadas y favoritos en Supabase.
-- Fallback de búsqueda:
-  - intenta primero con la API pública desde el servidor
-  - si falla, intenta respaldo HTML en servidor
-  - si vuelve a fallar, el cliente intenta directo desde el navegador
-- sitemap y robots.
+Esta versión corrige dos problemas estructurales de la iteración anterior:
 
-## Variables necesarias
+1. deja de hacer fallback directo del navegador a `api.mercadolibre.com`, que generaba `403` por restricciones del lado cliente;
+2. deja explícito el estado real de cada fuente y mantiene la UX operativa con un modo demo interno cuando las fuentes externas fallan.
 
-Copiar `.env.example` a `.env.local`.
+## Qué funciona
 
-## Supabase
+- Home editorial con contenido original
+- Herramienta de búsqueda con score e insights
+- Guardado de búsquedas y favoritos en Supabase si está configurado
+- Guías, categorías, análisis, discovery editorial, roadmap y página de fuentes
+- Popup anti-adblock por detección de extensiones que bloquean anuncios
+- API de búsqueda con tres capas:
+  - Mercado Libre API pública
+  - reconstrucción desde HTML público
+  - semilla interna demo claramente señalada
 
-1. Ejecutar `supabase/migrations/001_init.sql`.
-2. Cargar en Vercel:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY`
+## Qué sigue en roadmap
 
-## Desarrollo local
+- Google demand signals
+- Meta audience signals
+- Alibaba sourcing
+- Discovery automático
+- Tracking histórico completo
+- Calculadora financiera avanzada
+- Newsletter
+
+## Variables de entorno
+
+Copiá `.env.example` a `.env.local`.
+
+### Necesarias
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `NEXT_PUBLIC_SITE_URL`
+
+### Opcionales
+
+- `NEXT_PUBLIC_ADSENSE_CLIENT`
+- `RESEND_API_KEY`
+- `EMAIL_FROM`
+
+## Base de datos
+
+Ejecutar en Supabase:
+
+- `supabase/migrations/001_init.sql`
+
+## Notas importantes
+
+- Si Mercado Libre bloquea la consulta pública desde Vercel, la app intentará HTML público.
+- Si tampoco hay datos suficientes, la UI no queda vacía: entra en modo semilla interna demo.
+- Los ítems demo no se guardan como favoritos para no mezclar datos reales con simulados.
+
+## Desarrollo
 
 ```bash
 npm install
 npm run dev
 ```
-
-## Deploy en Vercel
-
-- Framework: Next.js
-- Root Directory: carpeta del proyecto
-- Build Command: `next build`
-- Output: automático
-
-## Notas
-
-- Si Mercado Libre rechaza la API pública desde el servidor, la interfaz muestra la fuente alternativa utilizada.
-- El anti-AdBlock es un control del lado cliente y puede ajustarse o retirarse fácilmente si preferís un enfoque menos restrictivo.
