@@ -1,4 +1,5 @@
 import { buildOpportunityCalendar, enrichOpportunityCalendar } from "@/lib/calendar/opportunities";
+import type { OpportunityStatus } from "@/types/app";
 
 function formatDate(isoDate: string) {
   return new Date(`${isoDate}T00:00:00Z`).toLocaleDateString("es-AR", {
@@ -9,7 +10,7 @@ function formatDate(isoDate: string) {
   });
 }
 
-function buyStatusLabel(status: "future" | "open" | "past", daysToBuy: number, daysToEvent: number) {
+function buyStatusLabel(status: OpportunityStatus, daysToBuy: number, daysToEvent: number) {
   if (status === "future") return `Comprar en ${daysToBuy} días`;
   if (status === "open") return daysToEvent >= 0 ? `Ventana abierta · faltan ${daysToEvent} días` : "Ventana abierta";
   return "Ventana pasada";

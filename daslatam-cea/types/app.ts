@@ -75,3 +75,12 @@ export type OpportunityEvent = {
   rationale: string;
   examples: string[];
 };
+
+
+export type OpportunityStatus = "future" | "open" | "past";
+
+export type EnrichedOpportunityEvent = OpportunityEvent & {
+  daysToBuy: number;
+  daysToEvent: number;
+  status: OpportunityStatus;
+};

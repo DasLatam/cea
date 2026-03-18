@@ -1,4 +1,4 @@
-import type { OpportunityEvent } from "@/types/app";
+import type { EnrichedOpportunityEvent, OpportunityEvent, OpportunityStatus } from "@/types/app";
 
 function nthWeekdayOfMonth(year: number, monthIndex: number, weekday: number, occurrence: number) {
   const first = new Date(Date.UTC(year, monthIndex, 1));
@@ -127,7 +127,7 @@ export function buildOpportunityCalendar(year = new Date().getUTCFullYear()): Op
   return events.sort((a, b) => a.buyDate.localeCompare(b.buyDate));
 }
 
-export function enrichOpportunityCalendar(items: OpportunityEvent[], referenceDate = new Date()) {
+export function enrichOpportunityCalendar(items: OpportunityEvent[], referenceDate = new Date()): EnrichedOpportunityEvent[] {
   const today = new Date(Date.UTC(referenceDate.getUTCFullYear(), referenceDate.getUTCMonth(), referenceDate.getUTCDate()));
 
   return items.map((item) => {
@@ -136,7 +136,7 @@ export function enrichOpportunityCalendar(items: OpportunityEvent[], referenceDa
     const daysToBuy = Math.round((buyDate.getTime() - today.getTime()) / 86400000);
     const daysToEvent = Math.round((eventDate.getTime() - today.getTime()) / 86400000);
 
-    const status = daysToBuy > 0 ? "future" : daysToEvent >= 0 ? "open" : "past";
+    const status: OpportunityStatus = daysToBuy > 0 ? "future" : daysToEvent >= 0 ? "open" : "past";
 
     return {
       ...item,
