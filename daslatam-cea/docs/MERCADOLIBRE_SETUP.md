@@ -1,10 +1,50 @@
-# Configuración simple de app de Mercado Libre
+# Configuración correcta de Mercado Libre OAuth
 
-1. Entrá a Developers de Mercado Libre con tu cuenta principal.
-2. Creá una aplicación nueva.
-3. Definí un redirect URI HTTPS fijo, por ejemplo: `https://daslatamcea.vercel.app/api/meli/callback`.
-4. Copiá APP_ID y SECRET_KEY.
-5. Abrí la URL de autorización con tu APP_ID y redirect URI.
-6. Autorizá la app y copiá el `code` de la URL de callback.
-7. Intercambiá ese `code` por `access_token` y `refresh_token` contra `https://api.mercadolibre.com/oauth/token`.
-8. Guardá en Vercel: `MERCADOLIBRE_CLIENT_ID`, `MERCADOLIBRE_CLIENT_SECRET`, `MERCADOLIBRE_REDIRECT_URI`, `MERCADOLIBRE_ACCESS_TOKEN`, `MERCADOLIBRE_REFRESH_TOKEN`.
+## Variables necesarias en Vercel
+
+- `MERCADOLIBRE_CLIENT_ID`
+- `MERCADOLIBRE_CLIENT_SECRET`
+- `MERCADOLIBRE_REDIRECT_URI`
+- `MERCADOLIBRE_API_BASE=https://api.mercadolibre.com`
+- `MERCADOLIBRE_AUTH_BASE=https://auth.mercadolibre.com.ar`
+- `SUPABASE_URL` o `NEXT_PUBLIC_SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+## Importante
+
+No guardes `access_token` ni `refresh_token` en variables de entorno para operación normal.
+Los tokens deben quedar persistidos en `public.meli_oauth_accounts` y rotarse desde backend.
+
+## Redirect URI correcta
+
+Registrá exactamente:
+
+`https://daslatamcea.vercel.app/api/meli/redirect`
+
+La ruta `/api/meli/callback` queda reservada para notificaciones/webhooks, no para el intercambio OAuth.
+
+## Flujo de conexión
+
+1. Entrá a `/api/meli/status` y verificá configuración.
+2. Abrí `/api/meli/connect`.
+3. Mercado Libre redirige a `/api/meli/redirect?code=...&state=...`.
+4. El backend intercambia `code` por tokens.
+5. Los tokens quedan guardados en Supabase.
+6. Probá `/api/meli/users-me`.
+
+## Diagnóstico rápido
+
+### `/api/meli/status`
+Debe mostrar:
+- `config.clientId: true`
+- `config.clientSecret: true`
+- `config.redirectUri: true`
+- `config.supabase: true`
+
+### Error `invalid_grant`
+Suele significar una de estas cosas:
+- refresh token vencido o revocado
+- refresh token ya usado y rotado
+- inconsistencia de app / redirect URI
+
+Si persiste, reconectá desde `/api/meli/connect`.

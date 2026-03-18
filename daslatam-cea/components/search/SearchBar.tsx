@@ -22,7 +22,7 @@ export default function SearchBar({ onSearch, loading = false, defaultValue = ""
         <p className="section-label">Explorador de productos</p>
         <h2>Buscar oportunidades en Mercado Libre Argentina</h2>
         <p className="muted">
-          El sistema intenta primero la API pública, luego el token OAuth propio del backend y después una reconstrucción desde HTML público. Si todo falla, muestra el error real y el estado de conectores, sin inventar datos.
+          El sistema intenta primero la API pública y, si el upstream la bloquea, usa la cuenta OAuth conectada en el backend. Si no puede resolver la búsqueda, muestra el error real y el estado de conectores, sin inventar datos.
         </p>
       </div>
 

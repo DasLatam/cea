@@ -27,7 +27,7 @@ export default function SearchSummary({ query, loading = false, data }: SearchSu
     );
   }
 
-  const sourceLabel = data.source === "html-fallback" ? "Respaldo HTML público" : data.source === "api" ? "API de Mercado Libre" : "Sin resultados";
+  const sourceLabel = data.source === "api" ? "API de Mercado Libre" : "Sin resultados";
 
   return (
     <section className="panel">
