@@ -1,30 +1,50 @@
-import "../styles/globals.css";
+import type { Metadata } from "next";
+import Script from "next/script";
+import "@/styles/globals.css";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "DAS LATAM CEA",
+  description: "Comercio Electrónico en Argentina - análisis de oportunidades en Mercado Libre",
 };
 
-export default function RootLayout({ children }: any) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+
   return (
-    <html>
-      <head>
-        <script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT}`}
-          crossOrigin="anonymous"
-        ></script>
-      </head>
+    <html lang="es">
       <body>
-        <header style={{ padding: 20 }}>
-          <h1>DAS LATAM CEA</h1>
-          <small>Powered by DAS LATAM</small>
-        </header>
+        <div className="app-shell">
+          <header className="site-header">
+            <div>
+              <p className="eyebrow">Powered by DAS LATAM</p>
+              <h1>DAS LATAM CEA</h1>
+              <p className="subtitle">
+                Comercio Electrónico en Argentina · análisis de oportunidades para Mercado Libre
+              </p>
+            </div>
+          </header>
 
-        <main style={{ padding: 20 }}>{children}</main>
+          <main className="site-main">{children}</main>
 
-        <footer style={{ padding: 20, marginTop: 40 }}>
-          © DAS LATAM — comercioelectronico@daslatam.org
-        </footer>
+          <footer className="site-footer">
+            <span>© DAS LATAM</span>
+            <span>comercioelectronico@daslatam.org</span>
+          </footer>
+        </div>
+
+        {adsenseClient ? (
+          <Script
+            id="adsense-script"
+            strategy="afterInteractive"
+            async
+            crossOrigin="anonymous"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+          />
+        ) : null}
       </body>
     </html>
   );

@@ -1,27 +1,56 @@
 import { NextResponse } from "next/server";
+import { analyzeSearchResults } from "@/lib/ml/analyzeSearchResults";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const q = searchParams.get("q");
+  const query = searchParams.get("q")?.trim();
 
-  if (!q) {
-    return NextResponse.json({ error: "Missing query" }, { status: 400 });
+  if (!query) {
+    return NextResponse.json(
+      { error: "Debe indicar un término de búsqueda." },
+      { status: 400 }
+    );
   }
 
-  const res = await fetch(
-    `https://api.mercadolibre.com/sites/MLA/search?q=${q}`
-  );
+  try {
+    const url = `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(
+      query
+    )}&limit=30`;
 
-  const data = await res.json();
+    const mlResponse = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+      },
+      cache: "no-store",
+    });
 
-  const results = data.results.map((item: any) => ({
-    id: item.id,
-    title: item.title,
-    price: item.price,
-    sold: item.sold_quantity,
-    stock: item.available_quantity,
-    link: item.permalink
-  }));
+    if (!mlResponse.ok) {
+      return NextResponse.json(
+        {
+          error: "Mercado Libre respondió con error.",
+          details: `HTTP ${mlResponse.status}`,
+        },
+        { status: 502 }
+      );
+    }
 
-  return NextResponse.json(results);
+    const rawData = (await mlResponse.json()) as Record<string, unknown>;
+    const analyzed = analyzeSearchResults(query, rawData);
+
+    return NextResponse.json(analyzed, { status: 200 });
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Error inesperado al consultar Mercado Libre.";
+
+    return NextResponse.json(
+      {
+        error: "No se pudo procesar la búsqueda.",
+        details: message,
+      },
+      { status: 500 }
+    );
+  }
 }
