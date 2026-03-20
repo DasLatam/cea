@@ -1,45 +1,116 @@
 import Link from "next/link";
 
-const upcoming = [
-  "Scanner de oportunidades con foco en contexto argentino.",
-  "Lectura estructurada de competencia, vendedores y saturación.",
-  "Calendario comercial con ventanas de compra y alertas anticipadas.",
-  "Módulo de margen, costos y riesgo operativo.",
-  "Suscripciones por correo con oportunidades semanales curadas.",
+const tools = [
+  {
+    title: "Vender todo el año",
+    href: "/herramientas/vender-todo-el-ano",
+    status: "Disponible",
+    description:
+      "Calendario comercial con fechas de regalo, ventana de compra en China, tramo marítimo sugerido y publicación 30 días antes en Mercado Libre.",
+  },
+  {
+    title: "Calculadora de margen real",
+    href: "#",
+    status: "Próximamente",
+    description:
+      "Costos, comisión, flete, impuestos y utilidad neta para validar si el negocio tiene sentido antes de importar.",
+  },
+  {
+    title: "Radar de fechas fuertes",
+    href: "#",
+    status: "Próximamente",
+    description:
+      "Mapa rápido de campañas por trimestre para no comprar tarde ni publicar cuando el mercado ya está saturado.",
+  },
 ];
 
 export default function HerramientasPage() {
   return (
-    <main className="editorial-main">
-      <div className="shell editorial-shell">
-        <section className="hero-card hero-card--compact soon-card">
-          <p className="eyebrow">Herramientas</p>
-          <h1>Próximamente</h1>
-          <p className="hero-lead">
-            La sección de herramientas queda visible para marcar el rumbo del producto, pero por ahora el esfuerzo está puesto en construir contenido útil, metodología y claridad de criterios. Preferimos un “próximamente” honesto antes que una herramienta a medio hacer.
-          </p>
-          <div className="hero-actions">
-            <Link href="/suscribirse" className="button-primary">
-              Seguir avances
-            </Link>
-            <Link href="/roadmap" className="button-secondary">
-              Ver roadmap
-            </Link>
-          </div>
-        </section>
+    <main style={{ maxWidth: 1120, margin: "0 auto", padding: "36px 20px 72px" }}>
+      <section
+        style={{
+          background: "linear-gradient(135deg, #111827 0%, #1f2937 55%, #0f172a 100%)",
+          color: "#fff",
+          borderRadius: 22,
+          padding: 28,
+          boxShadow: "0 12px 28px rgba(15, 23, 42, 0.16)",
+        }}
+      >
+        <div
+          style={{
+            display: "inline-flex",
+            padding: "8px 12px",
+            borderRadius: 999,
+            background: "#ffe600",
+            color: "#111827",
+            fontWeight: 800,
+            fontSize: 13,
+            marginBottom: 14,
+          }}
+        >
+          CEA · Herramientas
+        </div>
+        <h1 style={{ margin: "0 0 10px", fontSize: 38, lineHeight: 1.08 }}>Herramientas para decidir mejor qué vender</h1>
+        <p style={{ margin: 0, maxWidth: 860, color: "#d1d5db", lineHeight: 1.7, fontSize: 18 }}>
+          Esta sección concentra herramientas prácticas para organizar campañas, validar márgenes y transformar intuiciones en un plan
+          comercial más disciplinado. Empezamos por una herramienta simple pero potente: una agenda anual de oportunidades recurrentes.
+        </p>
+      </section>
 
-        <section className="article-card">
-          <h2>Qué se está preparando</h2>
-          <ul className="check-list">
-            {upcoming.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-          <p>
-            La decisión de retrasar esta capa no responde a falta de ambición, sino a una prioridad de producto. Si el criterio no está bien explicado y si la base metodológica no es sólida, cualquier tablero genera una falsa sensación de precisión. Primero ordenamos el lenguaje común del proyecto; después automatizamos aquello que realmente agregue valor.
-          </p>
-        </section>
-      </div>
+      <section
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+          gap: 18,
+          marginTop: 24,
+        }}
+      >
+        {tools.map((tool) => {
+          const available = tool.status === "Disponible" && tool.href !== "#";
+          const Card = (
+            <article
+              style={{
+                height: "100%",
+                background: "#fff",
+                border: "1px solid #e5e7eb",
+                borderRadius: 18,
+                padding: 22,
+                boxShadow: "0 8px 24px rgba(15, 23, 42, 0.05)",
+                display: "grid",
+                gap: 12,
+              }}
+            >
+              <div
+                style={{
+                  display: "inline-flex",
+                  width: "fit-content",
+                  padding: "6px 10px",
+                  borderRadius: 999,
+                  background: available ? "#dcfce7" : "#f3f4f6",
+                  color: available ? "#166534" : "#374151",
+                  fontWeight: 700,
+                  fontSize: 13,
+                }}
+              >
+                {tool.status}
+              </div>
+              <h2 style={{ margin: 0, fontSize: 24, color: "#111827" }}>{tool.title}</h2>
+              <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.7 }}>{tool.description}</p>
+              <div style={{ marginTop: 8, color: available ? "#0f62fe" : "#6b7280", fontWeight: 700 }}>
+                {available ? "Abrir herramienta →" : "Disponible más adelante"}
+              </div>
+            </article>
+          );
+
+          return available ? (
+            <Link key={tool.title} href={tool.href} style={{ textDecoration: "none" }}>
+              {Card}
+            </Link>
+          ) : (
+            <div key={tool.title}>{Card}</div>
+          );
+        })}
+      </section>
     </main>
   );
 }
