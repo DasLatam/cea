@@ -11,8 +11,7 @@ export default function ContactoPage() {
             Esta sección está pensada para quienes están evaluando productos, importación, márgenes, campañas o una reorganización más seria de su operación comercial. Si tenés una duda concreta o querés ordenar una decisión antes de invertir, podés escribirnos desde acá.
           </p>
           <p style={{ margin: 0 }}>
-            Cuanto más claro sea el contexto, mejor. Ayuda mucho saber qué vendés o querés vender, en qué canal operás, qué dudas aparecen hoy y qué parte del proceso te genera más incertidumbre. Eso permite que el intercambio sea más útil desde el principio.
-          </p>
+            CEA está pensado como un espacio práctico para quienes quieren vender mejor en Argentina, tomar decisiones con más criterio y evitar errores costosos al momento de elegir productos, calcular márgenes o planificar campañas.</p>
         </div>
       </section>
 
@@ -30,8 +29,11 @@ export default function ContactoPage() {
             <li>Qué limitación hoy te está frenando más.</li>
           </ul>
           <p className="reading-block" style={{ margin: 0, color: "#4b5563", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>
-            El formulario usa Resend para enviar la consulta por correo desde el backend. Si la configuración de dominio y remitente está bien validada en Vercel, el mensaje debería salir sin depender de integraciones complejas adicionales.
-          </p>
+            Si tenés consultas sobre las guías, las herramientas publicadas o la lógica comercial del sitio, podés escribirnos desde este formulario. También podés contactarte si querés sugerir nuevas herramientas, proponer temas para las próximas guías o enviarnos comentarios para mejorar la experiencia de uso.
+            </p>
+          <p className="reading-block" style={{ margin: 0, color: "#4b5563", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>
+            Si tenés consultas sobre las guías, las herramientas publicadas o la lógica comercial del sitio, podés escribirnos desde este formulario. También podés contactarte si querés sugerir nuevas herramientas, proponer temas para las próximas guías o enviarnos comentarios para mejorar la experiencia de uso.
+            </p>
         </aside>
       </section>
     </main>

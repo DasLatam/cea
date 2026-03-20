@@ -1,119 +1,163 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 
-type Status = { type: "idle" | "success" | "error"; message: string };
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "14px 16px",
-  borderRadius: 12,
-  border: "1px solid #d5d9e2",
-  fontSize: 16,
-  fontFamily: "inherit",
-  background: "#fff",
-};
+type FormState = "idle" | "loading" | "success" | "error";
 
 export default function ContactForm() {
-  const [status, setStatus] = useState<Status>({ type: "idle", message: "" });
-  const [loading, setLoading] = useState(false);
+  const [state, setState] = useState<FormState>("idle");
+  const [message, setMessage] = useState("");
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setLoading(true);
-    setStatus({ type: "idle", message: "" });
 
-    const formData = new FormData(event.currentTarget);
-    const payload = {
-      name: String(formData.get("name") || ""),
-      email: String(formData.get("email") || ""),
-      company: String(formData.get("company") || ""),
-      topic: String(formData.get("topic") || ""),
-      message: String(formData.get("message") || ""),
-    };
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    setState("loading");
+    setMessage("");
 
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          nombre: String(formData.get("nombre") || ""),
+          email: String(formData.get("email") || ""),
+          asunto: String(formData.get("asunto") || ""),
+          mensaje: String(formData.get("mensaje") || ""),
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
-      const json = await response.json();
+      const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        throw new Error(json?.error || "No se pudo enviar el mensaje.");
+        throw new Error(
+          data?.error || "No pudimos enviar tu consulta en este momento."
+        );
       }
 
-      setStatus({
-        type: "success",
-        message: "Tu mensaje se envió correctamente. Revisá tu correo por si te mandamos una confirmación.",
-      });
-      event.currentTarget.reset();
-    } catch (error) {
-      setStatus({
-        type: "error",
-        message: error instanceof Error ? error.message : "No se pudo enviar el mensaje.",
-      });
-    } finally {
-      setLoading(false);
+      form.reset();
+      setState("success");
+      setMessage(
+        "Tu consulta fue enviada correctamente. Te responderemos a la brevedad."
+      );
+    } catch (error: any) {
+      setState("error");
+      setMessage(
+        error?.message || "Ocurrió un error al enviar el formulario."
+      );
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "grid", gap: 16 }}>
-      <div style={{ display: "grid", gap: 16, gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))" }}>
-        <input name="name" placeholder="Nombre y apellido" style={inputStyle} />
-        <input name="email" type="email" placeholder="Email" style={inputStyle} />
+    <form
+      onSubmit={handleSubmit}
+      style={{
+        display: "grid",
+        gap: 16,
+        background: "#fff",
+        border: "1px solid #e5e7eb",
+        borderRadius: 20,
+        padding: 24,
+        boxShadow: "0 8px 24px rgba(0,0,0,0.05)",
+      }}
+    >
+      <div style={{ display: "grid", gap: 8 }}>
+        <label htmlFor="nombre" style={{ fontWeight: 600 }}>
+          Nombre
+        </label>
+        <input
+          id="nombre"
+          name="nombre"
+          type="text"
+          required
+          placeholder="Tu nombre"
+          style={inputStyle}
+        />
       </div>
-      <div style={{ display: "grid", gap: 16, gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))" }}>
-        <input name="company" placeholder="Proyecto, marca o empresa" style={inputStyle} />
-        <select name="topic" style={inputStyle} defaultValue="">
-          <option value="" disabled>
-            Tema de la consulta
-          </option>
-          <option>Elegir producto</option>
-          <option>Importación</option>
-          <option>Costos y márgenes</option>
-          <option>Campañas de venta</option>
-          <option>Publicidad y demanda</option>
-          <option>Otro</option>
-        </select>
+
+      <div style={{ display: "grid", gap: 8 }}>
+        <label htmlFor="email" style={{ fontWeight: 600 }}>
+          Email
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          placeholder="tu@email.com"
+          style={inputStyle}
+        />
       </div>
-      <textarea
-        name="message"
-        rows={7}
-        placeholder="Contanos qué estás evaluando, en qué etapa estás y qué necesitás resolver."
-        style={{ ...inputStyle, resize: "vertical" }}
-      />
-      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-        <button
-          type="submit"
-          disabled={loading}
+
+      <div style={{ display: "grid", gap: 8 }}>
+        <label htmlFor="asunto" style={{ fontWeight: 600 }}>
+          Asunto
+        </label>
+        <input
+          id="asunto"
+          name="asunto"
+          type="text"
+          required
+          placeholder="Motivo de tu consulta"
+          style={inputStyle}
+        />
+      </div>
+
+      <div style={{ display: "grid", gap: 8 }}>
+        <label htmlFor="mensaje" style={{ fontWeight: 600 }}>
+          Mensaje
+        </label>
+        <textarea
+          id="mensaje"
+          name="mensaje"
+          required
+          placeholder="Contanos en qué podemos ayudarte"
+          rows={6}
+          style={{ ...inputStyle, resize: "vertical" }}
+        />
+      </div>
+
+      <button
+        type="submit"
+        disabled={state === "loading"}
+        style={{
+          background: "#ffe600",
+          color: "#111827",
+          border: "none",
+          borderRadius: 12,
+          padding: "14px 18px",
+          fontWeight: 700,
+          cursor: state === "loading" ? "not-allowed" : "pointer",
+        }}
+      >
+        {state === "loading" ? "Enviando..." : "Enviar consulta"}
+      </button>
+
+      {message ? (
+        <p
           style={{
-            border: 0,
-            borderRadius: 999,
-            background: "#ffe600",
-            color: "#101114",
-            fontWeight: 800,
-            padding: "14px 22px",
-            cursor: loading ? "not-allowed" : "pointer",
+            margin: 0,
+            color: state === "success" ? "#15803d" : "#b91c1c",
+            fontWeight: 500,
           }}
         >
-          {loading ? "Enviando..." : "Enviar consulta"}
-        </button>
-        {status.message ? (
-          <p
-            style={{
-              margin: 0,
-              color: status.type === "success" ? "#0f8a4b" : "#b42318",
-              fontWeight: 600,
-            }}
-          >
-            {status.message}
-          </p>
-        ) : null}
-      </div>
+          {message}
+        </p>
+      ) : null}
     </form>
   );
 }
+
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  border: "1px solid #d1d5db",
+  borderRadius: 12,
+  padding: "12px 14px",
+  fontSize: 16,
+  background: "#fff",
+  color: "#111827",
+};
