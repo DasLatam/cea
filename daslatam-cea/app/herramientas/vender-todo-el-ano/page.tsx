@@ -1,5 +1,5 @@
-import YearRoundSalesPlanner from "@/components/tools/YearRoundSalesPlanner";
+import { redirect } from "next/navigation";
 
-export default function VenderTodoElAnoPage() {
-  return <YearRoundSalesPlanner />;
+export default function LegacyVenderTodoElAnoPage() {
+  redirect("/herramientas/vender-todo-el-anio");
 }

@@ -1,87 +1,88 @@
 import Link from "next/link";
 
-const footerColumns = [
-  {
-    title: "Contenido útil",
-    links: [
-      { href: "/guias", label: "Guías" },
-      { href: "/como-funciona", label: "Cómo funciona" },
-      { href: "/metodologia", label: "Metodología" },
-      { href: "/fuentes", label: "Fuentes" },
-    ],
-  },
-  {
-    title: "Para detectar oportunidades",
-    links: [
-      { href: "/oportunidades", label: "Oportunidades" },
-      { href: "/temporadas-y-tendencias", label: "Temporadas y tendencias" },
-      { href: "/roadmap", label: "Roadmap" },
-      { href: "/herramientas", label: "Herramientas" },
-    ],
-  },
-  {
-    title: "Herramientas disponibles",
-    links: [
-      { href: "/herramientas/vender-todo-el-ano", label: "Vender todo el Año" },
-      { href: "/herramientas/calculadora-costos", label: "Calculadora de costos real" },
-      { href: "/herramientas", label: "Próximamente" },
-    ],
-  },
-  {
-    title: "Relación con lectores",
-    links: [
-      { href: "/suscribirse", label: "Suscribirse" },
-      { href: "/contacto", label: "Contáctenos" },
-      { href: "/about", label: "Sobre el sitio" },
-      { href: "/mapa-del-sitio", label: "Mapa del sitio" },
-    ],
-  },
-  {
-    title: "Legal y SEO",
-    links: [
-      { href: "/terminos", label: "Términos y condiciones" },
-      { href: "/privacidad", label: "Privacidad" },
-      { href: "/sitemap.xml", label: "Sitemap XML" },
-      { href: "/robots.txt", label: "robots.txt" },
-    ],
-  },
+const useful = [
+  { href: "/guias", label: "Guías" },
+  { href: "/herramientas", label: "Herramientas" },
+  { href: "/oportunidades", label: "Oportunidades" },
+  { href: "/temporadas-y-tendencias", label: "Temporadas y tendencias" },
+  { href: "/suscribirse", label: "Suscribirse" },
+  { href: "/contacto", label: "Contáctenos" },
 ];
 
-export function SiteFooter() {
+const tools = [
+  { href: "/herramientas/vender-todo-el-anio", label: "Vender todo el año" },
+  { href: "/herramientas/calculadora-costos", label: "Calculadora de costos real" },
+  { href: "/herramientas", label: "Próximas herramientas" },
+];
+
+const legal = [
+  { href: "/terminos", label: "Términos y condiciones" },
+  { href: "/privacidad", label: "Privacidad" },
+  { href: "/mapa-del-sitio", label: "Mapa del sitio" },
+  { href: "/sitemap.xml", label: "Sitemap XML" },
+  { href: "/robots.txt", label: "robots.txt" },
+];
+
+function LinkList({ items }: { items: { href: string; label: string }[] }) {
   return (
-    <footer className="site-footer site-footer--dark">
-      <div className="shell footer-grid">
-        <div className="footer-brand">
-          <p className="footer-kicker footer-kicker--light">CEA</p>
-          <h2>Comercio Electrónico en Argentina</h2>
-          <p>
-            CEA reúne guías, metodología y herramientas prácticas para ayudar a vendedores,
-            emprendedores e importadores a tomar decisiones con más criterio. La propuesta del sitio es
-            ordenar ideas, mostrar caminos concretos y dar contexto antes de invertir stock, capital o
-            tiempo en una categoría. Hoy ya podés usar herramientas simples y leer contenido pensado para
-            el mercado argentino; las próximas capas del producto se publicarán por etapas, sin exagerar
-            alcances ni prometer automatizaciones frágiles.
-          </p>
+    <div style={{ display: "grid", gap: 10 }}>
+      {items.map((item) => (
+        <Link key={item.href} href={item.href} style={{ color: "#f3f5f7", textDecoration: "none" }}>
+          {item.label}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+export default function SiteFooter() {
+  return (
+    <footer style={{ background: "#0d1015", color: "#f3f5f7", marginTop: 56 }}>
+      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "36px 20px 28px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr 1fr", gap: 28 }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+              <div aria-hidden style={{ width: 18, height: 18, borderRadius: 4, background: "#ffe600" }} />
+              <div>
+                <div style={{ fontWeight: 900, letterSpacing: 0.4 }}>CEA</div>
+                <div style={{ color: "#c5cbd3", fontSize: 14 }}>Comercio Electrónico en Argentina</div>
+              </div>
+            </div>
+            <p className="footer-intro" style={{ color: "#d7dde4", lineHeight: 1.75, margin: 0, textAlign: "justify", hyphens: "auto" }}>
+              CEA reúne guías, metodología y herramientas prácticas para ayudar a vendedores, marcas y emprendedores que quieren tomar mejores decisiones en comercio electrónico. El objetivo del sitio es ordenar información útil, bajar errores frecuentes y convertir ideas dispersas en criterios de trabajo más claros.
+            </p>
+          </div>
+
+          <div>
+            <h3 style={{ marginTop: 0, marginBottom: 14, fontSize: 18 }}>Secciones</h3>
+            <LinkList items={useful} />
+          </div>
+
+          <div>
+            <h3 style={{ marginTop: 0, marginBottom: 14, fontSize: 18 }}>Herramientas</h3>
+            <LinkList items={tools} />
+          </div>
         </div>
 
-        {footerColumns.map((column) => (
-          <div key={column.title} className="footer-column">
-            <h3>{column.title}</h3>
-            <ul>
-              {column.links.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href}>{link.label}</Link>
-                </li>
-              ))}
-            </ul>
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.12)", marginTop: 28, paddingTop: 22 }}>
+          <div style={{ fontWeight: 800, marginBottom: 14 }}>Legal y SEO</div>
+          <div className="footer-legal-row" style={{ display: "flex", gap: 18, flexWrap: "wrap", justifyContent: "space-between" }}>
+            {legal.map((item) => (
+              <Link key={item.href} href={item.href} style={{ color: "#f3f5f7", textDecoration: "none" }}>
+                {item.label}
+              </Link>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
 
-      <div className="shell footer-bottom">
-        <p>© {new Date().getFullYear()} CEA · Comercio Electrónico en Argentina.</p>
-        <p>Este sitio funciona gracias a DASLATAM.org.</p>
-        <p>El contenido es informativo y no reemplaza asesoramiento profesional específico.</p>
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.12)", marginTop: 24, paddingTop: 20, display: "grid", gap: 10 }}>
+          <p style={{ margin: 0, color: "#c5cbd3", textAlign: "center" }}>
+            El contenido es informativo y no reemplaza asesoramiento profesional específico.
+          </p>
+          <p style={{ margin: 0, color: "#c5cbd3", textAlign: "center" }}>
+            Este sitio funciona gracias a <a href="https://daslatam.org" target="_blank" rel="noreferrer" style={{ color: "#ffe600" }}>DASLATAM.org</a>
+          </p>
+        </div>
       </div>
     </footer>
   );

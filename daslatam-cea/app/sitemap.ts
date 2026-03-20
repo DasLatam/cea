@@ -1,22 +1,12 @@
 type SitemapEntry = {
   url: string;
   lastModified?: string | Date;
-  changeFrequency?:
-    | "always"
-    | "hourly"
-    | "daily"
-    | "weekly"
-    | "monthly"
-    | "yearly"
-    | "never";
+  changeFrequency?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
   priority?: number;
 };
 
 const routes = [
   "",
-  "/about",
-  "/como-funciona",
-  "/metodologia",
   "/guias",
   "/guias/validar-producto",
   "/guias/margen-real",
@@ -24,22 +14,17 @@ const routes = [
   "/guias/importacion-courier",
   "/guias/peso-y-fragilidad",
   "/guias/monotributo-mercado-libre",
-  "/fuentes",
-  "/contacto",
-  "/suscribirse",
-  "/roadmap",
-  "/privacidad",
-  "/terminos",
   "/herramientas",
-  "/herramientas/vender-todo-el-ano",
+  "/herramientas/vender-todo-el-anio",
   "/herramientas/calculadora-costos",
-  "/mapa-del-sitio",
+  "/metodologia",
   "/oportunidades",
   "/temporadas-y-tendencias",
-  "/categorias/fitness",
-  "/categorias/hogar",
-  "/categorias/mascotas",
-  "/categorias/belleza",
+  "/suscribirse",
+  "/contacto",
+  "/mapa-del-sitio",
+  "/terminos",
+  "/privacidad",
 ];
 
 export default function sitemap(): SitemapEntry[] {
@@ -49,13 +34,6 @@ export default function sitemap(): SitemapEntry[] {
     url: `${base}${route}`,
     lastModified: new Date(),
     changeFrequency: route === "" ? "weekly" : "monthly",
-    priority:
-      route === ""
-        ? 1
-        : route.startsWith("/herramientas/")
-        ? 0.9
-        : route === "/herramientas" || route === "/guias"
-        ? 0.85
-        : 0.7,
+    priority: route === "" ? 1 : 0.72,
   }));
 }

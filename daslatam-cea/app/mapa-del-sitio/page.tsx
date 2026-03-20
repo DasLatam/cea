@@ -2,44 +2,28 @@ import Link from "next/link";
 
 const sections = [
   {
-    title: "Navegación principal",
+    title: "Principal",
     links: [
       ["/", "Inicio"],
       ["/guias", "Guías"],
-      ["/metodologia", "Metodología"],
-      ["/suscribirse", "Novedades"],
-      ["/contacto", "Contáctenos"],
       ["/herramientas", "Herramientas"],
-    ],
-  },
-  {
-    title: "Oportunidades y lectura del mercado",
-    links: [
-      ["/oportunidades", "Oportunidades"],
-      ["/temporadas-y-tendencias", "Temporadas y tendencias"],
-      ["/categorias/fitness", "Categoría Fitness"],
-      ["/categorias/hogar", "Categoría Hogar"],
-      ["/categorias/mascotas", "Categoría Mascotas"],
-      ["/categorias/belleza", "Categoría Belleza"],
+      ["/metodologia", "Metodología"],
+      ["/suscribirse", "Suscribirse"],
+      ["/contacto", "Contáctenos"],
     ],
   },
   {
     title: "Herramientas publicadas",
     links: [
-      ["/herramientas/vender-todo-el-ano", "Vender todo el Año"],
+      ["/herramientas/vender-todo-el-anio", "Vender todo el año"],
       ["/herramientas/calculadora-costos", "Calculadora de costos real"],
-      ["/herramientas", "Ver todas las herramientas"],
     ],
   },
   {
-    title: "Contenido institucional y legal",
+    title: "Legal y SEO",
     links: [
-      ["/about", "Sobre el sitio"],
-      ["/como-funciona", "Cómo funciona"],
-      ["/fuentes", "Fuentes"],
-      ["/roadmap", "Roadmap"],
-      ["/privacidad", "Privacidad"],
       ["/terminos", "Términos y condiciones"],
+      ["/privacidad", "Privacidad"],
       ["/sitemap.xml", "Sitemap XML"],
       ["/robots.txt", "robots.txt"],
     ],
@@ -48,33 +32,29 @@ const sections = [
 
 export default function MapaDelSitioPage() {
   return (
-    <main className="editorial-main">
-      <div className="shell editorial-shell">
-        <section className="hero-card hero-card--compact">
-          <p className="eyebrow">Mapa del sitio</p>
-          <h1>Todo el contenido útil de CEA, ordenado en un solo lugar.</h1>
-          <p className="hero-lead">
-            Esta página reúne las rutas principales del sitio para que cualquier visitante pueda
-            orientarse rápido, descubrir herramientas, volver a una guía específica o acceder a la
-            información legal y técnica que ayuda a Google a indexar correctamente el proyecto.
-          </p>
-        </section>
+    <main style={{ maxWidth: 1100, margin: "0 auto", padding: "34px 20px 56px" }}>
+      <section style={{ display: "grid", gap: 14, marginBottom: 28 }}>
+        <span style={{ display: "inline-flex", width: "fit-content", padding: "8px 12px", borderRadius: 999, background: "#eef8ff", color: "#0b6db4", fontWeight: 800 }}>Mapa del sitio</span>
+        <h1 style={{ fontSize: "clamp(2rem,4vw,3.2rem)", margin: 0, lineHeight: 1.05 }}>Accesos principales de CEA</h1>
+        <p className="reading-block" style={{ margin: 0, color: "#374151", lineHeight: 1.8, maxWidth: 860 }}>
+          Este mapa resume las páginas más importantes del sitio para facilitar la navegación de usuarios y buscadores. Reúne accesos a contenido editorial, herramientas publicadas y recursos legales o técnicos de indexación.
+        </p>
+      </section>
 
-        <div className="feature-grid sitemap-grid">
-          {sections.map((section) => (
-            <article key={section.title} className="feature-card">
-              <h2>{section.title}</h2>
-              <ul className="sitemap-list">
-                {section.links.map(([href, label]) => (
-                  <li key={href}>
-                    <Link href={href}>{label}</Link>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </div>
+      <section style={{ display: "grid", gap: 18, gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))" }}>
+        {sections.map((section) => (
+          <article key={section.title} style={{ background: "#fff", border: "1px solid #e4e8ef", borderRadius: 18, padding: 22, boxShadow: "0 8px 24px rgba(16,17,20,0.04)" }}>
+            <h2 style={{ marginTop: 0 }}>{section.title}</h2>
+            <div style={{ display: "grid", gap: 10 }}>
+              {section.links.map(([href, label]) => (
+                <Link key={href} href={href} style={{ color: "#0b6db4", textDecoration: "none", fontWeight: 700 }}>
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </article>
+        ))}
+      </section>
     </main>
   );
 }

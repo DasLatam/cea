@@ -1,74 +1,54 @@
 import Link from "next/link";
 
-const tools = [
+const published = [
   {
-    href: "/herramientas/vender-todo-el-ano",
-    title: "Vender todo el Año",
-    description:
-      "Agenda comercial para comprar, importar, publicar y vender con campañas recurrentes durante todo el año.",
-    status: "Disponible",
+    href: "/herramientas/vender-todo-el-anio",
+    title: "Vender todo el año",
+    description: "Agenda comercial para detectar campañas repetibles, comprar con anticipación y ordenar la publicación de productos a tiempo.",
   },
   {
     href: "/herramientas/calculadora-costos",
     title: "Calculadora de costos real",
-    description:
-      "Calculá comisión, logística, retenciones y ganancia unitaria antes de comprar o publicar en Mercado Libre.",
-    status: "Nueva",
+    description: "Modelo práctico para estimar costos, gastos y ganancia neta según modalidad logística, precio y estructura de venta.",
   },
+];
+
+const upcoming = [
+  "Buscador de productos en Mercado Libre",
+  "Exploración de tendencias",
+  "Validación de demanda y publicidad",
 ];
 
 export default function HerramientasPage() {
   return (
-    <main style={{ maxWidth: 1180, margin: "0 auto", padding: "36px 20px 64px" }}>
-      <section style={{ display: "grid", gap: 16, marginBottom: 28 }}>
-        <span style={{ display: "inline-flex", width: "fit-content", padding: "8px 12px", borderRadius: 999, background: "#fff7cc", color: "#6b5d00", fontWeight: 700 }}>
-          Herramientas CEA
-        </span>
-        <div>
-          <h1 style={{ margin: "0 0 10px", fontSize: 40, lineHeight: 1.08 }}>Herramientas para decidir mejor antes de vender</h1>
-          <p style={{ margin: 0, maxWidth: 860, color: "#4b5563", fontSize: 18, lineHeight: 1.7 }}>
-            Este espacio reúne calculadoras, agendas y utilidades pensadas para e-commerce en Argentina. La idea no es llenar de funciones vacías, sino ofrecer herramientas cortas, prácticas y usables para tomar decisiones comerciales con más criterio.
-          </p>
-        </div>
+    <main style={{ maxWidth: 1180, margin: "0 auto", padding: "34px 20px 56px" }}>
+      <section style={{ display: "grid", gap: 14, marginBottom: 28 }}>
+        <span style={{ display: "inline-flex", width: "fit-content", padding: "8px 12px", borderRadius: 999, background: "#eef8ff", color: "#0b6db4", fontWeight: 800 }}>Herramientas</span>
+        <h1 style={{ fontSize: "clamp(2rem,4vw,3.4rem)", lineHeight: 1.05, margin: 0 }}>Recursos concretos para planificar, medir y decidir mejor</h1>
+        <p className="reading-block" style={{ margin: 0, maxWidth: 900, color: "#374151", lineHeight: 1.8 }}>
+          Esta sección reúne herramientas simples, orientadas a problemas reales de comercio electrónico: ordenar campañas, revisar costos, anticipar compras y trabajar decisiones con más criterio. La idea es crecer con módulos útiles, no con promesas vacías.
+        </p>
       </section>
 
-      <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 18 }}>
-        {tools.map((tool) => (
-          <article
-            key={tool.href}
-            style={{
-              background: "#fff",
-              border: "1px solid #e5e7eb",
-              borderRadius: 20,
-              padding: 24,
-              boxShadow: "0 14px 40px rgba(15,23,42,0.06)",
-              display: "grid",
-              gap: 14,
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center" }}>
-              <h2 style={{ margin: 0, fontSize: 24 }}>{tool.title}</h2>
-              <span style={{ padding: "6px 10px", borderRadius: 999, background: "#eff6ff", color: "#1d4ed8", fontWeight: 700, fontSize: 13 }}>
-                {tool.status}
-              </span>
-            </div>
-            <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.7 }}>{tool.description}</p>
-            <Link
-              href={tool.href}
-              style={{
-                width: "fit-content",
-                textDecoration: "none",
-                fontWeight: 800,
-                color: "#111827",
-                background: "#ffe600",
-                padding: "12px 16px",
-                borderRadius: 12,
-              }}
-            >
+      <section style={{ display: "grid", gap: 18, gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", marginBottom: 30 }}>
+        {published.map((tool) => (
+          <article key={tool.href} style={{ background: "#fff", border: "1px solid #e4e8ef", borderRadius: 18, padding: 22, boxShadow: "0 8px 24px rgba(16,17,20,0.04)", display: "grid", gap: 14 }}>
+            <h2 style={{ margin: 0, fontSize: 24 }}>{tool.title}</h2>
+            <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>{tool.description}</p>
+            <Link href={tool.href} style={{ color: "#0b6db4", textDecoration: "none", fontWeight: 800 }}>
               Abrir herramienta
             </Link>
           </article>
         ))}
+      </section>
+
+      <section style={{ background: "#0f1720", color: "#f4f7fb", borderRadius: 22, padding: 24, display: "grid", gap: 14 }}>
+        <h2 style={{ margin: 0, fontSize: 26 }}>Próximamente</h2>
+        <ul style={{ margin: 0, paddingLeft: 20, color: "#d5dce4", lineHeight: 1.8 }}>
+          {upcoming.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
       </section>
     </main>
   );

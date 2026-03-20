@@ -1,51 +1,39 @@
-import { ContactForm } from "@/components/forms/ContactForm";
+import ContactForm from "@/components/forms/ContactForm";
 
 export default function ContactoPage() {
   return (
-    <main className="editorial-main">
-      <div className="shell editorial-shell form-page-shell">
-        <section className="hero-card hero-card--compact">
-          <p className="eyebrow">Contáctenos</p>
-          <h1>Canal abierto para consultas, sugerencias y propuestas.</h1>
-          <p className="hero-lead">
-            Esta sección permite ordenar el contacto con lectores, empresas, aliados y personas que quieran
-            acercar una consulta concreta sobre el contenido del sitio o sobre futuras herramientas.
+    <main style={{ maxWidth: 1100, margin: "0 auto", padding: "34px 20px 56px" }}>
+      <section style={{ display: "grid", gap: 14, marginBottom: 28 }}>
+        <span style={{ display: "inline-flex", width: "fit-content", padding: "8px 12px", borderRadius: 999, background: "#dff4ff", color: "#0b6db4", fontWeight: 800 }}>Contáctenos</span>
+        <h1 style={{ fontSize: "clamp(2rem,4vw,3.2rem)", lineHeight: 1.05, margin: 0 }}>Contanos qué querés resolver y en qué etapa estás</h1>
+        <div className="reading-block" style={{ display: "grid", gap: 14, maxWidth: 900, color: "#374151", fontSize: 18, lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
+          <p style={{ margin: 0 }}>
+            Esta sección está pensada para quienes están evaluando productos, importación, márgenes, campañas o una reorganización más seria de su operación comercial. Si tenés una duda concreta o querés ordenar una decisión antes de invertir, podés escribirnos desde acá.
           </p>
-          <p className="hero-paragraph">
-            El formulario ya está incorporado a la experiencia general para que la navegación resulte más
-            completa. La conexión real del envío se puede activar en una siguiente fase sin rehacer la capa
-            visual ni el recorrido del usuario.
+          <p style={{ margin: 0 }}>
+            Cuanto más claro sea el contexto, mejor. Ayuda mucho saber qué vendés o querés vender, en qué canal operás, qué dudas aparecen hoy y qué parte del proceso te genera más incertidumbre. Eso permite que el intercambio sea más útil desde el principio.
           </p>
-        </section>
-
-        <div className="content-grid content-grid--form">
-          <article className="article-card">
-            <section className="article-section">
-              <h2>Cuándo conviene escribir</h2>
-              <p>
-                Este canal puede usarse para sugerir guías, proponer alianzas, señalar temas poco claros,
-                acercar necesidades de una categoría o consultar por futuras funcionalidades. La intención es
-                que el sitio evolucione con preguntas reales del público y no sólo con decisiones tomadas de
-                forma interna.
-              </p>
-            </section>
-            <section className="article-section">
-              <h2>Qué esperar de esta etapa</h2>
-              <p>
-                Por ahora, el formulario deja preparada la interfaz de contacto y muestra con claridad dónde
-                se va a canalizar esa relación. La integración del backend puede sumarse después sin volver a
-                rediseñar la experiencia completa.
-              </p>
-            </section>
-          </article>
-
-          <aside className="aside-card form-card">
-            <p className="aside-kicker">Formulario de contacto</p>
-            <h3>Escribinos desde esta misma página</h3>
-            <ContactForm />
-          </aside>
         </div>
-      </div>
+      </section>
+
+      <section style={{ display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: 22 }}>
+        <div style={{ background: "#fff", border: "1px solid #e4e8ef", borderRadius: 20, padding: 24, boxShadow: "0 8px 24px rgba(16,17,20,0.04)" }}>
+          <ContactForm />
+        </div>
+        <aside style={{ background: "#fff", border: "1px solid #e4e8ef", borderRadius: 20, padding: 24, boxShadow: "0 8px 24px rgba(16,17,20,0.04)", display: "grid", gap: 16, alignContent: "start" }}>
+          <h2 style={{ margin: 0, fontSize: 24 }}>Qué conviene incluir</h2>
+          <ul className="reading-block" style={{ margin: 0, paddingLeft: 20, color: "#374151", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>
+            <li>Qué producto o categoría estás evaluando.</li>
+            <li>Si ya vendés en Mercado Libre, tienda propia o redes.</li>
+            <li>Si el foco está en importación, rentabilidad o campañas.</li>
+            <li>En qué plazo querés tomar la decisión.</li>
+            <li>Qué limitación hoy te está frenando más.</li>
+          </ul>
+          <p className="reading-block" style={{ margin: 0, color: "#4b5563", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>
+            El formulario usa Resend para enviar la consulta por correo desde el backend. Si la configuración de dominio y remitente está bien validada en Vercel, el mensaje debería salir sin depender de integraciones complejas adicionales.
+          </p>
+        </aside>
+      </section>
     </main>
   );
 }

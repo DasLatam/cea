@@ -1,128 +1,83 @@
 import Link from "next/link";
-import { NewsletterForm } from "@/components/forms/NewsletterForm";
 
-const featureCards = [
+const featured = [
   {
-    title: "Guías útiles y concretas",
-    text:
-      "Explicaciones extensas sobre validación de productos, márgenes, importación, logística, fragilidad y operación diaria. La idea es dar contexto antes de tomar decisiones.",
+    title: "Guías",
+    text: "Criterios prácticos para validar productos, medir margen, importar con más orden y evitar errores frecuentes.",
+    href: "/guias",
   },
   {
-    title: "Oportunidades y temporadas",
-    text:
-      "Contenido pensado para ayudar a detectar momentos de venta, campañas repetibles y nichos estacionales sin depender de promesas mágicas ni supuestos poco claros.",
+    title: "Herramientas",
+    text: "Recursos concretos para planificar campañas, calcular costos y ordenar decisiones comerciales.",
+    href: "/herramientas",
   },
   {
-    title: "Herramientas publicadas",
-    text:
-      "CEA ya reúne una agenda anual para vender durante todo el año y una calculadora de costos real para revisar gastos, comisiones y ganancia antes de publicar.",
+    title: "Oportunidades",
+    text: "Ideas accionables para vender durante el año sin depender sólo de la improvisación del momento.",
+    href: "/oportunidades",
   },
-  {
-    title: "Novedades semanales",
-    text:
-      "La suscripción busca reunir oportunidades, alertas y contenidos nuevos en un formato breve y útil para quienes siguen el e-commerce argentino.",
-  },
-];
-
-const quickLinks = [
-  { href: "/guias", label: "Ver guías prácticas" },
-  { href: "/oportunidades", label: "Explorar oportunidades" },
-  { href: "/temporadas-y-tendencias", label: "Leer temporadas y tendencias" },
-  { href: "/herramientas/vender-todo-el-ano", label: "Abrir Vender todo el Año" },
-  { href: "/herramientas/calculadora-costos", label: "Abrir Calculadora de costos" },
-  { href: "/suscribirse", label: "Recibir novedades" },
 ];
 
 export default function HomePage() {
   return (
-    <main className="home-main">
-      <section className="shell hero-grid">
-        <div className="hero-card hero-card--home">
-          <p className="eyebrow">CEA</p>
-          <h1>Comercio Electrónico en Argentina</h1>
-          <p className="hero-lead">
-            Información útil para evaluar productos, entender categorías, revisar márgenes y tomar
-            mejores decisiones comerciales en el mercado argentino.
-          </p>
-          <p className="hero-paragraph">
-            Este sitio está pensado para vendedores, emprendedores, importadores y equipos que necesitan
-            una base más clara para decidir qué probar, qué revisar y qué evitar. En esta etapa, el foco
-            está puesto en contenido sólido, herramientas simples realmente usables y un lenguaje público,
-            directo y orientado a resolver problemas concretos.
-          </p>
-          <div className="hero-actions">
-            <Link href="/herramientas" className="button-primary">
+    <main style={{ maxWidth: 1180, margin: "0 auto", padding: "34px 20px 56px" }}>
+      <section
+        style={{
+          display: "grid",
+          gap: 24,
+          gridTemplateColumns: "1.15fr 0.85fr",
+          alignItems: "center",
+          marginBottom: 30,
+        }}
+      >
+        <div style={{ display: "grid", gap: 16 }}>
+          <span style={{ display: "inline-flex", width: "fit-content", padding: "8px 12px", borderRadius: 999, background: "#fff7c8", color: "#6d5600", fontWeight: 800 }}>
+            CEA · Comercio Electrónico en Argentina
+          </span>
+          <h1 style={{ fontSize: "clamp(2.4rem,5vw,4.4rem)", lineHeight: 0.98, margin: 0 }}>
+            Información útil y herramientas concretas para vender mejor durante todo el año
+          </h1>
+          <div className="reading-block" style={{ display: "grid", gap: 14, maxWidth: 820, fontSize: 18, lineHeight: 1.8, textAlign: "justify", hyphens: "auto", color: "#374151" }}>
+            <p style={{ margin: 0 }}>
+              CEA reúne guías, metodología y herramientas para quienes venden o quieren vender más ordenadamente en Argentina. El foco del sitio está puesto en elegir mejor un producto, calcular costos con criterio, planificar campañas y evitar errores que se pagan caro cuando ya hay stock, tiempos y dinero comprometidos.
+            </p>
+            <p style={{ margin: 0 }}>
+              La idea no es prometer fórmulas mágicas. La idea es ayudarte a tomar decisiones más claras, con mejor preparación y con un lenguaje pensado para el trabajo real de quien vende, importa, prueba productos o busca construir una operación más seria.
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <Link href="/herramientas" style={{ textDecoration: "none", background: "#ffe600", color: "#101114", padding: "14px 18px", borderRadius: 999, fontWeight: 900 }}>
               Ver herramientas
             </Link>
-            <Link href="/guias" className="button-secondary">
+            <Link href="/guias" style={{ textDecoration: "none", background: "#009ee3", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 900 }}>
               Explorar guías
             </Link>
           </div>
         </div>
 
-        <aside className="hero-side-card">
-          <p className="aside-kicker">Hoy en CEA</p>
-          <h2>Qué ya podés usar en el sitio</h2>
-          <ul>
-            <li>Guías largas y prácticas sobre validación, importación, logística y márgenes.</li>
-            <li>Contenido público sobre oportunidades, temporadas y lectura comercial.</li>
-            <li>Agenda anual para planificar compras, campañas y ventas durante todo el año.</li>
-            <li>Calculadora de costos para revisar comisión, logística, retenciones y ganancia.</li>
+        <div style={{ background: "#0f1720", color: "#f4f7fb", borderRadius: 24, padding: 26, display: "grid", gap: 16 }}>
+          <h2 style={{ margin: 0, fontSize: 28 }}>Qué ya podés usar hoy</h2>
+          <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.8, color: "#d5dce4" }}>
+            <li>Vender todo el año: agenda comercial con ventanas de compra, importación y publicación.</li>
+            <li>Calculadora de costos real: costos, gastos y ganancia neta por producto.</li>
+            <li>Guías desarrolladas para validar productos, importar y ordenar la parte fiscal.</li>
           </ul>
-        </aside>
-      </section>
-
-      <section className="shell section-spacing">
-        <div className="section-heading">
-          <p className="eyebrow">Para quién sirve</p>
-          <h2>Contenido pensado para decidir mejor, no para impresionar.</h2>
-          <p>
-            CEA está orientado a personas que venden, quieren vender o están evaluando categorías,
-            productos y oportunidades en Argentina. La propuesta es ayudarte a ordenar preguntas,
-            reconocer riesgos y leer el contexto con más claridad.
+          <p style={{ margin: 0, color: "#d5dce4", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>
+            Próximamente se sumarán nuevos módulos para trabajar datos de productos, tendencias y validación comercial con más profundidad.
           </p>
-        </div>
-
-        <div className="feature-grid">
-          {featureCards.map((card) => (
-            <article key={card.title} className="feature-card">
-              <h3>{card.title}</h3>
-              <p>{card.text}</p>
-            </article>
-          ))}
         </div>
       </section>
 
-      <section className="shell section-spacing section-reading">
-        <div className="section-heading narrow">
-          <p className="eyebrow">Cómo recorrer el sitio</p>
-          <h2>Elegí el punto de entrada que más se ajuste a tu necesidad.</h2>
-          <p>
-            Si querés resolver una duda práctica, empezá por Guías. Si querés pensar campañas y ventanas
-            de venta, seguí por Oportunidades y Temporadas. Si necesitás pasar a la acción, Herramientas
-            reúne la agenda anual y la calculadora de costos ya disponibles.
-          </p>
-        </div>
-
-        <div className="reading-list">
-          {quickLinks.map((item) => (
-            <Link key={item.href} href={item.href} className="reading-link">
-              {item.label}
+      <section style={{ display: "grid", gap: 18, gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", marginBottom: 34 }}>
+        {featured.map((item) => (
+          <article key={item.href} style={{ background: "#fff", border: "1px solid #e4e8ef", borderRadius: 20, padding: 22, boxShadow: "0 8px 24px rgba(16,17,20,0.04)", display: "grid", gap: 14 }}>
+            <h2 style={{ margin: 0, fontSize: 24 }}>{item.title}</h2>
+            <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>{item.text}</p>
+            <Link href={item.href} style={{ textDecoration: "none", color: "#0b6db4", fontWeight: 800 }}>
+              Ver sección
             </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="shell newsletter-band section-spacing">
-        <div className="newsletter-copy">
-          <p className="eyebrow">Novedades</p>
-          <h2>Sumate para recibir oportunidades y contenidos nuevos.</h2>
-          <p>
-            Esta interfaz deja preparada la suscripción para futuras alertas semanales, guías nuevas y
-            recordatorios comerciales relevantes.
-          </p>
-        </div>
-        <NewsletterForm compact />
+          </article>
+        ))}
       </section>
     </main>
   );

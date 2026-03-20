@@ -1,6 +1,6 @@
-import { EditorialPage } from "@/components/content/EditorialPage";
-import { editorialPages } from "@/lib/content/editorial";
+import GuidePage from "@/components/content/GuidePage";
+import { guides } from "@/lib/content";
 
 export default function Page() {
-  return <EditorialPage page={editorialPages["guias-importacion-courier"]} />;
+  return <GuidePage content={guides.importacionCourier} />;
 }

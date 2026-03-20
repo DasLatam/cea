@@ -1,52 +1,36 @@
-import { NewsletterForm } from "@/components/forms/NewsletterForm";
+import NewsletterForm from "@/components/forms/NewsletterForm";
 
 export default function SuscribirsePage() {
   return (
-    <main className="editorial-main">
-      <div className="shell editorial-shell form-page-shell">
-        <section className="hero-card hero-card--compact">
-          <p className="eyebrow">Novedades</p>
-          <h1>Recibí oportunidades y contenidos nuevos en tu email.</h1>
-          <p className="hero-lead">
-            La suscripción está pensada para quienes quieren seguir oportunidades semanales, guías nuevas,
-            alertas estacionales y señales útiles del comercio electrónico en Argentina sin revisar el sitio
-            todos los días.
+    <main style={{ maxWidth: 1100, margin: "0 auto", padding: "34px 20px 56px" }}>
+      <section style={{ display: "grid", gap: 14, marginBottom: 28 }}>
+        <span style={{ display: "inline-flex", width: "fit-content", padding: "8px 12px", borderRadius: 999, background: "#fff7c8", color: "#6d5600", fontWeight: 800 }}>Novedades</span>
+        <h1 style={{ fontSize: "clamp(2rem,4vw,3.2rem)", lineHeight: 1.05, margin: 0 }}>Recibí ideas para vender, campañas y herramientas nuevas</h1>
+        <div className="reading-block" style={{ display: "grid", gap: 14, maxWidth: 900, color: "#374151", fontSize: 18, lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
+          <p style={{ margin: 0 }}>
+            Esta suscripción está pensada para quienes quieren mantenerse cerca de oportunidades estacionales, criterios de validación de productos, nuevas herramientas del sitio y recordatorios útiles para planificar compras e importaciones con más anticipación.
           </p>
-          <p className="hero-paragraph">
-            El objetivo no es llenar la bandeja de entrada, sino enviar una selección breve y curada de
-            aquello que realmente valga la pena mirar. En esta etapa, la interfaz del formulario ya queda
-            visible y lista para conectarse al sistema de envíos en la próxima fase del proyecto.
+          <p style={{ margin: 0 }}>
+            La idea no es llenar tu correo de ruido, sino enviarte información concreta cuando haya algo que realmente pueda ayudarte a vender mejor, ordenar campañas o detectar una oportunidad con más tiempo de preparación.
           </p>
-        </section>
-
-        <div className="content-grid content-grid--form">
-          <article className="article-card">
-            <section className="article-section">
-              <h2>Qué clase de novedades podés esperar</h2>
-              <p>
-                El contenido previsto para esta suscripción incluye oportunidades a seguir, guías recién
-                publicadas, recordatorios sobre fechas comerciales y notas breves sobre riesgos o variables
-                que conviene revisar antes de comprar, publicar o importar. La propuesta busca ser útil para
-                vendedores, emprendedores e importadores pequeños.
-              </p>
-            </section>
-            <section className="article-section">
-              <h2>Por qué conviene dejar el formulario listo</h2>
-              <p>
-                La próxima capa del sitio va a incorporar el sistema de envío. Tener esta sección visible
-                desde ahora ayuda a ordenar la experiencia y a mostrar que la relación con los lectores forma
-                parte del producto, no un agregado de último momento.
-              </p>
-            </section>
-          </article>
-
-          <aside className="aside-card form-card">
-            <p className="aside-kicker">Formulario de novedades</p>
-            <h3>Dejá preparado tu alta</h3>
-            <NewsletterForm />
-          </aside>
         </div>
-      </div>
+      </section>
+
+      <section style={{ display: "grid", gridTemplateColumns: "1fr 0.92fr", gap: 22 }}>
+        <div style={{ background: "#fff", border: "1px solid #e4e8ef", borderRadius: 20, padding: 24, boxShadow: "0 8px 24px rgba(16,17,20,0.04)" }}>
+          <NewsletterForm />
+        </div>
+        <aside style={{ background: "#0f1720", color: "#f4f7fb", borderRadius: 20, padding: 24, display: "grid", gap: 16 }}>
+          <h2 style={{ margin: 0, fontSize: 24 }}>Qué tipo de novedades vas a recibir</h2>
+          <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.8, color: "#d4dbe4" }}>
+            <li>Ideas para campañas de regalo y venta estacional.</li>
+            <li>Criterios para validar productos antes de comprar stock.</li>
+            <li>Herramientas nuevas publicadas dentro de CEA.</li>
+            <li>Recordatorios útiles para planificar compra, importación y publicación.</li>
+            <li>Notas breves con foco comercial, no relleno.</li>
+          </ul>
+        </aside>
+      </section>
     </main>
   );
 }
