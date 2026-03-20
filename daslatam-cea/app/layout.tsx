@@ -1,6 +1,6 @@
 import "../styles/globals.css";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteNav } from "@/components/site/SiteNav";
+import SiteFooter from "@/components/site/SiteFooter";
+import SiteNav from "@/components/site/SiteNav";
 import { SiteBreadcrumbs } from "@/components/site/SiteBreadcrumbs";
 
 export default function RootLayout({
