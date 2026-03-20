@@ -1,320 +1,384 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
 import {
+  buildAnnualCalendarIcs,
+  buildBonusTracks,
+  buildCampaignCalendarIcs,
+  buildCoreCampaigns,
+  buildMilestones,
   formatDateEs,
-  formatMoneyAr,
-  getYearRoundAgenda,
-  type CampaignOccurrence,
+  formatShort,
 } from "@/lib/calendar/yearRoundSales";
 
-const statusStyles: Record<CampaignOccurrence["status"], { label: string; bg: string; color: string }> = {
-  "buy-now": { label: "Comprar ahora", bg: "#fff3cd", color: "#7a5d00" },
-  "embark-soon": { label: "Coordinar embarque", bg: "#e0f2fe", color: "#075985" },
-  "publish-soon": { label: "Preparar publicación", bg: "#ede9fe", color: "#5b21b6" },
-  "on-sale": { label: "Ya en venta", bg: "#dcfce7", color: "#166534" },
-  planned: { label: "Planificado", bg: "#f3f4f6", color: "#374151" },
-};
+function downloadTextFile(filename: string, text: string, mimeType = "text/calendar;charset=utf-8") {
+  const blob = new Blob([text], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
 
-export default function YearRoundSalesPlanner() {
-  const [unitsPerCampaign, setUnitsPerCampaign] = useState(1000);
-  const [profitPerUnit, setProfitPerUnit] = useState(1000);
-  const [showOnlyUpcomingActions, setShowOnlyUpcomingActions] = useState(false);
-
-  const campaigns = useMemo(() => getYearRoundAgenda(new Date()), []);
-
-  const visibleCampaigns = useMemo(() => {
-    if (!showOnlyUpcomingActions) return campaigns;
-    return campaigns.filter((campaign) => campaign.status !== "planned");
-  }, [campaigns, showOnlyUpcomingActions]);
-
-  const campaignCount = campaigns.length;
-  const annualUnits = campaignCount * unitsPerCampaign;
-  const annualPocket = annualUnits * profitPerUnit;
-  const annualPocketOptimistic = annualUnits * 10000;
+function metricCard(value: string, label: string, tone: "dark" | "yellow" | "blue" = "dark") {
+  const palette =
+    tone === "yellow"
+      ? { bg: "#fff7cc", color: "#7a5d00" }
+      : tone === "blue"
+      ? { bg: "#eaf7ff", color: "#0c4a6e" }
+      : { bg: "#111827", color: "#ffffff" };
 
   return (
-    <div style={{ display: "grid", gap: 24 }}>
+    <div
+      style={{
+        background: palette.bg,
+        color: palette.color,
+        borderRadius: 18,
+        padding: "18px 20px",
+        border: tone === "dark" ? "1px solid #111827" : "1px solid rgba(17,24,39,0.08)",
+      }}
+    >
+      <div style={{ fontSize: 28, fontWeight: 900, lineHeight: 1 }}>{value}</div>
+      <div style={{ marginTop: 8, fontSize: 14, lineHeight: 1.5 }}>{label}</div>
+    </div>
+  );
+}
+
+export default function YearRoundSalesPlanner() {
+  const year = new Date().getFullYear();
+  const campaigns = buildCoreCampaigns(year);
+  const bonusTracks = buildBonusTracks(year);
+
+  return (
+    <main style={{ maxWidth: 1160, margin: "0 auto", padding: "38px 20px 80px" }}>
       <section
         style={{
-          background: "linear-gradient(135deg, #fffbe6 0%, #ffffff 55%, #e6f7ff 100%)",
-          border: "1px solid #e5e7eb",
-          borderRadius: 20,
-          padding: 28,
-          boxShadow: "0 12px 28px rgba(15, 23, 42, 0.06)",
+          background: "linear-gradient(135deg, #fff8cc 0%, #ffffff 58%, #e9f6ff 100%)",
+          border: "1px solid #ececec",
+          borderRadius: 28,
+          padding: 32,
+          boxShadow: "0 22px 48px rgba(17, 24, 39, 0.08)",
         }}
       >
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginBottom: 14 }}>
-          <span
-            style={{
-              display: "inline-flex",
-              padding: "8px 12px",
-              borderRadius: 999,
-              background: "#111827",
-              color: "#fff",
-              fontSize: 13,
-              fontWeight: 700,
-            }}
-          >
-            Herramienta CEA
-          </span>
-          <span
-            style={{
-              display: "inline-flex",
-              padding: "8px 12px",
-              borderRadius: 999,
-              background: "#ffe600",
-              color: "#111827",
-              fontSize: 13,
-              fontWeight: 700,
-            }}
-          >
-            Agenda del éxito
-          </span>
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 10,
+            borderRadius: 999,
+            background: "#111827",
+            color: "#ffffff",
+            padding: "9px 14px",
+            fontSize: 13,
+            fontWeight: 800,
+            letterSpacing: 0.2,
+            marginBottom: 16,
+          }}
+        >
+          Agenda del Éxito · Un regalo de CEA
         </div>
 
-        <h1 style={{ fontSize: 38, lineHeight: 1.08, margin: "0 0 12px", color: "#111827" }}>
-          Vender todo el año
+        <h1 style={{ margin: "0 0 14px", fontSize: 46, lineHeight: 1.03 }}>
+          Vender todo el Año
         </h1>
 
-        <p style={{ margin: 0, maxWidth: 900, color: "#374151", fontSize: 18, lineHeight: 1.7 }}>
-          Esta herramienta ordena una agenda anual de campañas recurrentes para regalo y consumo estacional. La lógica es simple:
-          comprar con anticipación, usar tránsito marítimo para bajar costo, publicar con 30 días de margen y sostener un flujo de
-          nichos repetibles a lo largo del año. No garantiza ventas; sirve para planificar mejor, reducir improvisación y entrar antes
-          que la mayoría.
+        <p style={{ margin: "0 0 14px", maxWidth: 860, fontSize: 19, lineHeight: 1.75, color: "#374151" }}>
+          Esta herramienta organiza campañas repetibles alrededor de fechas en las que las personas
+          buscan ideas para regalar, renovar o comprar por temporada. La lógica es simple: anticiparse,
+          importar con tiempo, publicar antes del pico de demanda y repetir una agenda comercial ordenada
+          durante todo el año.
         </p>
-      </section>
 
-      <section
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: 16,
-        }}
-      >
-        {[
-          { label: "Campañas activas", value: String(campaignCount), note: "ventanas comerciales recurrentes" },
-          { label: "Unidades objetivo", value: annualUnits.toLocaleString("es-AR"), note: `${unitsPerCampaign.toLocaleString("es-AR")} por campaña` },
-          { label: "Ganancia bolsillo", value: formatMoneyAr(annualPocket), note: `${formatMoneyAr(profitPerUnit)} por unidad` },
-          { label: "Escenario alto", value: formatMoneyAr(annualPocketOptimistic), note: "si la utilidad llega a $10.000 por unidad" },
-        ].map((item) => (
-          <article
-            key={item.label}
-            style={{
-              background: "#fff",
-              border: "1px solid #e5e7eb",
-              borderRadius: 18,
-              padding: 20,
-              boxShadow: "0 8px 24px rgba(15, 23, 42, 0.05)",
-            }}
-          >
-            <div style={{ color: "#6b7280", fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.6 }}>
-              {item.label}
-            </div>
-            <div style={{ marginTop: 10, fontSize: 30, fontWeight: 800, color: "#111827" }}>{item.value}</div>
-            <div style={{ marginTop: 8, color: "#4b5563", fontSize: 14 }}>{item.note}</div>
-          </article>
-        ))}
-      </section>
+        <p style={{ margin: 0, maxWidth: 860, fontSize: 17, lineHeight: 1.75, color: "#4b5563" }}>
+          La propuesta promocional del sitio es clara: si trabajás 12 campañas al año, con 1.000 unidades
+          por campaña, hablás de 12.000 unidades anuales. Con una ganancia de $1.000 por unidad, el resultado
+          teórico es de $12.000.000. Con una ganancia de $10.000 por unidad, el resultado teórico escala a
+          $120.000.000. No es una promesa automática: es una forma visual de entender el poder de una agenda
+          anual bien ejecutada.
+        </p>
 
-      <section
-        style={{
-          background: "#fff",
-          border: "1px solid #e5e7eb",
-          borderRadius: 18,
-          padding: 24,
-          boxShadow: "0 8px 24px rgba(15, 23, 42, 0.05)",
-        }}
-      >
-        <h2 style={{ margin: "0 0 18px", fontSize: 24, color: "#111827" }}>Supuestos del modelo</h2>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 18 }}>
-          <label style={{ display: "grid", gap: 8 }}>
-            <span style={{ fontWeight: 700, color: "#374151" }}>Unidades por campaña</span>
-            <input
-              type="number"
-              min={100}
-              step={100}
-              value={unitsPerCampaign}
-              onChange={(e) => setUnitsPerCampaign(Number(e.target.value || 0))}
-              style={inputStyle}
-            />
-          </label>
-
-          <label style={{ display: "grid", gap: 8 }}>
-            <span style={{ fontWeight: 700, color: "#374151" }}>Ganancia por unidad</span>
-            <input
-              type="number"
-              min={100}
-              step={100}
-              value={profitPerUnit}
-              onChange={(e) => setProfitPerUnit(Number(e.target.value || 0))}
-              style={inputStyle}
-            />
-          </label>
-
-          <label style={{ display: "flex", alignItems: "end", gap: 10, color: "#374151", fontWeight: 600 }}>
-            <input
-              type="checkbox"
-              checked={showOnlyUpcomingActions}
-              onChange={(e) => setShowOnlyUpcomingActions(e.target.checked)}
-            />
-            Mostrar sólo campañas con acción próxima
-          </label>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: 16,
+            marginTop: 24,
+          }}
+        >
+          {metricCard("12+", "Campañas principales para sostener oportunidades recurrentes durante el año.", "dark")}
+          {metricCard("90 días", "Compra sugerida en China antes de la fecha comercial para bajar costos.", "yellow")}
+          {metricCard("30 días", "Publicación sugerida en Mercado Libre antes del pico de búsqueda.", "blue")}
         </div>
 
         <div
           style={{
-            marginTop: 18,
-            padding: 16,
-            borderRadius: 14,
-            background: "#f8fafc",
-            color: "#475569",
-            lineHeight: 1.6,
+            display: "flex",
+            gap: 12,
+            flexWrap: "wrap",
+            marginTop: 24,
           }}
         >
-          Regla operativa sugerida: comprar en China 90 días antes, embarcar aproximadamente entre 75 y 60 días antes, recibir y preparar
-          stock con margen, y publicar 30 días antes de la fecha fuerte. Esa secuencia baja costo unitario, mejora timing y evita subir el
-          listing tarde cuando el mercado ya está saturado.
+          <button
+            type="button"
+            onClick={() =>
+              downloadTextFile(`agenda-del-exito-${year}.ics`, buildAnnualCalendarIcs(year))
+            }
+            style={{
+              appearance: "none",
+              border: "none",
+              background: "#111827",
+              color: "#fff",
+              fontWeight: 800,
+              borderRadius: 14,
+              padding: "14px 18px",
+              cursor: "pointer",
+            }}
+          >
+            Agregar agenda anual al calendario
+          </button>
+
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              borderRadius: 14,
+              padding: "14px 16px",
+              background: "#ffffff",
+              border: "1px solid #d1d5db",
+              color: "#4b5563",
+              fontSize: 14,
+              lineHeight: 1.5,
+            }}
+          >
+            Incluye fechas de compra, embarque, recepción y publicación para cada campaña.
+          </span>
         </div>
       </section>
 
-      <section style={{ display: "grid", gap: 16 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
-          <div>
-            <h2 style={{ margin: 0, fontSize: 26, color: "#111827" }}>Calendario operativo</h2>
-            <p style={{ margin: "6px 0 0", color: "#4b5563" }}>
-              Cada tarjeta te dice cuándo comprar, cuándo embarcar y cuándo deberías estar publicado en Mercado Libre.
-            </p>
-          </div>
-        </div>
+      <section
+        style={{
+          marginTop: 28,
+          background: "#0f172a",
+          color: "#fff",
+          borderRadius: 24,
+          padding: 28,
+          boxShadow: "0 18px 38px rgba(15, 23, 42, 0.2)",
+        }}
+      >
+        <h2 style={{ margin: "0 0 10px", fontSize: 28 }}>Regla operativa sugerida</h2>
+        <p style={{ margin: 0, maxWidth: 900, lineHeight: 1.8, color: "rgba(255,255,255,0.88)" }}>
+          Elegí una campaña, buscá un subnicho concreto, comprá con una ventana cercana a 90 días, embarcá
+          por vía marítima para cuidar costos, recibí con tiempo para revisar calidad y subí la publicación
+          unos 30 días antes del evento. La repetición disciplinada de este proceso puede transformar fechas
+          sueltas en un calendario comercial estable.
+        </p>
+      </section>
 
-        {visibleCampaigns.map((campaign) => {
-          const status = statusStyles[campaign.status];
+      <section style={{ marginTop: 28 }}>
+        <h2 style={{ margin: "0 0 8px", fontSize: 32 }}>Calendario operativo</h2>
+        <p style={{ margin: "0 0 20px", maxWidth: 900, color: "#4b5563", lineHeight: 1.8 }}>
+          Siempre se muestra el listado completo para ayudarte a mirar el año entero y no sólo la próxima urgencia.
+          Cada campaña incluye un botón para descargar sus hitos al calendario.
+        </p>
 
-          return (
-            <article
-              key={campaign.id}
-              style={{
-                background: "#fff",
-                border: "1px solid #e5e7eb",
-                borderRadius: 20,
-                padding: 22,
-                boxShadow: "0 8px 24px rgba(15, 23, 42, 0.05)",
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap", alignItems: "start" }}>
-                <div style={{ maxWidth: 720 }}>
-                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-                    <h3 style={{ margin: 0, fontSize: 24, color: "#111827" }}>{campaign.title}</h3>
-                    <span
+        <div style={{ display: "grid", gap: 18 }}>
+          {campaigns.map((campaign) => {
+            const milestones = buildMilestones(campaign);
+
+            return (
+              <article
+                key={campaign.key}
+                style={{
+                  background: "#fff",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: 24,
+                  padding: 24,
+                  boxShadow: "0 12px 28px rgba(17, 24, 39, 0.06)",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 18,
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <div style={{ maxWidth: 780 }}>
+                    <div
                       style={{
                         display: "inline-flex",
-                        padding: "6px 10px",
+                        alignItems: "center",
                         borderRadius: 999,
-                        background: status.bg,
-                        color: status.color,
-                        fontWeight: 700,
-                        fontSize: 13,
+                        padding: "7px 12px",
+                        background:
+                          campaign.risk === "Bajo"
+                            ? "#dcfce7"
+                            : campaign.risk === "Medio"
+                            ? "#fef3c7"
+                            : "#fee2e2",
+                        color:
+                          campaign.risk === "Bajo"
+                            ? "#166534"
+                            : campaign.risk === "Medio"
+                            ? "#92400e"
+                            : "#991b1b",
+                        fontSize: 12,
+                        fontWeight: 800,
+                        marginBottom: 14,
                       }}
                     >
-                      {status.label}
-                    </span>
+                      Riesgo operativo {campaign.risk}
+                    </div>
+
+                    <h3 style={{ margin: "0 0 8px", fontSize: 28 }}>{campaign.name}</h3>
+                    <p style={{ margin: "0 0 10px", color: "#374151", lineHeight: 1.75 }}>
+                      Fecha comercial objetivo: <strong>{campaign.anchorLabel}</strong> · {formatDateEs(campaign.saleDate)}
+                    </p>
+                    <p style={{ margin: "0 0 14px", color: "#4b5563", lineHeight: 1.75 }}>{campaign.note}</p>
+
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                      {campaign.niches.map((niche) => (
+                        <span
+                          key={niche}
+                          style={{
+                            borderRadius: 999,
+                            background: "#f3f4f6",
+                            color: "#374151",
+                            padding: "8px 12px",
+                            fontSize: 13,
+                            fontWeight: 700,
+                          }}
+                        >
+                          {niche}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <p style={{ margin: "12px 0 0", color: "#4b5563", lineHeight: 1.7 }}>{campaign.description}</p>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      downloadTextFile(
+                        `${campaign.key}-${year}.ics`,
+                        buildCampaignCalendarIcs(campaign)
+                      )
+                    }
+                    style={{
+                      appearance: "none",
+                      border: "none",
+                      background: "#111827",
+                      color: "#fff",
+                      fontWeight: 800,
+                      borderRadius: 14,
+                      padding: "14px 18px",
+                      cursor: "pointer",
+                      minWidth: 220,
+                    }}
+                  >
+                    Agregar al calendario
+                  </button>
                 </div>
 
                 <div
                   style={{
-                    minWidth: 210,
-                    background: "#f8fafc",
-                    borderRadius: 16,
-                    padding: 16,
-                    border: "1px solid #e2e8f0",
+                    marginTop: 20,
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
+                    gap: 12,
                   }}
                 >
-                  <div style={{ fontSize: 13, color: "#64748b", fontWeight: 700, textTransform: "uppercase" }}>Fecha ancla</div>
-                  <div style={{ marginTop: 8, fontSize: 22, fontWeight: 800, color: "#111827" }}>{formatDateEs(campaign.eventDate)}</div>
-                  <div style={{ marginTop: 8, color: "#475569" }}>Faltan {campaign.daysUntilEvent} días</div>
+                  {milestones.map((step) => (
+                    <div
+                      key={step.label}
+                      style={{
+                        background: "#f8fafc",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: 18,
+                        padding: 16,
+                      }}
+                    >
+                      <div style={{ fontSize: 12, fontWeight: 800, color: "#0f172a", marginBottom: 8 }}>
+                        {step.label}
+                      </div>
+                      <div style={{ fontSize: 20, fontWeight: 900, marginBottom: 8 }}>
+                        {formatShort(step.date)}
+                      </div>
+                      <div style={{ color: "#475569", lineHeight: 1.6, fontSize: 14 }}>{step.description}</div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-
-              <div
-                style={{
-                  marginTop: 18,
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                  gap: 14,
-                }}
-              >
-                <MilestoneCard title="Comprar" date={formatDateEs(campaign.buyDate)} note="Orden al proveedor y cierre de costos." />
-                <MilestoneCard
-                  title="Embarcar"
-                  date={`${formatDateEs(campaign.sailWindowStart)} → ${formatDateEs(campaign.sailWindowEnd)}`}
-                  note="Ventana sugerida para tránsito marítimo económico."
-                />
-                <MilestoneCard title="Publicar" date={formatDateEs(campaign.publishDate)} note="Listing en ML con 30 días de ventaja." />
-                <MilestoneCard title="Stock sugerido" date={`${unitsPerCampaign.toLocaleString("es-AR")} unidades`} note={campaign.inventoryHint} />
-              </div>
-
-              <div
-                style={{
-                  marginTop: 18,
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                  gap: 14,
-                }}
-              >
-                <InfoCard title="Nichos sugeridos" body={campaign.niches.join(" · ")} />
-                <InfoCard title="Audiencia" body={campaign.audience} />
-                <InfoCard title="Riesgo operativo" body={campaign.caution} />
-              </div>
-            </article>
-          );
-        })}
+              </article>
+            );
+          })}
+        </div>
       </section>
-    </div>
+
+      <section style={{ marginTop: 34 }}>
+        <h2 style={{ margin: "0 0 10px", fontSize: 32 }}>Bonus track</h2>
+        <p style={{ margin: "0 0 20px", color: "#4b5563", lineHeight: 1.8, maxWidth: 900 }}>
+          Son ventanas temáticas que pueden acelerar oportunidades puntuales. No reemplazan la agenda base:
+          sirven para sumar campañas con criterio y aprovechar conversación, tendencia o atención masiva.
+        </p>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 18 }}>
+          {bonusTracks.map((item) => (
+            <article
+              key={item.key}
+              style={{
+                background: "#fff",
+                border: "1px solid #e5e7eb",
+                borderRadius: 24,
+                padding: 22,
+                boxShadow: "0 12px 28px rgba(17, 24, 39, 0.05)",
+              }}
+            >
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  borderRadius: 999,
+                  background: "#eaf7ff",
+                  color: "#0c4a6e",
+                  padding: "7px 12px",
+                  fontSize: 12,
+                  fontWeight: 800,
+                  marginBottom: 14,
+                }}
+              >
+                Oportunidad táctica
+              </div>
+
+              <h3 style={{ margin: "0 0 8px", fontSize: 24 }}>{item.name}</h3>
+              <p style={{ margin: "0 0 8px", color: "#0f172a", fontWeight: 700 }}>{item.timingLabel}</p>
+              <p style={{ margin: "0 0 14px", color: "#4b5563", lineHeight: 1.75 }}>{item.description}</p>
+
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 14 }}>
+                {item.niches.map((niche) => (
+                  <span
+                    key={niche}
+                    style={{
+                      borderRadius: 999,
+                      background: "#f3f4f6",
+                      color: "#374151",
+                      padding: "8px 12px",
+                      fontSize: 13,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {niche}
+                  </span>
+                ))}
+              </div>
+
+              <p style={{ margin: 0, color: "#475569", lineHeight: 1.7 }}>{item.note}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
   );
 }
-
-function MilestoneCard({ title, date, note }: { title: string; date: string; note: string }) {
-  return (
-    <div
-      style={{
-        borderRadius: 16,
-        border: "1px solid #e5e7eb",
-        padding: 16,
-        background: "#ffffff",
-      }}
-    >
-      <div style={{ fontSize: 13, color: "#6b7280", fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.6 }}>{title}</div>
-      <div style={{ marginTop: 8, fontSize: 18, fontWeight: 800, color: "#111827", lineHeight: 1.35 }}>{date}</div>
-      <div style={{ marginTop: 8, color: "#4b5563", lineHeight: 1.5 }}>{note}</div>
-    </div>
-  );
-}
-
-function InfoCard({ title, body }: { title: string; body: string }) {
-  return (
-    <div
-      style={{
-        borderRadius: 16,
-        border: "1px solid #e5e7eb",
-        padding: 16,
-        background: "#f8fafc",
-      }}
-    >
-      <div style={{ fontSize: 13, color: "#6b7280", fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.6 }}>{title}</div>
-      <div style={{ marginTop: 8, color: "#334155", lineHeight: 1.6 }}>{body}</div>
-    </div>
-  );
-}
-
-const inputStyle: CSSProperties = {
-  border: "1px solid #d1d5db",
-  borderRadius: 12,
-  padding: "12px 14px",
-  fontSize: 16,
-  color: "#111827",
-  background: "#fff",
-};

@@ -1,115 +1,133 @@
 import Link from "next/link";
 
-const tools = [
+const toolCards = [
   {
-    title: "Vender todo el año",
     href: "/herramientas/vender-todo-el-ano",
+    title: "Vender todo el Año",
+    description:
+      "Una agenda comercial para anticiparte a las fechas de regalo, comprar con tiempo, importar más barato y llegar con stock cuando el mercado empieza a buscar.",
     status: "Disponible",
-    description:
-      "Calendario comercial con fechas de regalo, ventana de compra en China, tramo marítimo sugerido y publicación 30 días antes en Mercado Libre.",
   },
   {
-    title: "Calculadora de margen real",
-    href: "#",
-    status: "Próximamente",
+    href: "/herramientas",
+    title: "Más herramientas",
     description:
-      "Costos, comisión, flete, impuestos y utilidad neta para validar si el negocio tiene sentido antes de importar.",
-  },
-  {
-    title: "Radar de fechas fuertes",
-    href: "#",
+      "Estamos preparando nuevos módulos prácticos de planificación comercial, validación de producto y márgenes.",
     status: "Próximamente",
-    description:
-      "Mapa rápido de campañas por trimestre para no comprar tarde ni publicar cuando el mercado ya está saturado.",
   },
 ];
 
 export default function HerramientasPage() {
   return (
-    <main style={{ maxWidth: 1120, margin: "0 auto", padding: "36px 20px 72px" }}>
+    <main style={{ maxWidth: 1120, margin: "0 auto", padding: "40px 20px 72px" }}>
       <section
         style={{
-          background: "linear-gradient(135deg, #111827 0%, #1f2937 55%, #0f172a 100%)",
-          color: "#fff",
-          borderRadius: 22,
-          padding: 28,
-          boxShadow: "0 12px 28px rgba(15, 23, 42, 0.16)",
+          background: "linear-gradient(135deg, #fff8cc 0%, #ffffff 55%, #e9f6ff 100%)",
+          border: "1px solid #e8e8e8",
+          borderRadius: 24,
+          padding: 32,
+          boxShadow: "0 18px 50px rgba(17, 24, 39, 0.08)",
         }}
       >
-        <div
+        <span
           style={{
-            display: "inline-flex",
-            padding: "8px 12px",
+            display: "inline-block",
+            background: "#111827",
+            color: "#fff",
             borderRadius: 999,
-            background: "#ffe600",
-            color: "#111827",
-            fontWeight: 800,
+            padding: "8px 14px",
+            fontWeight: 700,
             fontSize: 13,
+            letterSpacing: 0.3,
             marginBottom: 14,
           }}
         >
-          CEA · Herramientas
-        </div>
-        <h1 style={{ margin: "0 0 10px", fontSize: 38, lineHeight: 1.08 }}>Herramientas para decidir mejor qué vender</h1>
-        <p style={{ margin: 0, maxWidth: 860, color: "#d1d5db", lineHeight: 1.7, fontSize: 18 }}>
-          Esta sección concentra herramientas prácticas para organizar campañas, validar márgenes y transformar intuiciones en un plan
-          comercial más disciplinado. Empezamos por una herramienta simple pero potente: una agenda anual de oportunidades recurrentes.
+          Herramientas CEA
+        </span>
+        <h1 style={{ margin: "0 0 12px", fontSize: 42, lineHeight: 1.05 }}>
+          Herramientas simples para planificar mejor tus ventas
+        </h1>
+        <p style={{ margin: 0, maxWidth: 820, fontSize: 18, lineHeight: 1.7, color: "#374151" }}>
+          Empezamos por módulos concretos, prácticos y fáciles de usar. La idea es que cada
+          herramienta te ayude a tomar decisiones con anticipación: qué vender, cuándo comprar,
+          cuándo publicar y cómo organizar campañas repetibles durante todo el año.
         </p>
       </section>
 
       <section
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-          gap: 18,
-          marginTop: 24,
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: 20,
+          marginTop: 28,
         }}
       >
-        {tools.map((tool) => {
-          const available = tool.status === "Disponible" && tool.href !== "#";
-          const Card = (
-            <article
+        {toolCards.map((tool) => (
+          <article
+            key={tool.title}
+            style={{
+              background: "#fff",
+              border: "1px solid #e5e7eb",
+              borderRadius: 22,
+              padding: 24,
+              boxShadow: "0 14px 34px rgba(17, 24, 39, 0.06)",
+              display: "flex",
+              flexDirection: "column",
+              gap: 14,
+            }}
+          >
+            <div
               style={{
-                height: "100%",
-                background: "#fff",
-                border: "1px solid #e5e7eb",
-                borderRadius: 18,
-                padding: 22,
-                boxShadow: "0 8px 24px rgba(15, 23, 42, 0.05)",
-                display: "grid",
-                gap: 12,
+                alignSelf: "flex-start",
+                borderRadius: 999,
+                padding: "7px 12px",
+                fontSize: 12,
+                fontWeight: 800,
+                background: tool.status === "Disponible" ? "#dcfce7" : "#f3f4f6",
+                color: tool.status === "Disponible" ? "#166534" : "#374151",
               }}
             >
-              <div
+              {tool.status}
+            </div>
+            <h2 style={{ margin: 0, fontSize: 24 }}>{tool.title}</h2>
+            <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.7 }}>{tool.description}</p>
+            {tool.status === "Disponible" ? (
+              <Link
+                href={tool.href}
                 style={{
+                  marginTop: "auto",
                   display: "inline-flex",
-                  width: "fit-content",
-                  padding: "6px 10px",
-                  borderRadius: 999,
-                  background: available ? "#dcfce7" : "#f3f4f6",
-                  color: available ? "#166534" : "#374151",
-                  fontWeight: 700,
-                  fontSize: 13,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textDecoration: "none",
+                  background: "#111827",
+                  color: "#fff",
+                  borderRadius: 14,
+                  padding: "14px 16px",
+                  fontWeight: 800,
                 }}
               >
-                {tool.status}
-              </div>
-              <h2 style={{ margin: 0, fontSize: 24, color: "#111827" }}>{tool.title}</h2>
-              <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.7 }}>{tool.description}</p>
-              <div style={{ marginTop: 8, color: available ? "#0f62fe" : "#6b7280", fontWeight: 700 }}>
-                {available ? "Abrir herramienta →" : "Disponible más adelante"}
-              </div>
-            </article>
-          );
-
-          return available ? (
-            <Link key={tool.title} href={tool.href} style={{ textDecoration: "none" }}>
-              {Card}
-            </Link>
-          ) : (
-            <div key={tool.title}>{Card}</div>
-          );
-        })}
+                Abrir herramienta
+              </Link>
+            ) : (
+              <span
+                style={{
+                  marginTop: "auto",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  border: "1px dashed #cbd5e1",
+                  color: "#475569",
+                  borderRadius: 14,
+                  padding: "14px 16px",
+                  fontWeight: 700,
+                }}
+              >
+                Próximamente
+              </span>
+            )}
+          </article>
+        ))}
       </section>
     </main>
   );
