@@ -572,3 +572,76 @@ li {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* ===== Lectura justificada con guionado en español ===== */
+
+:root {
+  --content-max-width: 78ch;
+}
+
+/* Contenido largo / editorial */
+main p,
+article p,
+section p,
+main li,
+article li,
+section li,
+main blockquote,
+article blockquote,
+section blockquote {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* Evitar justificar elementos cortos o de UI */
+nav p,
+footer p,
+button,
+label,
+input,
+textarea,
+select,
+small,
+.badge,
+.kpi,
+.card-title,
+.card-subtitle,
+.hero-actions,
+.site-nav,
+.site-footer,
+.breadcrumbs {
+  text-align: left;
+  hyphens: manual;
+}
+
+/* Mejor legibilidad en bloques largos */
+main article,
+main .content,
+main .prose,
+.editorial-content {
+  max-width: var(--content-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Listas más prolijas */
+main ul,
+main ol,
+article ul,
+article ol,
+section ul,
+section ol {
+  padding-left: 1.35rem;
+}
+
+main li + li,
+article li + li,
+section li + li {
+  margin-top: 0.35rem;
+}
