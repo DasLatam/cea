@@ -2,21 +2,21 @@ import Link from "next/link";
 
 const footerColumns = [
   {
-    title: "Plataforma",
+    title: "Explorar",
     links: [
+      { href: "/guias", label: "Guías" },
       { href: "/como-funciona", label: "Cómo funciona" },
       { href: "/metodologia", label: "Metodología" },
       { href: "/fuentes", label: "Fuentes" },
-      { href: "/roadmap", label: "Roadmap" },
     ],
   },
   {
-    title: "Contenido útil",
+    title: "Secciones",
     links: [
-      { href: "/guias", label: "Guías prácticas" },
-      { href: "/categorias/fitness", label: "Fitness" },
-      { href: "/categorias/hogar", label: "Hogar" },
-      { href: "/categorias/mascotas", label: "Mascotas" },
+      { href: "/analisis", label: "Análisis" },
+      { href: "/discovery", label: "Discovery" },
+      { href: "/roadmap", label: "Roadmap" },
+      { href: "/herramientas", label: "Herramientas" },
     ],
   },
   {
@@ -25,7 +25,6 @@ const footerColumns = [
       { href: "/suscribirse", label: "Suscribirse" },
       { href: "/contacto", label: "Contáctenos" },
       { href: "/about", label: "About" },
-      { href: "/herramientas", label: "Herramientas" },
     ],
   },
   {
@@ -42,13 +41,13 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="shell footer-grid">
         <div className="footer-brand">
-          <p className="footer-kicker">DAS LATAM CEA</p>
-          <h2>Información práctica para vender mejor en Argentina.</h2>
+          <p className="footer-kicker">CEA · Comercio Electrónico en Argentina</p>
+          <h2>Información práctica para tomar mejores decisiones comerciales.</h2>
           <p>
-            En esta primera etapa priorizamos contenido original, criterios de análisis,
-            contexto operativo y una base editorial sólida. La capa de herramientas
-            avanzadas se liberará por fases para evitar promesas vacías y mantener un
-            producto creíble.
+            Este sitio reúne guías, contexto operativo, criterios de evaluación y contenido útil para
+            vendedores, importadores y emprendedores que trabajan con comercio electrónico en Argentina.
+            La sección de herramientas se irá habilitando por fases, pero la base actual ya busca ser
+            útil, clara y accionable para el público general.
           </p>
         </div>
 
@@ -67,9 +66,8 @@ export function SiteFooter() {
       </div>
 
       <div className="shell footer-bottom">
-        <p>
-          © {new Date().getFullYear()} DAS LATAM CEA. Sitio editorial y de referencia sobre comercio electrónico en Argentina.
-        </p>
+        <p>© {new Date().getFullYear()} CEA · Comercio Electrónico en Argentina.</p>
+        <p>Este sitio funciona gracias a DASLATAM.org.</p>
         <p>
           El contenido no reemplaza asesoramiento contable, legal, impositivo ni de comercio exterior.
         </p>

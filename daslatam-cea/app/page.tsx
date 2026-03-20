@@ -2,34 +2,34 @@ import Link from "next/link";
 
 const featureCards = [
   {
-    title: "Metodología antes que promesa",
+    title: "Guías útiles y concretas",
     text:
-      "La primera etapa del proyecto está centrada en criterio editorial, lectura del mercado y documentación útil. Antes de liberar automatizaciones, necesitamos explicar qué mirar, qué descartar y por qué.",
+      "La sección Guías reúne contenido largo y práctico sobre validación de productos, márgenes, importación, logística y operación diaria. La intención es que cualquier lector encuentre criterios aplicables, no texto de relleno.",
   },
   {
-    title: "Guías pensadas para Argentina",
+    title: "Metodología explicada",
     text:
-      "Las decisiones en e-commerce no se toman igual que en otros países. Acá pesan logística, rotación de caja, comisiones, fragilidad, fiscalidad y timing comercial local.",
+      "Antes de hablar de oportunidades conviene dejar claro cómo se evalúan una categoría, un producto y un riesgo. Por eso la metodología está visible y escrita en lenguaje accesible para el público general.",
   },
   {
     title: "Suscripción semanal",
     text:
-      "La sección de suscripción ya quedó planteada para ordenar criterios de curaduría, frecuencia y expectativas. El alta operativa se conectará cuando la capa de listas y automatización quede cerrada.",
+      "La suscripción está pensada como un canal de actualización para recibir oportunidades, señales comerciales y contenido seleccionado. La idea es enviar información breve, curada y realmente útil para la operatoria.",
   },
   {
-    title: "Herramientas en siguiente fase",
+    title: "Herramientas en preparación",
     text:
-      "La sección Herramientas sigue visible para marcar el camino del producto, pero por ahora funciona como landing de próximos lanzamientos. Preferimos eso antes que publicar una demo incompleta.",
+      "La sección Herramientas permanece visible para marcar el rumbo del producto. Mientras se completa esa etapa, el sitio prioriza contenido confiable, lectura de contexto y orientación práctica para usuarios reales.",
   },
 ];
 
-const readingLinks = [
-  { href: "/como-funciona", label: "Cómo funciona la plataforma" },
-  { href: "/metodologia", label: "Metodología editorial y analítica" },
-  { href: "/guias", label: "Guías prácticas para decidir mejor" },
-  { href: "/fuentes", label: "Fuentes, límites y criterio de uso" },
-  { href: "/suscribirse", label: "Suscribirse a oportunidades semanales" },
-  { href: "/contacto", label: "Contáctenos" },
+const quickLinks = [
+  { href: "/guias", label: "Ver guías prácticas" },
+  { href: "/metodologia", label: "Leer la metodología" },
+  { href: "/suscribirse", label: "Suscribirse a novedades" },
+  { href: "/contacto", label: "Contactarse" },
+  { href: "/fuentes", label: "Conocer las fuentes" },
+  { href: "/herramientas", label: "Entrar a Herramientas" },
 ];
 
 export default function HomePage() {
@@ -37,47 +37,51 @@ export default function HomePage() {
     <main className="home-main">
       <section className="shell hero-grid">
         <div className="hero-card hero-card--home">
-          <p className="eyebrow">DAS LATAM · Comercio Electrónico en Argentina</p>
-          <h1>Construimos primero el criterio, después las herramientas.</h1>
+          <p className="eyebrow">CEA · Comercio Electrónico en Argentina</p>
+          <h1>Información útil para vender, evaluar y decidir mejor.</h1>
           <p className="hero-lead">
-            Este sitio inicia por su capa más útil y más creíble: contenido original, metodología,
-            lectura operativa y contexto para decidir qué vender, cuándo avanzar y dónde están los riesgos.
-            La plataforma de inteligencia comercial vendrá después, sobre una base editorial seria.
+            CEA es un espacio de referencia para quienes trabajan o quieren empezar a trabajar con
+            comercio electrónico en Argentina. Reúne guías, criterios de evaluación, notas de contexto,
+            explicaciones metodológicas y una futura capa de herramientas pensadas para tomar mejores
+            decisiones comerciales.
           </p>
           <p className="hero-paragraph">
-            En lugar de llenar la pantalla con widgets prematuros, estamos armando un entorno de trabajo
-            que ayude a separar demanda aparente de demanda real, margen teórico de margen defendible,
-            oportunidad puntual de oportunidad sostenible. Esa diferencia importa mucho en Argentina,
-            donde el costo de equivocarse en una compra, una importación o un lote inmovilizado suele ser alto.
+            El objetivo de esta etapa es simple: ofrecer contenido claro, serio y aplicable. En lugar de
+            prometer automatizaciones antes de tiempo, el sitio prioriza aquello que más ayuda a ordenar
+            una decisión: entender una categoría, evaluar un producto, medir riesgos logísticos,
+            dimensionar un margen y reconocer cuándo una oportunidad conviene y cuándo conviene dejarla pasar.
           </p>
           <div className="hero-actions">
-            <Link href="/herramientas" className="button-primary">
-              Herramientas
+            <Link href="/guias" className="button-primary">
+              Explorar guías
             </Link>
-            <Link href="/guias" className="button-secondary">
-              Ver guías
+            <Link href="/herramientas" className="button-secondary">
+              Herramientas
             </Link>
           </div>
         </div>
 
         <aside className="hero-side-card">
-          <p className="aside-kicker">En esta etapa</p>
-          <h2>Qué ya vas a poder consultar</h2>
+          <p className="aside-kicker">Qué vas a encontrar</p>
+          <h2>Un punto de partida ordenado para analizar el mercado.</h2>
           <ul>
-            <li>Guías extensas para validar productos antes de comprometer capital.</li>
-            <li>Marco metodológico para leer competencia, precio y timing comercial.</li>
-            <li>Información útil sobre importación, fragilidad, monotributo y operación diaria.</li>
-            <li>Suscripción editorial pensada para oportunidades semanales curadas.</li>
+            <li>Guías prácticas sobre productos, márgenes, importación y logística.</li>
+            <li>Metodología pública para entender cómo se ordenan los criterios del sitio.</li>
+            <li>Información institucional, contacto, privacidad y términos claros.</li>
+            <li>Una sección de herramientas que irá creciendo por fases.</li>
           </ul>
         </aside>
       </section>
 
       <section className="shell section-spacing">
         <div className="section-heading">
-          <p className="eyebrow">Enfoque editorial</p>
-          <h2>Una plataforma que quiere ser útil tiene que explicar cómo piensa.</h2>
+          <p className="eyebrow">Para quién está hecho este sitio</p>
+          <h2>Lectura comercial para vendedores, emprendedores e importadores.</h2>
           <p>
-            La propuesta de DAS LATAM CEA no es parecer una demo ni un scraper. El objetivo es convertirse en una referencia práctica para pequeños y medianos operadores que necesitan criterio antes de invertir. Por eso el sitio arranca con páginas sustantivas, legibles, trazables y realmente orientadas a la toma de decisiones.
+            El contenido está dirigido a personas que necesitan tomar decisiones con mayor claridad: qué
+            producto probar, cómo leer una categoría, qué riesgos operativos subestimar puede salir caro y
+            qué variables conviene revisar antes de comprometer capital. No hace falta venir del mundo
+            técnico para usar el sitio; sí conviene tener interés en pensar mejor el negocio.
           </p>
         </div>
 
@@ -93,15 +97,17 @@ export default function HomePage() {
 
       <section className="shell section-spacing section-reading">
         <div className="section-heading narrow">
-          <p className="eyebrow">Lecturas recomendadas</p>
-          <h2>Ordená primero las preguntas correctas.</h2>
+          <p className="eyebrow">Recorridos recomendados</p>
+          <h2>Empezá por la sección que mejor se ajuste a tu necesidad.</h2>
           <p>
-            No todo problema de e-commerce se resuelve con más datos. Muchas veces se resuelve con mejores criterios: entender qué tipo de producto exige respaldo, cuál depende de estacionalidad, cuándo una categoría está demasiado saturada o por qué una operación de courier puede parecer simple en la teoría y complejizarse rápido en la práctica.
+            Algunos lectores van a querer entender primero la metodología. Otros preferirán entrar directo
+            a las guías o revisar las fuentes. El sitio está ordenado para que el recorrido sea simple y para
+            que cada visitante pueda construir su propia lectura sin perderse en una navegación excesiva.
           </p>
         </div>
 
         <div className="reading-list">
-          {readingLinks.map((item) => (
+          {quickLinks.map((item) => (
             <Link key={item.href} href={item.href} className="reading-link">
               {item.label}
             </Link>
@@ -111,14 +117,15 @@ export default function HomePage() {
 
       <section className="shell newsletter-band section-spacing">
         <div>
-          <p className="eyebrow">Suscripción editorial</p>
-          <h2>Preparando el envío semanal de oportunidades.</h2>
+          <p className="eyebrow">Suscripción</p>
+          <h2>Recibí oportunidades y novedades semanales.</h2>
           <p>
-            La suscripción no se plantea como una lista de correos genérica. La intención es construir un envío semanal curado, con foco en señales comerciales, ventanas de compra, alertas operativas y contexto local. Primero definimos el estándar editorial; luego activamos la entrega automatizada.
+            La suscripción está pensada como un resumen curado para quienes quieren seguir tendencias,
+            oportunidades y contenido nuevo sin tener que revisar el sitio todos los días.
           </p>
         </div>
         <Link href="/suscribirse" className="button-secondary strong">
-          Conocer el esquema de suscripción
+          Conocer la suscripción
         </Link>
       </section>
     </main>

@@ -1,11 +1,8 @@
 import Link from "next/link";
 
 const primaryLinks = [
-  { href: "/", label: "Inicio" },
-  { href: "/como-funciona", label: "Cómo funciona" },
-  { href: "/metodologia", label: "Metodología" },
   { href: "/guias", label: "Guías" },
-  { href: "/fuentes", label: "Fuentes" },
+  { href: "/metodologia", label: "Metodología" },
   { href: "/suscribirse", label: "Suscribirse" },
   { href: "/contacto", label: "Contáctenos" },
 ];
@@ -14,8 +11,8 @@ export function SiteNav() {
   return (
     <header className="site-header">
       <div className="shell nav-shell">
-        <Link href="/" className="brand-mark" aria-label="DAS LATAM CEA">
-          <span className="brand-pill">DAS LATAM</span>
+        <Link href="/" className="brand-mark" aria-label="CEA · Comercio Electrónico en Argentina">
+          <span className="brand-square" aria-hidden="true" />
           <span className="brand-text">CEA · Comercio Electrónico en Argentina</span>
         </Link>
 

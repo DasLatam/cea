@@ -53,8 +53,8 @@ export function EditorialPage({ page }: { page: EditorialPageData }) {
             </ul>
             <div className="aside-note">
               <p>
-                Este contenido fue escrito para usuarios que necesitan criterio antes de invertir tiempo,
-                stock o capital. La intención del sitio es ordenar decisiones, no empujar compras impulsivas.
+                Este contenido está pensado para lectores que buscan información útil, lenguaje claro y
+                criterios aplicables a decisiones reales de comercio electrónico en Argentina.
               </p>
             </div>
           </aside>
