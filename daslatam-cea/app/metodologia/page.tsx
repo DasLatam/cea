@@ -1,10 +1,9 @@
 import type { CSSProperties } from "react";
-import type { Metadata } from "next";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Metodología",
   description:
-    "Cómo validar productos, registrar señales y tomar decisiones comerciales con una metodología práctica para vender mejor en Argentina.",
+    "Cómo validar productos, registrar señales, revisar proveedores y tomar decisiones comerciales con una metodología práctica para vender mejor en Argentina.",
 };
 
 const principleCards = [
@@ -16,12 +15,12 @@ const principleCards = [
   {
     title: "Cruzar señales, no depender de una sola",
     text:
-      "Una tendencia aislada no alcanza. Conviene mirar demanda potencial, competencia visible, presión publicitaria, costos, logística y margen antes de comprometer stock.",
+      "Una tendencia aislada no alcanza. Conviene mirar demanda potencial, competencia visible, presión publicitaria, proveedor, logística y margen antes de comprometer stock.",
   },
   {
-    title: "Tomar decisiones con criterio comercial",
+    title: "Cerrar todo por escrito",
     text:
-      "La idea no es perseguir todos los productos del momento, sino detectar oportunidades donde todavía exista espacio para entrar con números razonables y una propuesta vendible.",
+      "Cuando una condición importante queda afuera del chat, aumenta el riesgo. Es mejor que precio, embalaje, etiquetado, fotos reales, envío y plazos queden documentados desde el inicio.",
   },
 ];
 
@@ -29,17 +28,18 @@ const spreadsheetFields = [
   ["Fecha de análisis", "Para saber cuándo fue tomada cada decisión y no mezclar datos viejos con señales nuevas."],
   ["Producto o nicho", "Nombre claro del producto y, si hace falta, una variante concreta."],
   ["Problema que resuelve", "Ayuda a distinguir moda pasajera de necesidad real o compra impulsiva."],
-  ["Keyword principal", "La búsqueda exacta que vas a revisar en Mercado Libre, Google y otras fuentes."],
-  ["Fuente del hallazgo", "Mercado Libre Tendencias, Google Trends, Meta Ads Library, red social, proveedor o dato propio."],
+  ["Keyword principal", "La búsqueda exacta que vas a revisar en Mercado Libre, Google, Meta y Alibaba."],
+  ["Fuente del hallazgo", "Mercado Libre Tendencias, Google Trends, Meta Ads Library, Alibaba, red social, proveedor o dato propio."],
   ["Señal en Mercado Libre", "Qué viste: crecimiento, deseadas, populares, cantidad de publicaciones, rango de precios y competidores."],
   ["Señal en Google", "Evolución de interés, estacionalidad, regiones y términos relacionados."],
   ["Señal publicitaria", "Quién lo está anunciando, con qué mensaje, desde cuándo y con qué insistencia."],
-  ["Costo del producto", "Valor de compra estimado, ya sea por proveedor local o importación."],
+  ["Proveedor observado", "Nombre, antigüedad, condición Verified, reseñas, calificación y tipo de fábrica o trader."],
+  ["Costo del producto", "Valor de compra cotizado por unidad y por cantidad mínima."],
   ["Costo puesto en Argentina", "Producto, flete, embalaje, etiquetado, logística y cualquier costo por unidad que cambie el margen real."],
   ["Precio de venta estimado", "Rango posible en Mercado Libre o en el canal que pienses usar."],
   ["Margen estimado", "Ganancia por unidad y total, con un criterio realista y no optimista."],
   ["Riesgos", "Fragilidad, devoluciones, restricciones, talles, garantías, modas cortas o dependencia de una campaña puntual."],
-  ["Decisión", "Seguir, profundizar, descartar o revisar más adelante."],
+  ["Decisión", "Seguir, pedir muestra, profundizar, descartar o revisar más adelante."],
 ];
 
 const steps = [
@@ -70,12 +70,19 @@ const steps = [
   {
     title: "5. Revisar presión comercial en Meta",
     text:
-      "La Biblioteca de anuncios de Meta permite ver anuncios activos y buscar por palabra clave o anunciante. Para análisis comercial conviene usar el modo de todos los anuncios, no el filtro de anuncios políticos. Esto ayuda a ver si otros ya están empujando ese producto, cómo lo comunican y qué ángulos de venta repiten.",
+      "La Biblioteca de anuncios de Meta permite ver anuncios activos y buscar por palabra clave o anunciante. Para análisis comercial conviene usar el modo de todos los anuncios. Esto ayuda a ver si otros ya están empujando ese producto, cómo lo comunican y qué ángulos de venta repiten.",
     href: "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AR&media_type=all",
     hrefLabel: "Abrir Biblioteca de anuncios de Meta",
   },
   {
-    title: "6. Hacer recién ahí los números",
+    title: "6. Validar proveedor y condiciones en Alibaba",
+    text:
+      "Si el producto va por importación, recién ahí conviene abrir proveedores. La lógica no es pedir precio y listo: hay que mirar si el proveedor está verificado, cuántos años lleva activo, qué reseñas tiene, si responde bien por chat y si acepta dejar por escrito embalaje, etiquetado, envío y alcance exacto del precio.",
+    href: "https://www.alibaba.com/",
+    hrefLabel: "Abrir Alibaba",
+  },
+  {
+    title: "7. Hacer recién ahí los números",
     text:
       "Cuando la señal comercial parece razonable, recién tiene sentido estimar costo puesto en Argentina, precio de venta, cargos del canal, impuestos, logística y margen real. Un producto puede verse atractivo en búsquedas y aun así ser malo cuando lo pasás por una calculadora seria.",
   },
@@ -88,38 +95,39 @@ const mlChecks = [
   "Después conviene profundizar por categoría para no quedarse sólo con el titular general de la tendencia.",
 ];
 
-const metaChecks = [
-  "Buscar por palabra clave del producto y también por marcas o competidores visibles.",
-  "Revisar si hay muchos anunciantes distintos o si siempre aparecen los mismos.",
-  "Mirar cuánto insiste cada anunciante y desde cuándo corre la campaña.",
-  "Anotar qué beneficio prometen: precio, practicidad, regalo, novedad, problema que resuelve o urgencia.",
+const alibabaChecks = [
+  "Hablar siempre por el chat de la plataforma y dejar ahí todas las condiciones importantes. Si algo sale mal, esa conversación ayuda a respaldar el reclamo.",
+  "Priorizar proveedores con sello Verified y revisar además antigüedad, tipo de empresa y consistencia del perfil.",
+  "Como regla práctica, conviene empezar mirando proveedores con al menos 3 años de actividad visible.",
+  "Buscar un mínimo de reseñas útiles y una calificación alta sostenida; no alcanza con ver el promedio, hay que leer bien las observaciones negativas.",
+  "Pedir fotos reales del producto en la mano y sobre la mesa, incluyendo el embalaje individual que después recibe el comprador final.",
+  "Si necesitás etiqueta individual, código o alguna presentación especial, pedirlo desde el inicio porque suele ser económico o quedar incluido en el acuerdo.",
+  "Aclarar siempre que el precio cotizado sea final e incluya todo lo conversado: unidad, bolsa, caja, accesorios, etiquetado y embalaje.",
+  "Negociar por chat quién se ocupa del envío y bajo qué alcance, evitando frases vagas que después generan costos extra.",
 ];
 
-const decisionRules = [
+const orderRules = [
   {
-    title: "Señales favorables",
-    items: [
-      "El nicho muestra interés visible en más de una fuente.",
-      "Todavía hay margen para diferenciar oferta, precio o presentación.",
-      "El costo puesto en Argentina deja ganancia razonable incluso con comisiones y devoluciones probables.",
-    ],
+    title: "Todo lo sensible, por escrito",
+    text:
+      "No conviene repartir el acuerdo entre mensajes sueltos, audios externos y suposiciones. Lo importante es que el chat de la plataforma concentre precio final, cantidades, tiempos, embalaje, fotos, etiquetado, muestra y alcance del envío.",
   },
   {
-    title: "Señales de cautela",
-    items: [
-      "La tendencia existe, pero el mercado parece ya muy copado por grandes jugadores o importadores con volumen.",
-      "El producto depende demasiado de una moda breve o de una sola campaña estacional.",
-      "El margen sólo cierra si todo sale perfecto.",
-    ],
+    title: "El proveedor también se valida",
+    text:
+      "Validar demanda sin validar proveedor deja medio trabajo hecho. La oportunidad comercial puede ser buena y aun así arruinarse por mala comunicación, embalaje pobre, fotos engañosas o costos que aparecieron tarde.",
   },
   {
-    title: "Señales para descartar",
-    items: [
-      "No aparece evidencia suficiente de demanda real o la búsqueda es demasiado esporádica.",
-      "La competencia es abundante y homogénea, sin un espacio claro para entrar.",
-      "El costo total y la logística destruyen el margen antes de publicar.",
-    ],
+    title: "La compra cierra con costo total, no con precio unitario",
+    text:
+      "El número que importa no es sólo la unidad en fábrica. Importa cuánto termina costando venderlo bien en Argentina, con presentación correcta, logística definida y margen todavía defendible.",
   },
+];
+
+const paymentAlert = [
+  "Si vas a pagar en moneda extranjera, conviene revisar cómo liquida hoy tu banco los consumos en dólares antes de cerrar la orden.",
+  "Para planificación financiera, es más prudente comparar el costo de cancelar el consumo con dólares propios contra dejar que se pesifique automáticamente.",
+  "Ese punto cambia con regulación y con la operatoria del banco, así que no conviene dejarlo supuesto dentro del margen.",
 ];
 
 const cardStyle: CSSProperties = {
@@ -148,11 +156,11 @@ export default function MetodologiaPage() {
           Metodología
         </span>
         <h1 style={{ margin: 0, fontSize: "clamp(2rem,4vw,3.2rem)", lineHeight: 1.05 }}>
-          Cómo ordenamos la validación de productos y nichos
+          Cómo ordenamos la validación de productos, nichos y proveedores
         </h1>
         <div className="reading-block" style={{ maxWidth: 930, display: "grid", gap: 14, fontSize: 18, lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
           <p style={{ margin: 0 }}>
-            En comercio electrónico, una buena decisión rara vez nace de una sola fuente. Lo más útil es combinar señales rápidas de demanda, observación directa del marketplace, presión publicitaria, análisis en buscadores y números reales.
+            En comercio electrónico, una buena decisión rara vez nace de una sola fuente. Lo más útil es combinar señales rápidas de demanda, observación directa del marketplace, presión publicitaria, análisis en buscadores y una revisión seria del proveedor si el producto va a importarse.
           </p>
           <p style={{ margin: 0 }}>
             El orden puede cambiar. A veces una idea aparece en una tendencia, otras veces surge por un anuncio, una búsqueda en Google o una categoría concreta de Mercado Libre. Lo importante no es el punto de partida, sino dejar registro y cruzar evidencias antes de comprar stock.
@@ -177,36 +185,53 @@ export default function MetodologiaPage() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 14 }}>
           {spreadsheetFields.map(([title, text]) => (
             <div key={title} style={{ borderRadius: 16, border: "1px solid #e5e7eb", background: "#f8fafc", padding: 16 }}>
-              <div style={{ fontWeight: 800, color: "#0f172a", marginBottom: 8 }}>{title}</div>
-              <div style={{ color: "#475569", lineHeight: 1.65, fontSize: 14 }}>{text}</div>
+              <div style={{ fontWeight: 800, marginBottom: 8, color: "#0f172a" }}>{title}</div>
+              <div style={{ color: "#4b5563", lineHeight: 1.7, textAlign: "justify", hyphens: "auto" }}>{text}</div>
             </div>
           ))}
         </div>
       </section>
 
       <section style={{ ...cardStyle, marginBottom: 30 }}>
-        <h2 style={{ margin: "0 0 10px", fontSize: 28 }}>Secuencia sugerida de análisis</h2>
-        <p style={{ margin: "0 0 18px", color: "#4b5563", lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
-          No existe un único orden obligatorio. Estas fuentes se pueden usar en cualquier dirección: detectar una oportunidad en Meta y después validar en Mercado Libre, encontrar una búsqueda en Google y luego revisar competencia, o empezar por Mercado Libre Tendencias y recién después pasar al resto. Lo importante es que el análisis termine en una decisión documentada.
-        </p>
+        <h2 style={{ margin: "0 0 14px", fontSize: 28 }}>Una secuencia práctica para validar</h2>
         <div style={{ display: "grid", gap: 14 }}>
           {steps.map((step) => (
             <article key={step.title} style={{ borderRadius: 18, border: "1px solid #e5e7eb", background: "#fff", padding: 18 }}>
-              <h3 style={{ margin: "0 0 8px", fontSize: 20 }}>{step.title}</h3>
-              <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>{step.text}</p>
-              {step.href ? (
-                <a href={step.href} target="_blank" rel="noreferrer" style={{ display: "inline-flex", marginTop: 12, fontWeight: 800, color: "#0b6db4" }}>
-                  {step.hrefLabel}
-                </a>
-              ) : null}
+              <div style={{ display: "flex", gap: 12, justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap" }}>
+                <div style={{ maxWidth: 820 }}>
+                  <h3 style={{ margin: "0 0 8px", fontSize: 22 }}>{step.title}</h3>
+                  <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>{step.text}</p>
+                </div>
+                {step.href ? (
+                  <a
+                    href={step.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      minHeight: 44,
+                      padding: "0 16px",
+                      borderRadius: 12,
+                      background: "#0f172a",
+                      color: "#fff",
+                      fontWeight: 800,
+                      textDecoration: "none",
+                    }}
+                  >
+                    {step.hrefLabel}
+                  </a>
+                ) : null}
+              </div>
             </article>
           ))}
         </div>
       </section>
 
-      <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 18, marginBottom: 30 }}>
+      <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 18, marginBottom: 30 }}>
         <article style={cardStyle}>
-          <h2 style={{ margin: "0 0 10px", fontSize: 24 }}>Cómo usar Mercado Libre Tendencias</h2>
+          <h2 style={{ margin: "0 0 10px", fontSize: 24 }}>Qué mirar en Mercado Libre Tendencias</h2>
           <ul style={{ margin: 0, paddingLeft: 20, color: "#4b5563", lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
             {mlChecks.map((item) => (
               <li key={item}>{item}</li>
@@ -215,43 +240,48 @@ export default function MetodologiaPage() {
         </article>
 
         <article style={cardStyle}>
-          <h2 style={{ margin: "0 0 10px", fontSize: 24 }}>Qué buscar en Google Trends</h2>
+          <h2 style={{ margin: "0 0 10px", fontSize: 24 }}>Qué revisar en Alibaba antes de cotizar en serio</h2>
           <ul style={{ margin: 0, paddingLeft: 20, color: "#4b5563", lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
-            <li>Comparar términos parecidos para no validar una keyword equivocada.</li>
-            <li>Mirar la serie temporal para detectar estacionalidad o un pico aislado.</li>
-            <li>Revisar regiones para ver dónde hay más interés relativo.</li>
-            <li>Explorar búsquedas relacionadas para abrir variantes comerciales o mejores títulos.</li>
-          </ul>
-        </article>
-
-        <article style={cardStyle}>
-          <h2 style={{ margin: "0 0 10px", fontSize: 24 }}>Cómo leer Meta Ads Library</h2>
-          <ul style={{ margin: 0, paddingLeft: 20, color: "#4b5563", lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
-            {metaChecks.map((item) => (
+            {alibabaChecks.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
         </article>
       </section>
 
-      <section style={{ ...cardStyle, marginBottom: 30 }}>
-        <h2 style={{ margin: "0 0 10px", fontSize: 28 }}>Lo que esta metodología no promete</h2>
-        <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
-          Ninguna herramienta garantiza ventas por sí sola. Tendencias, búsquedas y anuncios ayudan a reducir incertidumbre, pero no reemplazan criterio comercial, ejecución, calidad de oferta, servicio posventa, reputación, pricing ni timing. La decisión final sigue siendo propia y conviene asumirla como tal.
-        </p>
-      </section>
-
-      <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 18 }}>
-        {decisionRules.map((group) => (
-          <article key={group.title} style={cardStyle}>
-            <h2 style={{ margin: "0 0 10px", fontSize: 24 }}>{group.title}</h2>
-            <ul style={{ margin: 0, paddingLeft: 20, color: "#4b5563", lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
-              {group.items.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
+      <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 18, marginBottom: 30 }}>
+        {orderRules.map((item) => (
+          <article key={item.title} style={cardStyle}>
+            <h2 style={{ margin: "0 0 10px", fontSize: 24 }}>{item.title}</h2>
+            <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>{item.text}</p>
           </article>
         ))}
+      </section>
+
+      <section style={{ ...cardStyle, marginBottom: 30 }}>
+        <h2 style={{ margin: "0 0 10px", fontSize: 28 }}>Alerta financiera al pagar en dólares</h2>
+        <div className="reading-block" style={{ display: "grid", gap: 12, color: "#4b5563", lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
+          <p style={{ margin: 0 }}>
+            En operaciones internacionales no conviene suponer el costo cambiario. Antes de pagar, revisá cómo se liquida hoy el consumo en moneda extranjera en tu banco y cómo impacta eso sobre tu costo real por unidad.
+          </p>
+          <ul style={{ margin: 0, paddingLeft: 20 }}>
+            {paymentAlert.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section style={{ ...cardStyle }}>
+        <h2 style={{ margin: "0 0 10px", fontSize: 28 }}>La decisión final sigue siendo propia</h2>
+        <div className="reading-block" style={{ display: "grid", gap: 14, color: "#4b5563", lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
+          <p style={{ margin: 0 }}>
+            La metodología no busca convertir una idea en verdad, sino obligarla a pasar por fuentes, números y condiciones reales. Cuanto más ordenado sea el proceso, menos lugar queda para comprar por entusiasmo.
+          </p>
+          <p style={{ margin: 0 }}>
+            Un producto puede parecer fuerte en tendencias, sostener interés en Google y además tener anunciantes activos. Pero si el proveedor no transmite confianza, el embalaje es pobre o el costo final destruye el margen, la decisión correcta puede seguir siendo no avanzar.
+          </p>
+        </div>
       </section>
     </main>
   );

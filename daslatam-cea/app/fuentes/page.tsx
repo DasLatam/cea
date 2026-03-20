@@ -1,10 +1,9 @@
 import type { CSSProperties } from "react";
-import type { Metadata } from "next";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Fuentes",
   description:
-    "Fuentes y herramientas concretas que CEA utiliza para detectar nichos, validar productos y documentar decisiones comerciales.",
+    "Fuentes y herramientas concretas que CEA utiliza para detectar nichos, validar productos, revisar proveedores y documentar decisiones comerciales.",
 };
 
 const sources = [
@@ -34,11 +33,22 @@ const sources = [
     title: "Biblioteca de anuncios de Meta",
     href: "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AR&media_type=all",
     text:
-      "La usamos para ver si otros jugadores ya están empujando un producto o una promesa de venta. Para análisis comercial conviene entrar en el modo de todos los anuncios activos y buscar por palabra clave o anunciante. El filtro de anuncios políticos no sirve para validar productos de consumo.",
+      "La usamos para ver si otros jugadores ya están empujando un producto o una promesa de venta. Para análisis comercial conviene entrar en el modo de todos los anuncios activos y buscar por palabra clave o anunciante.",
     bullets: [
       "Permite observar presión publicitaria y mensajes repetidos.",
       "Ayuda a identificar creatividades, claims y anunciantes activos.",
       "No garantiza que una campaña sea rentable ni cuánto está vendiendo realmente.",
+    ],
+  },
+  {
+    title: "Alibaba",
+    href: "https://www.alibaba.com/",
+    text:
+      "Cuando el análisis apunta a importación, Alibaba pasa a ser una fuente para validar proveedores, calidades, condiciones comerciales y costos ocultos. No se usa sólo para pedir precio: se usa para revisar con quién se podría trabajar y bajo qué alcance real.",
+    bullets: [
+      "Conviene priorizar proveedores con sello Verified y perfil consistente.",
+      "La antigüedad visible, las reseñas y la calidad de respuesta ayudan a filtrar mejor.",
+      "Todo lo importante debería quedar documentado en el chat de la plataforma.",
     ],
   },
   {
@@ -65,6 +75,18 @@ const sources = [
   },
 ];
 
+const alibabaChecklist = [
+  "Hablar siempre por el chat de la plataforma para que cualquier diferencia quede respaldada dentro del sistema.",
+  "Verificar que el proveedor tenga sello Verified y revisar si la información del perfil es consistente con lo que ofrece.",
+  "Tomar como referencia inicial una antigüedad de al menos 3 años visibles en la plataforma.",
+  "Buscar reseñas positivas suficientes y una calificación sólida; además de mirar el promedio, conviene leer con atención las críticas negativas.",
+  "Pedir fotos reales del producto y del embalaje individual, porque esa presentación afecta la percepción del comprador final.",
+  "Si hace falta etiquetado individual, pedirlo desde el inicio y dejar por escrito alcance y costo.",
+  "Aclarar que el precio cotizado incluye todo lo necesario para evitar sorpresas con bolsa, caja, accesorios o embalajes adicionales.",
+  "Negociar por chat el alcance del envío y quién se ocupa de que la mercadería llegue a la dirección indicada en Argentina.",
+  "Aprovechar la traducción integrada si hace falta escribir en castellano, pero revisar que las condiciones sensibles queden claras y sin ambigüedad.",
+];
+
 const logFields = [
   "fecha del análisis",
   "producto o nicho",
@@ -72,6 +94,7 @@ const logFields = [
   "fuente del hallazgo",
   "rango de precios observado",
   "cantidad y tipo de competidores",
+  "proveedor o proveedores observados",
   "costo estimado y costo puesto en Argentina",
   "margen estimado",
   "riesgos y observaciones",
@@ -92,7 +115,7 @@ const limits = [
   {
     title: "Una buena keyword no reemplaza una cuenta bien hecha",
     text:
-      "Las fuentes de demanda ayudan a orientar, pero la decisión real se define cuando el producto pasa por un cálculo serio y por una revisión honesta del canal de venta.",
+      "Las fuentes de demanda ayudan a orientar, pero la decisión real se define cuando el producto pasa por un cálculo serio y por una revisión honesta del canal de venta y del proveedor.",
   },
 ];
 
@@ -126,7 +149,7 @@ export default function FuentesPage() {
         </h1>
         <div className="reading-block" style={{ maxWidth: 930, display: "grid", gap: 14, fontSize: 18, lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
           <p style={{ margin: 0 }}>
-            En CEA no intentamos validar productos con una sola señal. Lo más útil es combinar fuentes que muestren demanda potencial, presión comercial, competencia visible y viabilidad económica.
+            En CEA no intentamos validar productos con una sola señal. Lo más útil es combinar fuentes que muestren demanda potencial, presión comercial, competencia visible, viabilidad económica y, cuando corresponde, consistencia del proveedor.
           </p>
           <p style={{ margin: 0 }}>
             Estas fuentes no se usan para confirmar caprichos, sino para reducir incertidumbre. Cuanto mejor se documenten, más fácil resulta repetir un buen proceso y descartar rápido lo que no cierra.
@@ -153,6 +176,20 @@ export default function FuentesPage() {
             </ul>
           </article>
         ))}
+      </section>
+
+      <section style={{ ...cardStyle, marginBottom: 30 }}>
+        <h2 style={{ margin: "0 0 10px", fontSize: 28 }}>Qué conviene mirar en Alibaba con más atención</h2>
+        <p style={{ margin: "0 0 16px", color: "#4b5563", lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
+          Cuando el producto tiene chances reales de importarse, Alibaba deja de ser una simple vidriera y pasa a ser parte del proceso de validación. La plataforma sirve mejor cuando se usa para documentar condiciones, filtrar proveedores y bajar el riesgo antes de pagar.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12 }}>
+          {alibabaChecklist.map((item) => (
+            <div key={item} style={{ borderRadius: 16, background: "#f8fafc", border: "1px solid #e5e7eb", padding: 16, color: "#334155", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>
+              {item}
+            </div>
+          ))}
+        </div>
       </section>
 
       <section style={{ ...cardStyle, marginBottom: 30 }}>
@@ -185,10 +222,10 @@ export default function FuentesPage() {
             Un camino posible es detectar una palabra o nicho en Mercado Libre Tendencias, revisar después si el interés se sostiene en Google Trends, mirar qué anuncian otros en Meta y finalmente pasar el producto por una validación manual en Mercado Libre y por una calculadora de costos.
           </p>
           <p style={{ margin: 0 }}>
-            También se puede empezar desde un anuncio visto en Meta o desde una categoría específica del marketplace. No hay un orden obligatorio. Lo importante es que el análisis termine en una decisión concreta: seguir, profundizar, esperar o descartar.
+            Si el análisis sigue siendo atractivo, entra Alibaba para validar proveedor, condiciones de embalaje, etiquetado, consistencia del precio y alcance real del envío. Todo eso debería quedar documentado dentro del chat de la plataforma.
           </p>
           <p style={{ margin: 0 }}>
-            La calidad del proceso depende menos de la fuente individual y más de la disciplina para cruzarlas, documentarlas y no forzar conclusiones optimistas cuando los números o la competencia cuentan otra historia.
+            No hay un orden obligatorio. Lo importante es que el análisis termine en una decisión concreta: seguir, pedir muestra, profundizar, esperar o descartar.
           </p>
         </div>
       </section>
