@@ -31,6 +31,7 @@ const routes = [
   "/privacidad",
   "/terminos",
   "/herramientas",
+  "/mapa-del-sitio",
   "/categorias/fitness",
   "/categorias/hogar",
   "/categorias/mascotas",

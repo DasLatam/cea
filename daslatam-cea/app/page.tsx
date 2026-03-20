@@ -1,35 +1,36 @@
 import Link from "next/link";
+import { NewsletterForm } from "@/components/forms/NewsletterForm";
 
 const featureCards = [
   {
     title: "Guías útiles y concretas",
     text:
-      "La sección Guías reúne contenido largo y práctico sobre validación de productos, márgenes, importación, logística y operación diaria. La intención es que cualquier lector encuentre criterios aplicables, no texto de relleno.",
+      "Explicaciones extensas sobre validación de productos, márgenes, importación, logística, fragilidad y operación diaria. La idea es dar contexto antes de tomar decisiones.",
   },
   {
-    title: "Metodología explicada",
+    title: "Criterio y metodología",
     text:
-      "Antes de hablar de oportunidades conviene dejar claro cómo se evalúan una categoría, un producto y un riesgo. Por eso la metodología está visible y escrita en lenguaje accesible para el público general.",
+      "La sección metodológica muestra cómo conviene analizar una categoría, leer riesgos y ordenar variables sin quedarse con una sola señal aislada.",
   },
   {
-    title: "Suscripción semanal",
+    title: "Novedades semanales",
     text:
-      "La suscripción está pensada como un canal de actualización para recibir oportunidades, señales comerciales y contenido seleccionado. La idea es enviar información breve, curada y realmente útil para la operatoria.",
+      "La suscripción busca reunir oportunidades, alertas y contenidos nuevos en un formato breve y útil para quienes siguen el e-commerce argentino.",
   },
   {
     title: "Herramientas en preparación",
     text:
-      "La sección Herramientas permanece visible para marcar el rumbo del producto. Mientras se completa esa etapa, el sitio prioriza contenido confiable, lectura de contexto y orientación práctica para usuarios reales.",
+      "La capa de producto va a crecer por fases. Mientras tanto, el sitio prioriza lectura útil, navegación clara y contenido realmente aplicable.",
   },
 ];
 
 const quickLinks = [
   { href: "/guias", label: "Ver guías prácticas" },
-  { href: "/metodologia", label: "Leer la metodología" },
-  { href: "/suscribirse", label: "Suscribirse a novedades" },
-  { href: "/contacto", label: "Contactarse" },
-  { href: "/fuentes", label: "Conocer las fuentes" },
-  { href: "/herramientas", label: "Entrar a Herramientas" },
+  { href: "/metodologia", label: "Entender la metodología" },
+  { href: "/fuentes", label: "Revisar fuentes" },
+  { href: "/suscribirse", label: "Recibir novedades" },
+  { href: "/contacto", label: "Hacer una consulta" },
+  { href: "/herramientas", label: "Ir a Herramientas" },
 ];
 
 export default function HomePage() {
@@ -37,51 +38,48 @@ export default function HomePage() {
     <main className="home-main">
       <section className="shell hero-grid">
         <div className="hero-card hero-card--home">
-          <p className="eyebrow">CEA · Comercio Electrónico en Argentina</p>
-          <h1>Información útil para vender, evaluar y decidir mejor.</h1>
+          <p className="eyebrow">CEA</p>
+          <h1>Comercio Electrónico en Argentina</h1>
           <p className="hero-lead">
-            CEA es un espacio de referencia para quienes trabajan o quieren empezar a trabajar con
-            comercio electrónico en Argentina. Reúne guías, criterios de evaluación, notas de contexto,
-            explicaciones metodológicas y una futura capa de herramientas pensadas para tomar mejores
-            decisiones comerciales.
+            Información útil para evaluar productos, entender categorías, revisar márgenes y tomar
+            mejores decisiones comerciales en el mercado argentino.
           </p>
           <p className="hero-paragraph">
-            El objetivo de esta etapa es simple: ofrecer contenido claro, serio y aplicable. En lugar de
-            prometer automatizaciones antes de tiempo, el sitio prioriza aquello que más ayuda a ordenar
-            una decisión: entender una categoría, evaluar un producto, medir riesgos logísticos,
-            dimensionar un margen y reconocer cuándo una oportunidad conviene y cuándo conviene dejarla pasar.
+            Este sitio está pensado para vendedores, emprendedores, importadores y equipos que necesitan
+            una base más clara para decidir qué probar, qué revisar y qué evitar. En esta etapa, el foco
+            está puesto en contenido sólido, navegación ordenada y criterios públicos antes que en promesas
+            técnicas exageradas.
           </p>
           <div className="hero-actions">
             <Link href="/guias" className="button-primary">
               Explorar guías
             </Link>
-            <Link href="/herramientas" className="button-secondary">
-              Herramientas
+            <Link href="/suscribirse" className="button-secondary">
+              Recibir novedades
             </Link>
           </div>
         </div>
 
         <aside className="hero-side-card">
-          <p className="aside-kicker">Qué vas a encontrar</p>
-          <h2>Un punto de partida ordenado para analizar el mercado.</h2>
+          <p className="aside-kicker">Punto de partida</p>
+          <h2>Qué vas a encontrar en CEA</h2>
           <ul>
-            <li>Guías prácticas sobre productos, márgenes, importación y logística.</li>
-            <li>Metodología pública para entender cómo se ordenan los criterios del sitio.</li>
-            <li>Información institucional, contacto, privacidad y términos claros.</li>
-            <li>Una sección de herramientas que irá creciendo por fases.</li>
+            <li>Guías largas y prácticas sobre validación, importación, logística y márgenes.</li>
+            <li>Metodología pública para entender el criterio del sitio.</li>
+            <li>Secciones institucionales completas: contacto, privacidad, términos y roadmap.</li>
+            <li>Una futura capa de herramientas, hoy visible de forma honesta como próxima etapa.</li>
           </ul>
         </aside>
       </section>
 
       <section className="shell section-spacing">
         <div className="section-heading">
-          <p className="eyebrow">Para quién está hecho este sitio</p>
-          <h2>Lectura comercial para vendedores, emprendedores e importadores.</h2>
+          <p className="eyebrow">Para quién sirve</p>
+          <h2>Contenido pensado para decidir mejor, no para impresionar.</h2>
           <p>
-            El contenido está dirigido a personas que necesitan tomar decisiones con mayor claridad: qué
-            producto probar, cómo leer una categoría, qué riesgos operativos subestimar puede salir caro y
-            qué variables conviene revisar antes de comprometer capital. No hace falta venir del mundo
-            técnico para usar el sitio; sí conviene tener interés en pensar mejor el negocio.
+            CEA está orientado a personas que venden, quieren vender o están evaluando categorías,
+            productos y oportunidades en Argentina. La propuesta es ayudarte a ordenar preguntas,
+            reconocer riesgos y leer el contexto con más claridad.
           </p>
         </div>
 
@@ -97,12 +95,12 @@ export default function HomePage() {
 
       <section className="shell section-spacing section-reading">
         <div className="section-heading narrow">
-          <p className="eyebrow">Recorridos recomendados</p>
-          <h2>Empezá por la sección que mejor se ajuste a tu necesidad.</h2>
+          <p className="eyebrow">Cómo recorrer el sitio</p>
+          <h2>Elegí el punto de entrada que más se ajuste a tu necesidad.</h2>
           <p>
-            Algunos lectores van a querer entender primero la metodología. Otros preferirán entrar directo
-            a las guías o revisar las fuentes. El sitio está ordenado para que el recorrido sea simple y para
-            que cada visitante pueda construir su propia lectura sin perderse en una navegación excesiva.
+            Si querés resolver una duda práctica, empezá por Guías. Si preferís entender el criterio del
+            sitio, seguí por Metodología y Fuentes. Si querés mantenerte al día, la sección de novedades
+            resume el contenido nuevo y las futuras oportunidades semanales.
           </p>
         </div>
 
@@ -116,17 +114,15 @@ export default function HomePage() {
       </section>
 
       <section className="shell newsletter-band section-spacing">
-        <div>
-          <p className="eyebrow">Suscripción</p>
-          <h2>Recibí oportunidades y novedades semanales.</h2>
+        <div className="newsletter-copy">
+          <p className="eyebrow">Novedades</p>
+          <h2>Sumate para recibir oportunidades y contenidos nuevos.</h2>
           <p>
-            La suscripción está pensada como un resumen curado para quienes quieren seguir tendencias,
-            oportunidades y contenido nuevo sin tener que revisar el sitio todos los días.
+            Esta interfaz ya deja preparada la suscripción para futuras alertas semanales, guías nuevas y
+            recordatorios comerciales relevantes.
           </p>
         </div>
-        <Link href="/suscribirse" className="button-secondary strong">
-          Conocer la suscripción
-        </Link>
+        <NewsletterForm compact />
       </section>
     </main>
   );
