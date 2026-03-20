@@ -1,7 +1,6 @@
 import "../styles/globals.css";
 import SiteFooter from "@/components/site/SiteFooter";
 import SiteNav from "@/components/site/SiteNav";
-import { SiteBreadcrumbs } from "@/components/site/SiteBreadcrumbs";
 
 export default function RootLayout({
   children,
@@ -30,7 +29,6 @@ export default function RootLayout({
       </head>
       <body>
         <SiteNav />
-        <SiteBreadcrumbs />
         {children}
         <SiteFooter />
       </body>

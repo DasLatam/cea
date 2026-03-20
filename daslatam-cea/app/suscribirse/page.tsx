@@ -20,9 +20,9 @@ export default function SuscribirsePage() {
         <div style={{ background: "#fff", border: "1px solid #e4e8ef", borderRadius: 20, padding: 24, boxShadow: "0 8px 24px rgba(16,17,20,0.04)" }}>
           <NewsletterForm />
         </div>
-        <aside style={{ background: "#0f1720", color: "#f4f7fb", borderRadius: 20, padding: 24, display: "grid", gap: 16 }}>
+        <aside style={{ background: "#ffffff", color: "#111827", borderRadius: 20, padding: 24, display: "grid", gap: 16, border: "1px solid #e4e8ef", boxShadow: "0 8px 24px rgba(16,17,20,0.04)" }}>
           <h2 style={{ margin: 0, fontSize: 24 }}>Qué tipo de novedades vas a recibir</h2>
-          <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.8, color: "#d4dbe4" }}>
+          <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.8, color: "#4b5563" }}>
             <li>Ideas para campañas de regalo y venta estacional.</li>
             <li>Criterios para validar productos antes de comprar stock.</li>
             <li>Herramientas nuevas publicadas dentro de CEA.</li>

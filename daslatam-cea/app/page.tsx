@@ -55,14 +55,14 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div style={{ background: "#0f1720", color: "#f4f7fb", borderRadius: 24, padding: 26, display: "grid", gap: 16 }}>
+        <div style={{ background: "#ffffff", color: "#111827", borderRadius: 24, padding: 26, display: "grid", gap: 16, border: "1px solid #e4e8ef", boxShadow: "0 8px 24px rgba(16,17,20,0.04)" }}>
           <h2 style={{ margin: 0, fontSize: 28 }}>Qué ya podés usar hoy</h2>
-          <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.8, color: "#d5dce4" }}>
+          <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.8, color: "#4b5563" }}>
             <li>Vender todo el año: agenda comercial con ventanas de compra, importación y publicación.</li>
             <li>Calculadora de costos real: costos, gastos y ganancia neta por producto.</li>
             <li>Guías desarrolladas para validar productos, importar y ordenar la parte fiscal.</li>
           </ul>
-          <p style={{ margin: 0, color: "#d5dce4", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>
+          <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>
             Próximamente se sumarán nuevos módulos para trabajar datos de productos, tendencias y validación comercial con más profundidad.
           </p>
         </div>

@@ -42,9 +42,9 @@ export default function HerramientasPage() {
         ))}
       </section>
 
-      <section style={{ background: "#0f1720", color: "#f4f7fb", borderRadius: 22, padding: 24, display: "grid", gap: 14 }}>
+      <section style={{ background: "#ffffff", color: "#111827", borderRadius: 22, padding: 24, display: "grid", gap: 14, border: "1px solid #e4e8ef", boxShadow: "0 8px 24px rgba(16,17,20,0.04)" }}>
         <h2 style={{ margin: 0, fontSize: 26 }}>Próximamente</h2>
-        <ul style={{ margin: 0, paddingLeft: 20, color: "#d5dce4", lineHeight: 1.8 }}>
+        <ul style={{ margin: 0, paddingLeft: 20, color: "#4b5563", lineHeight: 1.8 }}>
           {upcoming.map((item) => (
             <li key={item}>{item}</li>
           ))}

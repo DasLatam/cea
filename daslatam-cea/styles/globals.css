@@ -645,3 +645,11 @@ article li + li,
 section li + li {
   margin-top: 0.35rem;
 }
+
+/* Footer: permitir párrafo principal justificado */
+.footer-intro {
+  text-align: justify !important;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+}
