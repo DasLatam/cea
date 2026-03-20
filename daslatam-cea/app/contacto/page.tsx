@@ -31,9 +31,7 @@ export default function ContactoPage() {
           <p className="reading-block" style={{ margin: 0, color: "#4b5563", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>
             Si tenés consultas sobre las guías, las herramientas publicadas o la lógica comercial del sitio, podés escribirnos desde este formulario. También podés contactarte si querés sugerir nuevas herramientas, proponer temas para las próximas guías o enviarnos comentarios para mejorar la experiencia de uso.
             </p>
-          <p className="reading-block" style={{ margin: 0, color: "#4b5563", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>
-            Si tenés consultas sobre las guías, las herramientas publicadas o la lógica comercial del sitio, podés escribirnos desde este formulario. También podés contactarte si querés sugerir nuevas herramientas, proponer temas para las próximas guías o enviarnos comentarios para mejorar la experiencia de uso.
-            </p>
+          </p>
         </aside>
       </section>
     </main>
