@@ -7,6 +7,7 @@ const links = [
   { href: "/", label: "Inicio" },
   { href: "/guias", label: "Guías" },
   { href: "/metodologia", label: "Metodología" },
+  { href: "/fuentes", label: "Fuentes" },
   { href: "/herramientas", label: "Herramientas" },
   { href: "/suscribirse", label: "Suscribirse" },
   { href: "/contacto", label: "Contáctenos" },
@@ -16,18 +17,20 @@ const labelByPath: Record<string, string> = {
   "/": "Inicio",
   "/guias": "Guías",
   "/metodologia": "Metodología",
+  "/fuentes": "Fuentes",
   "/herramientas": "Herramientas",
   "/suscribirse": "Suscribirse",
   "/contacto": "Contáctenos",
   "/oportunidades": "Oportunidades",
   "/temporadas-y-tendencias": "Temporadas y tendencias",
+  "/herramientas/vender-todo-el-anio": "Vender todo el año",
+  "/herramientas/calculadora-costos": "Calculadora de costos real",
 };
 
 function humanizeSegment(segment: string) {
   if (segment === "vender-todo-el-anio") return "Vender todo el año";
-  return segment
-    .replace(/-/g, " ")
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+
+  return segment.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 export default function SiteNav() {
@@ -58,7 +61,15 @@ export default function SiteNav() {
           padding: "14px 20px 10px",
         }}
       >
-        <div style={{ display: "flex", gap: 18, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: 18,
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+          }}
+        >
           <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div
@@ -80,7 +91,10 @@ export default function SiteNav() {
 
           <nav style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
             {links.map((link) => {
-              const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
+              const active = link.href === "/"
+                ? pathname === "/"
+                : pathname === link.href || pathname.startsWith(`${link.href}/`);
+
               return (
                 <Link
                   key={link.href}
@@ -103,17 +117,38 @@ export default function SiteNav() {
           </nav>
         </div>
 
-        <div style={{ marginTop: 10, fontSize: 13, color: "#6c7480", display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>Inicio</Link>
-          {breadcrumbItems.map((item) => (
-            <span key={item.href} style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
-              <span>/</span>
-              <Link href={item.href} style={{ color: "inherit", textDecoration: "none" }}>
-                {item.label}
-              </Link>
-            </span>
-          ))}
-        </div>
+        {pathname !== "/" ? (
+          <div
+            style={{
+              marginTop: 10,
+              fontSize: 13,
+              color: "#6c7480",
+              display: "flex",
+              gap: 8,
+              flexWrap: "wrap",
+            }}
+          >
+            <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
+              Inicio
+            </Link>
+            {breadcrumbItems.map((item, index) => {
+              const isLast = index === breadcrumbItems.length - 1;
+
+              return (
+                <span key={item.href} style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
+                  <span>/</span>
+                  {isLast ? (
+                    <span style={{ color: "#101114", fontWeight: 700 }}>{item.label}</span>
+                  ) : (
+                    <Link href={item.href} style={{ color: "inherit", textDecoration: "none" }}>
+                      {item.label}
+                    </Link>
+                  )}
+                </span>
+              );
+            })}
+          </div>
+        ) : null}
       </div>
     </header>
   );

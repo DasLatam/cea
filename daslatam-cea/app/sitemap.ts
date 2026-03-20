@@ -1,39 +1,27 @@
-type SitemapEntry = {
-  url: string;
-  lastModified?: string | Date;
-  changeFrequency?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
-  priority?: number;
-};
+import { SITE_URL } from "@/lib/site";
 
 const routes = [
   "",
   "/guias",
-  "/guias/validar-producto",
-  "/guias/margen-real",
-  "/guias/importar-desde-china",
-  "/guias/importacion-courier",
-  "/guias/peso-y-fragilidad",
-  "/guias/monotributo-mercado-libre",
-  "/herramientas",
-  "/herramientas/vender-todo-el-anio",
-  "/herramientas/calculadora-costos",
   "/metodologia",
-  "/oportunidades",
-  "/temporadas-y-tendencias",
+  "/herramientas",
+  "/herramientas/calculadora-costos",
+  "/herramientas/vender-todo-el-anio",
   "/suscribirse",
   "/contacto",
-  "/mapa-del-sitio",
   "/terminos",
   "/privacidad",
+  "/fuentes",
+  "/mapa-del-sitio",
 ];
 
-export default function sitemap(): SitemapEntry[] {
-  const base = "https://daslatamcea.vercel.app";
+export default function sitemap() {
+  const now = new Date();
 
   return routes.map((route) => ({
-    url: `${base}${route}`,
-    lastModified: new Date(),
+    url: `${SITE_URL}${route}`,
+    lastModified: now,
     changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : 0.72,
+    priority: route === "" ? 1 : 0.7,
   }));
 }

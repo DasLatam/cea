@@ -40,7 +40,13 @@ export async function sendWithResend(payload: ResendEmailPayload) {
   });
 
   const text = await response.text();
-  const data = text ? JSON.parse(text) : null;
+  let data: any = null;
+
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch {
+    data = null;
+  }
 
   if (!response.ok) {
     throw new Error(data?.message || data?.error || `Resend respondió ${response.status}.`);
