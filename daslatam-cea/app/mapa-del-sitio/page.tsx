@@ -13,7 +13,26 @@ const sections = [
     ],
   },
   {
-    title: "Contenido institucional",
+    title: "Oportunidades y lectura del mercado",
+    links: [
+      ["/oportunidades", "Oportunidades"],
+      ["/temporadas-y-tendencias", "Temporadas y tendencias"],
+      ["/categorias/fitness", "Categoría Fitness"],
+      ["/categorias/hogar", "Categoría Hogar"],
+      ["/categorias/mascotas", "Categoría Mascotas"],
+      ["/categorias/belleza", "Categoría Belleza"],
+    ],
+  },
+  {
+    title: "Herramientas publicadas",
+    links: [
+      ["/herramientas/vender-todo-el-ano", "Vender todo el Año"],
+      ["/herramientas/calculadora-costos", "Calculadora de costos real"],
+      ["/herramientas", "Ver todas las herramientas"],
+    ],
+  },
+  {
+    title: "Contenido institucional y legal",
     links: [
       ["/about", "Sobre el sitio"],
       ["/como-funciona", "Cómo funciona"],
@@ -21,17 +40,8 @@ const sections = [
       ["/roadmap", "Roadmap"],
       ["/privacidad", "Privacidad"],
       ["/terminos", "Términos y condiciones"],
-    ],
-  },
-  {
-    title: "Categorías y análisis",
-    links: [
-      ["/analisis", "Análisis"],
-      ["/discovery", "Discovery"],
-      ["/categorias/fitness", "Categoría Fitness"],
-      ["/categorias/hogar", "Categoría Hogar"],
-      ["/categorias/mascotas", "Categoría Mascotas"],
-      ["/categorias/belleza", "Categoría Belleza"],
+      ["/sitemap.xml", "Sitemap XML"],
+      ["/robots.txt", "robots.txt"],
     ],
   },
 ];
@@ -42,10 +52,11 @@ export default function MapaDelSitioPage() {
       <div className="shell editorial-shell">
         <section className="hero-card hero-card--compact">
           <p className="eyebrow">Mapa del sitio</p>
-          <h1>Accesos rápidos para recorrer todo CEA.</h1>
+          <h1>Todo el contenido útil de CEA, ordenado en un solo lugar.</h1>
           <p className="hero-lead">
-            Esta página concentra las secciones principales del sitio para que cualquier visitante pueda
-            orientarse rápido, volver a una sección anterior o descubrir contenido complementario.
+            Esta página reúne las rutas principales del sitio para que cualquier visitante pueda
+            orientarse rápido, descubrir herramientas, volver a una guía específica o acceder a la
+            información legal y técnica que ayuda a Google a indexar correctamente el proyecto.
           </p>
         </section>
 

@@ -1,6 +1,5 @@
-import { EditorialPage } from "@/components/content/EditorialPage";
-import { editorialPages } from "@/lib/content/editorial";
+import { redirect } from "next/navigation";
 
-export default function Page() {
-  return <EditorialPage page={editorialPages["discovery"]} />;
+export default function DiscoveryRedirectPage() {
+  redirect("/temporadas-y-tendencias");
 }

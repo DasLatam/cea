@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const footerColumns = [
   {
-    title: "Contenido",
+    title: "Contenido útil",
     links: [
       { href: "/guias", label: "Guías" },
       { href: "/como-funciona", label: "Cómo funciona" },
@@ -11,12 +11,20 @@ const footerColumns = [
     ],
   },
   {
-    title: "Secciones",
+    title: "Para detectar oportunidades",
     links: [
-      { href: "/analisis", label: "Análisis" },
-      { href: "/discovery", label: "Discovery" },
+      { href: "/oportunidades", label: "Oportunidades" },
+      { href: "/temporadas-y-tendencias", label: "Temporadas y tendencias" },
       { href: "/roadmap", label: "Roadmap" },
       { href: "/herramientas", label: "Herramientas" },
+    ],
+  },
+  {
+    title: "Herramientas disponibles",
+    links: [
+      { href: "/herramientas/vender-todo-el-ano", label: "Vender todo el Año" },
+      { href: "/herramientas/calculadora-costos", label: "Calculadora de costos real" },
+      { href: "/herramientas", label: "Próximamente" },
     ],
   },
   {
@@ -29,11 +37,12 @@ const footerColumns = [
     ],
   },
   {
-    title: "Legal",
+    title: "Legal y SEO",
     links: [
       { href: "/terminos", label: "Términos y condiciones" },
       { href: "/privacidad", label: "Privacidad" },
       { href: "/sitemap.xml", label: "Sitemap XML" },
+      { href: "/robots.txt", label: "robots.txt" },
     ],
   },
 ];
@@ -46,10 +55,12 @@ export function SiteFooter() {
           <p className="footer-kicker footer-kicker--light">CEA</p>
           <h2>Comercio Electrónico en Argentina</h2>
           <p>
-            Un espacio editorial para entender mejor productos, categorías, márgenes, logística,
-            importación y decisiones de e-commerce en el mercado argentino. La sección de herramientas
-            seguirá creciendo por etapas, pero el objetivo actual es ofrecer contenido realmente útil,
-            claro y bien ordenado para quien necesita decidir con más criterio.
+            CEA reúne guías, metodología y herramientas prácticas para ayudar a vendedores,
+            emprendedores e importadores a tomar decisiones con más criterio. La propuesta del sitio es
+            ordenar ideas, mostrar caminos concretos y dar contexto antes de invertir stock, capital o
+            tiempo en una categoría. Hoy ya podés usar herramientas simples y leer contenido pensado para
+            el mercado argentino; las próximas capas del producto se publicarán por etapas, sin exagerar
+            alcances ni prometer automatizaciones frágiles.
           </p>
         </div>
 

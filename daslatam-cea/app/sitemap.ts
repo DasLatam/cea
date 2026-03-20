@@ -31,13 +31,15 @@ const routes = [
   "/privacidad",
   "/terminos",
   "/herramientas",
+  "/herramientas/vender-todo-el-ano",
+  "/herramientas/calculadora-costos",
   "/mapa-del-sitio",
+  "/oportunidades",
+  "/temporadas-y-tendencias",
   "/categorias/fitness",
   "/categorias/hogar",
   "/categorias/mascotas",
   "/categorias/belleza",
-  "/analisis",
-  "/discovery",
 ];
 
 export default function sitemap(): SitemapEntry[] {
@@ -47,6 +49,13 @@ export default function sitemap(): SitemapEntry[] {
     url: `${base}${route}`,
     lastModified: new Date(),
     changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : 0.7,
+    priority:
+      route === ""
+        ? 1
+        : route.startsWith("/herramientas/")
+        ? 0.9
+        : route === "/herramientas" || route === "/guias"
+        ? 0.85
+        : 0.7,
   }));
 }

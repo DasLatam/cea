@@ -8,29 +8,29 @@ const featureCards = [
       "Explicaciones extensas sobre validación de productos, márgenes, importación, logística, fragilidad y operación diaria. La idea es dar contexto antes de tomar decisiones.",
   },
   {
-    title: "Criterio y metodología",
+    title: "Oportunidades y temporadas",
     text:
-      "La sección metodológica muestra cómo conviene analizar una categoría, leer riesgos y ordenar variables sin quedarse con una sola señal aislada.",
+      "Contenido pensado para ayudar a detectar momentos de venta, campañas repetibles y nichos estacionales sin depender de promesas mágicas ni supuestos poco claros.",
+  },
+  {
+    title: "Herramientas publicadas",
+    text:
+      "CEA ya reúne una agenda anual para vender durante todo el año y una calculadora de costos real para revisar gastos, comisiones y ganancia antes de publicar.",
   },
   {
     title: "Novedades semanales",
     text:
       "La suscripción busca reunir oportunidades, alertas y contenidos nuevos en un formato breve y útil para quienes siguen el e-commerce argentino.",
   },
-  {
-    title: "Herramientas en preparación",
-    text:
-      "La capa de producto va a crecer por fases. Mientras tanto, el sitio prioriza lectura útil, navegación clara y contenido realmente aplicable.",
-  },
 ];
 
 const quickLinks = [
   { href: "/guias", label: "Ver guías prácticas" },
-  { href: "/metodologia", label: "Entender la metodología" },
-  { href: "/fuentes", label: "Revisar fuentes" },
+  { href: "/oportunidades", label: "Explorar oportunidades" },
+  { href: "/temporadas-y-tendencias", label: "Leer temporadas y tendencias" },
+  { href: "/herramientas/vender-todo-el-ano", label: "Abrir Vender todo el Año" },
+  { href: "/herramientas/calculadora-costos", label: "Abrir Calculadora de costos" },
   { href: "/suscribirse", label: "Recibir novedades" },
-  { href: "/contacto", label: "Hacer una consulta" },
-  { href: "/herramientas", label: "Ir a Herramientas" },
 ];
 
 export default function HomePage() {
@@ -47,27 +47,27 @@ export default function HomePage() {
           <p className="hero-paragraph">
             Este sitio está pensado para vendedores, emprendedores, importadores y equipos que necesitan
             una base más clara para decidir qué probar, qué revisar y qué evitar. En esta etapa, el foco
-            está puesto en contenido sólido, navegación ordenada y criterios públicos antes que en promesas
-            técnicas exageradas.
+            está puesto en contenido sólido, herramientas simples realmente usables y un lenguaje público,
+            directo y orientado a resolver problemas concretos.
           </p>
           <div className="hero-actions">
-            <Link href="/guias" className="button-primary">
-              Explorar guías
+            <Link href="/herramientas" className="button-primary">
+              Ver herramientas
             </Link>
-            <Link href="/suscribirse" className="button-secondary">
-              Recibir novedades
+            <Link href="/guias" className="button-secondary">
+              Explorar guías
             </Link>
           </div>
         </div>
 
         <aside className="hero-side-card">
-          <p className="aside-kicker">Punto de partida</p>
-          <h2>Qué vas a encontrar en CEA</h2>
+          <p className="aside-kicker">Hoy en CEA</p>
+          <h2>Qué ya podés usar en el sitio</h2>
           <ul>
             <li>Guías largas y prácticas sobre validación, importación, logística y márgenes.</li>
-            <li>Metodología pública para entender el criterio del sitio.</li>
-            <li>Secciones institucionales completas: contacto, privacidad, términos y roadmap.</li>
-            <li>Una futura capa de herramientas, hoy visible de forma honesta como próxima etapa.</li>
+            <li>Contenido público sobre oportunidades, temporadas y lectura comercial.</li>
+            <li>Agenda anual para planificar compras, campañas y ventas durante todo el año.</li>
+            <li>Calculadora de costos para revisar comisión, logística, retenciones y ganancia.</li>
           </ul>
         </aside>
       </section>
@@ -98,9 +98,9 @@ export default function HomePage() {
           <p className="eyebrow">Cómo recorrer el sitio</p>
           <h2>Elegí el punto de entrada que más se ajuste a tu necesidad.</h2>
           <p>
-            Si querés resolver una duda práctica, empezá por Guías. Si preferís entender el criterio del
-            sitio, seguí por Metodología y Fuentes. Si querés mantenerte al día, la sección de novedades
-            resume el contenido nuevo y las futuras oportunidades semanales.
+            Si querés resolver una duda práctica, empezá por Guías. Si querés pensar campañas y ventanas
+            de venta, seguí por Oportunidades y Temporadas. Si necesitás pasar a la acción, Herramientas
+            reúne la agenda anual y la calculadora de costos ya disponibles.
           </p>
         </div>
 
@@ -118,7 +118,7 @@ export default function HomePage() {
           <p className="eyebrow">Novedades</p>
           <h2>Sumate para recibir oportunidades y contenidos nuevos.</h2>
           <p>
-            Esta interfaz ya deja preparada la suscripción para futuras alertas semanales, guías nuevas y
+            Esta interfaz deja preparada la suscripción para futuras alertas semanales, guías nuevas y
             recordatorios comerciales relevantes.
           </p>
         </div>
