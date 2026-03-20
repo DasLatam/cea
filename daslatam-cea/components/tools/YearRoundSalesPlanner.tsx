@@ -8,6 +8,8 @@ import {
   buildMilestones,
   formatDateEs,
   formatShort,
+  getNextPurchaseDate,
+  sortCampaignsByUpcomingPurchase,
 } from "@/lib/calendar/yearRoundSales";
 
 function downloadTextFile(filename: string, text: string, mimeType = "text/calendar;charset=utf-8") {
@@ -47,9 +49,10 @@ function metricCard(value: string, label: string, tone: "dark" | "yellow" | "blu
 }
 
 export default function YearRoundSalesPlanner() {
-  const year = new Date().getFullYear();
-  const campaigns = buildCoreCampaigns(year);
-  const bonusTracks = buildBonusTracks(year);
+  const today = new Date();
+  const year = today.getFullYear();
+  const campaigns = sortCampaignsByUpcomingPurchase(buildCoreCampaigns(year), today);
+  const bonusTracks = buildBonusTracks(year, today);
 
   return (
     <main style={{ maxWidth: 1160, margin: "0 auto", padding: "38px 20px 80px" }}>
@@ -80,9 +83,7 @@ export default function YearRoundSalesPlanner() {
           Agenda del Éxito · Un regalo de CEA
         </div>
 
-        <h1 style={{ margin: "0 0 14px", fontSize: 46, lineHeight: 1.03 }}>
-          Vender todo el Año
-        </h1>
+        <h1 style={{ margin: "0 0 14px", fontSize: 46, lineHeight: 1.03 }}>Vender todo el Año</h1>
 
         <p style={{ margin: "0 0 14px", maxWidth: 860, fontSize: 19, lineHeight: 1.75, color: "#374151" }}>
           Esta herramienta organiza campañas repetibles alrededor de fechas en las que las personas
@@ -152,7 +153,7 @@ export default function YearRoundSalesPlanner() {
               lineHeight: 1.5,
             }}
           >
-            Incluye fechas de compra, embarque, recepción y publicación para cada campaña.
+            Ordenado por la próxima compra sugerida según la fecha actual.
           </span>
         </div>
       </section>
@@ -160,32 +161,32 @@ export default function YearRoundSalesPlanner() {
       <section
         style={{
           marginTop: 28,
-          background: "#0f172a",
-          color: "#fff",
+          background: "#ffffff",
+          border: "1px solid #e5e7eb",
           borderRadius: 24,
-          padding: 28,
-          boxShadow: "0 18px 38px rgba(15, 23, 42, 0.2)",
+          padding: 24,
+          boxShadow: "0 12px 28px rgba(17, 24, 39, 0.05)",
         }}
       >
-        <h2 style={{ margin: "0 0 10px", fontSize: 28 }}>Regla operativa sugerida</h2>
-        <p style={{ margin: 0, maxWidth: 900, lineHeight: 1.8, color: "rgba(255,255,255,0.88)" }}>
-          Elegí una campaña, buscá un subnicho concreto, comprá con una ventana cercana a 90 días, embarcá
-          por vía marítima para cuidar costos, recibí con tiempo para revisar calidad y subí la publicación
-          unos 30 días antes del evento. La repetición disciplinada de este proceso puede transformar fechas
-          sueltas en un calendario comercial estable.
+        <h2 style={{ margin: "0 0 8px", fontSize: 32 }}>Regla operativa sugerida</h2>
+        <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.8, maxWidth: 920 }}>
+          La agenda se ordena según la fecha en la que conviene comprar. Si hoy estás mirando el plan,
+          arriba de todo deberían aparecer primero las campañas cuya compra está más cerca. Así se vuelve
+          una herramienta de ejecución y no solo un calendario bonito para leer.
         </p>
       </section>
 
-      <section style={{ marginTop: 28 }}>
+      <section style={{ marginTop: 32 }}>
         <h2 style={{ margin: "0 0 8px", fontSize: 32 }}>Calendario operativo</h2>
         <p style={{ margin: "0 0 20px", maxWidth: 900, color: "#4b5563", lineHeight: 1.8 }}>
-          Siempre se muestra el listado completo para ayudarte a mirar el año entero y no sólo la próxima urgencia.
-          Cada campaña incluye un botón para descargar sus hitos al calendario.
+          Se muestra todo el listado, pero en el orden en el que conviene actuar. Cada campaña incluye
+          la próxima fecha de compra sugerida y un botón para descargar sus hitos al calendario.
         </p>
 
         <div style={{ display: "grid", gap: 18 }}>
           {campaigns.map((campaign) => {
             const milestones = buildMilestones(campaign);
+            const nextPurchase = getNextPurchaseDate(campaign, today);
 
             return (
               <article
@@ -208,30 +209,46 @@ export default function YearRoundSalesPlanner() {
                   }}
                 >
                   <div style={{ maxWidth: 780 }}>
-                    <div
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        borderRadius: 999,
-                        padding: "7px 12px",
-                        background:
-                          campaign.risk === "Bajo"
-                            ? "#dcfce7"
-                            : campaign.risk === "Medio"
-                            ? "#fef3c7"
-                            : "#fee2e2",
-                        color:
-                          campaign.risk === "Bajo"
-                            ? "#166534"
-                            : campaign.risk === "Medio"
-                            ? "#92400e"
-                            : "#991b1b",
-                        fontSize: 12,
-                        fontWeight: 800,
-                        marginBottom: 14,
-                      }}
-                    >
-                      Riesgo operativo {campaign.risk}
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 14 }}>
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          borderRadius: 999,
+                          padding: "7px 12px",
+                          background:
+                            campaign.risk === "Bajo"
+                              ? "#dcfce7"
+                              : campaign.risk === "Medio"
+                              ? "#fef3c7"
+                              : "#fee2e2",
+                          color:
+                            campaign.risk === "Bajo"
+                              ? "#166534"
+                              : campaign.risk === "Medio"
+                              ? "#92400e"
+                              : "#991b1b",
+                          fontSize: 12,
+                          fontWeight: 800,
+                        }}
+                      >
+                        Riesgo operativo {campaign.risk}
+                      </span>
+
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          borderRadius: 999,
+                          padding: "7px 12px",
+                          background: "#eaf7ff",
+                          color: "#0c4a6e",
+                          fontSize: 12,
+                          fontWeight: 800,
+                        }}
+                      >
+                        Próxima compra sugerida · {formatDateEs(nextPurchase)}
+                      </span>
                     </div>
 
                     <h3 style={{ margin: "0 0 8px", fontSize: 28 }}>{campaign.name}</h3>
@@ -262,10 +279,7 @@ export default function YearRoundSalesPlanner() {
                   <button
                     type="button"
                     onClick={() =>
-                      downloadTextFile(
-                        `${campaign.key}-${year}.ics`,
-                        buildCampaignCalendarIcs(campaign)
-                      )
+                      downloadTextFile(`${campaign.key}-${year}.ics`, buildCampaignCalendarIcs(campaign))
                     }
                     style={{
                       appearance: "none",
@@ -324,7 +338,7 @@ export default function YearRoundSalesPlanner() {
           sirven para sumar campañas con criterio y aprovechar conversación, tendencia o atención masiva.
         </p>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 18 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 18 }}>
           {bonusTracks.map((item) => (
             <article
               key={item.key}
@@ -374,7 +388,58 @@ export default function YearRoundSalesPlanner() {
                 ))}
               </div>
 
-              <p style={{ margin: 0, color: "#475569", lineHeight: 1.7 }}>{item.note}</p>
+              <p style={{ margin: "0 0 16px", color: "#475569", lineHeight: 1.7 }}>{item.note}</p>
+
+              <div style={{ display: "grid", gap: 10, marginBottom: 16 }}>
+                {item.milestones.map((step) => (
+                  <div
+                    key={`${item.key}-${step.label}`}
+                    style={{
+                      background: "#f8fafc",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: 16,
+                      padding: 14,
+                    }}
+                  >
+                    <div style={{ fontSize: 12, fontWeight: 800, color: "#0f172a", marginBottom: 8 }}>
+                      {step.label}
+                    </div>
+                    <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 6 }}>{formatDateEs(step.date)}</div>
+                    <div style={{ color: "#475569", lineHeight: 1.6, fontSize: 14 }}>{step.description}</div>
+                  </div>
+                ))}
+              </div>
+
+              {item.fixture && item.fixture.length > 0 ? (
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: "#0f172a", marginBottom: 8 }}>
+                    Fixture / hitos clave
+                  </div>
+                  <ul style={{ margin: 0, paddingLeft: 18, color: "#475569", lineHeight: 1.7 }}>
+                    {item.fixture.map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              <button
+                type="button"
+                onClick={() => downloadTextFile(item.calendarFilename, item.calendarIcs)}
+                style={{
+                  appearance: "none",
+                  border: "none",
+                  background: "#111827",
+                  color: "#fff",
+                  fontWeight: 800,
+                  borderRadius: 14,
+                  padding: "14px 18px",
+                  cursor: "pointer",
+                  width: "100%",
+                }}
+              >
+                Agregar al calendario
+              </button>
             </article>
           ))}
         </div>
