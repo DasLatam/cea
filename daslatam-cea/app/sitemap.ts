@@ -1,4 +1,16 @@
-import type { MetadataRoute } from "next";
+type SitemapEntry = {
+  url: string;
+  lastModified?: string | Date;
+  changeFrequency?:
+    | "always"
+    | "hourly"
+    | "daily"
+    | "weekly"
+    | "monthly"
+    | "yearly"
+    | "never";
+  priority?: number;
+};
 
 const routes = [
   "",
@@ -27,7 +39,7 @@ const routes = [
   "/discovery",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default function sitemap(): SitemapEntry[] {
   const base = "https://daslatamcea.vercel.app";
 
   return routes.map((route) => ({

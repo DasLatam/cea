@@ -1,9 +1,0 @@
-Aplicar este patch desde la raíz del proyecto /workspaces/cea/daslatam-cea
-
-1) Hacer backup o commit del estado actual.
-2) Descomprimir este ZIP dentro de la raíz del proyecto.
-3) Ejecutar npm run build
-4) Commit + push + redeploy en Vercel
-
-Este patch reemplaza la capa editorial, la home, la navegación, el footer y la sección Herramientas en modo próximamente.
-No modifica tus endpoints API existentes.
