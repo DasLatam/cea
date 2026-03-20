@@ -14,6 +14,12 @@ const tools = [
   { href: "/herramientas/calculadora-costos", label: "Calculadora de costos real" },
 ];
 
+const startHere = [
+  { href: "/metodologia", label: "Cómo validar un producto" },
+  { href: "/guias/margen-real", label: "Cómo calcular margen real" },
+  { href: "/fuentes", label: "Fuentes para investigar" },
+];
+
 const legal = [
   { href: "/terminos", label: "Términos y condiciones" },
   { href: "/privacidad", label: "Privacidad" },
@@ -26,7 +32,7 @@ function LinkList({ items }: { items: { href: string; label: string }[] }) {
   return (
     <div style={{ display: "grid", gap: 10 }}>
       {items.map((item) => (
-        <Link key={item.href} href={item.href} style={{ color: "#f3f5f7", textDecoration: "none" }}>
+        <Link key={item.href} href={item.href} style={{ color: "#f3f5f7", textDecoration: "none", lineHeight: 1.55 }}>
           {item.label}
         </Link>
       ))}
@@ -36,9 +42,16 @@ function LinkList({ items }: { items: { href: string; label: string }[] }) {
 
 export default function SiteFooter() {
   return (
-    <footer style={{ background: "#0d1015", color: "#f3f5f7", marginTop: 56 }}>
-      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "36px 20px 28px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 28 }}>
+    <footer style={{ background: "#0d1015", color: "#f3f5f7", marginTop: 64 }}>
+      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "38px 20px 28px" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(280px, 1.4fr) repeat(3, minmax(180px, 1fr))",
+            gap: 28,
+            alignItems: "start",
+          }}
+        >
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
               <div aria-hidden style={{ width: 18, height: 18, borderRadius: 4, background: "#ffe600" }} />
@@ -51,7 +64,9 @@ export default function SiteFooter() {
               className="footer-intro"
               style={{ color: "#d7dde4", lineHeight: 1.75, margin: 0, textAlign: "justify", hyphens: "auto" }}
             >
-              CEA reúne guías, metodología y herramientas prácticas para ayudar a vendedores, marcas y emprendedores que quieren tomar mejores decisiones en comercio electrónico. El objetivo del sitio es ordenar información útil, bajar errores frecuentes y convertir ideas dispersas en criterios de trabajo más claros.
+              CEA reúne guías, metodología, fuentes y herramientas prácticas para ayudar a tomar
+              mejores decisiones comerciales. La propuesta del sitio es ordenar información útil,
+              bajar errores frecuentes y convertir intuiciones en criterios de trabajo más claros.
             </p>
           </div>
 
@@ -61,12 +76,17 @@ export default function SiteFooter() {
           </div>
 
           <div>
+            <h3 style={{ marginTop: 0, marginBottom: 14, fontSize: 18 }}>Puntos de partida</h3>
+            <LinkList items={startHere} />
+          </div>
+
+          <div>
             <h3 style={{ marginTop: 0, marginBottom: 14, fontSize: 18 }}>Herramientas publicadas</h3>
             <LinkList items={tools} />
           </div>
         </div>
 
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.12)", marginTop: 28, paddingTop: 22 }}>
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.12)", marginTop: 30, paddingTop: 22 }}>
           <div style={{ fontWeight: 800, marginBottom: 14, textAlign: "center" }}>Legal y SEO</div>
           <div
             className="footer-legal-row"
@@ -80,7 +100,15 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.12)", marginTop: 24, paddingTop: 20, display: "grid", gap: 10 }}>
+        <div
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.12)",
+            marginTop: 24,
+            paddingTop: 20,
+            display: "grid",
+            gap: 10,
+          }}
+        >
           <p style={{ margin: 0, color: "#c5cbd3", textAlign: "center" }}>
             El contenido es informativo y no reemplaza asesoramiento profesional específico.
           </p>
