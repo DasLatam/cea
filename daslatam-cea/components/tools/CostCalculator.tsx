@@ -1,211 +1,429 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
-import { calculateMlCosts, type CostInputs } from "@/lib/calc/mlCostCalculator";
+import {
+  calculateMlRealCost,
+  getEstimatedMlFixedChargeArs,
+  getSuggestedFinancingPercent,
+  getSuggestedIibbPercent,
+  getSuggestedMlShippingChargeArs,
+  getSuggestedSellingFeePercent,
+  type SalesMode,
+} from "@/lib/calc/mlCostCalculator";
 
-const defaultInputs: CostInputs = {
-  mode: "full",
-  salePrice: 45000,
-  sellingFeePct: 14.5,
-  installmentsPct: 0,
-  iibbPct: 3,
-  fixedCharge: 0,
-  chinaCost: 9000,
-  freightToArgentina: 5000,
-  packagingCost: 600,
-  labelingCost: 250,
-  lengthCm: 28,
-  widthCm: 20,
-  heightCm: 12,
-  weightKg: 0.8,
-  manualLogisticsCost: 0,
-  useManualLogisticsCost: false,
-};
-
-const formatMoney = (value: number) =>
-  new Intl.NumberFormat("es-AR", {
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat("es-AR", {
     style: "currency",
     currency: "ARS",
     maximumFractionDigits: 0,
-  }).format(value);
+  }).format(value || 0);
+}
 
-function NumberField({ label, value, onChange, step = "0.01", hint }: { label: string; value: number; onChange: (value: number) => void; step?: string; hint?: string }) {
+function NumberField({
+  label,
+  value,
+  onChange,
+  hint,
+  min = 0,
+  step = 1,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+  hint?: string;
+  min?: number;
+  step?: number;
+}) {
   return (
     <label style={{ display: "grid", gap: 8 }}>
-      <span style={{ fontWeight: 700 }}>{label}</span>
+      <span style={{ fontWeight: 700, fontSize: 14, color: "#172033" }}>{label}</span>
       <input
         type="number"
+        min={min}
         step={step}
         value={Number.isFinite(value) ? value : 0}
         onChange={(e) => onChange(Number(e.target.value || 0))}
-        style={{ padding: "12px 14px", borderRadius: 12, border: "1px solid #d1d5db", fontSize: 16 }}
+        style={{
+          width: "100%",
+          height: 48,
+          borderRadius: 12,
+          border: "1px solid #d7deea",
+          background: "#fff",
+          padding: "0 14px",
+          fontSize: 15,
+          outline: "none",
+          boxSizing: "border-box",
+        }}
       />
-      {hint ? <small style={{ color: "#6b7280", lineHeight: 1.4 }}>{hint}</small> : null}
+      {hint ? <span style={{ fontSize: 12, color: "#64748b", lineHeight: 1.5 }}>{hint}</span> : null}
     </label>
   );
 }
 
+function ResultRow({ label, value, strong = false }: { label: string; value: string; strong?: boolean }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        gap: 16,
+        padding: "12px 0",
+        borderBottom: "1px solid #edf2f7",
+        fontSize: strong ? 16 : 14,
+        fontWeight: strong ? 700 : 500,
+      }}
+    >
+      <span style={{ color: "#334155" }}>{label}</span>
+      <span style={{ color: "#0f172a", whiteSpace: "nowrap" }}>{value}</span>
+    </div>
+  );
+}
+
 export default function CostCalculator() {
-  const [inputs, setInputs] = useState<CostInputs>(defaultInputs);
+  const [mode, setMode] = useState<SalesMode>("standard");
+  const [salePriceArs, setSalePriceArs] = useState(30000);
+  const [factoryCostArs, setFactoryCostArs] = useState(7000);
+  const [freightToArgentinaArs, setFreightToArgentinaArs] = useState(2500);
+  const [unitPackagingAndLabelArs, setUnitPackagingAndLabelArs] = useState(500);
+  const [masterCartonCostArs, setMasterCartonCostArs] = useState(300);
+  const [purchasedUnits, setPurchasedUnits] = useState(1000);
+  const [iibbPercent, setIibbPercent] = useState(getSuggestedIibbPercent());
+  const [sellingFeePercent, setSellingFeePercent] = useState(getSuggestedSellingFeePercent(mode));
+  const [financingPercent, setFinancingPercent] = useState(getSuggestedFinancingPercent());
+  const [mlShippingChargeArs, setMlShippingChargeArs] = useState(getSuggestedMlShippingChargeArs(mode, salePriceArs));
+  const [fullStoragePerUnitArs, setFullStoragePerUnitArs] = useState(0);
+  const [averageFullStorageDays, setAverageFullStorageDays] = useState(0);
 
-  const result = useMemo(() => calculateMlCosts(inputs), [inputs]);
+  const results = useMemo(
+    () =>
+      calculateMlRealCost({
+        mode,
+        salePriceArs,
+        factoryCostArs,
+        freightToArgentinaArs,
+        unitPackagingAndLabelArs,
+        masterCartonCostArs,
+        purchasedUnits,
+        iibbPercent,
+        sellingFeePercent,
+        financingPercent,
+        mlShippingChargeArs,
+        fullStoragePerUnitArs,
+        averageFullStorageDays,
+      }),
+    [
+      mode,
+      salePriceArs,
+      factoryCostArs,
+      freightToArgentinaArs,
+      unitPackagingAndLabelArs,
+      masterCartonCostArs,
+      purchasedUnits,
+      iibbPercent,
+      sellingFeePercent,
+      financingPercent,
+      mlShippingChargeArs,
+      fullStoragePerUnitArs,
+      averageFullStorageDays,
+    ],
+  );
 
-  const setField = <K extends keyof CostInputs>(field: K, value: CostInputs[K]) => {
-    setInputs((current) => ({ ...current, [field]: value }));
+  const resetMlSuggested = () => {
+    setSellingFeePercent(getSuggestedSellingFeePercent(mode));
+    setFinancingPercent(getSuggestedFinancingPercent());
+    setIibbPercent(getSuggestedIibbPercent());
+    setMlShippingChargeArs(getSuggestedMlShippingChargeArs(mode, salePriceArs));
   };
 
+  const autoFixedCharge = getEstimatedMlFixedChargeArs(salePriceArs);
+  const profitPositive = results.unitProfitArs >= 0;
+
   return (
-    <main style={{ maxWidth: 1240, margin: "0 auto", padding: "32px 20px 64px" }}>
-      <section style={{ display: "grid", gap: 16, marginBottom: 28 }}>
-        <span style={{ display: "inline-flex", width: "fit-content", padding: "8px 12px", borderRadius: 999, background: "#fff7cc", color: "#6b5d00", fontWeight: 700 }}>
-          Herramienta CEA
-        </span>
-        <div>
-          <h1 style={{ margin: "0 0 10px", fontSize: 38, lineHeight: 1.08 }}>Calculadora de costos real para Mercado Libre</h1>
-          <p style={{ margin: 0, maxWidth: 900, color: "#4b5563", fontSize: 18, lineHeight: 1.7 }}>
-            Cargá precio de venta, modalidad logística, medidas, peso y costos reales del producto para estimar gastos, retenciones y ganancia final. La calculadora está pensada para tomar decisiones rápidas antes de comprar, importar o publicar.
-          </p>
-        </div>
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <Link href="/herramientas" style={{ textDecoration: "none", fontWeight: 700, color: "#0f62fe" }}>← Volver a Herramientas</Link>
-        </div>
-      </section>
-
-      <section style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.25fr) minmax(320px, 0.75fr)", gap: 24, alignItems: "start" }}>
-        <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #e5e7eb", boxShadow: "0 14px 40px rgba(15,23,42,0.06)", padding: 24, display: "grid", gap: 28 }}>
-          <div style={{ display: "grid", gap: 14 }}>
-            <h2 style={{ margin: 0, fontSize: 24 }}>1. Modalidad y precio de venta</h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14 }}>
-              <label style={{ display: "grid", gap: 8 }}>
-                <span style={{ fontWeight: 700 }}>Modalidad logística</span>
-                <select
-                  value={inputs.mode}
-                  onChange={(e) => setField("mode", e.target.value as CostInputs["mode"])}
-                  style={{ padding: "12px 14px", borderRadius: 12, border: "1px solid #d1d5db", fontSize: 16 }}
-                >
-                  <option value="full">Mercado Envíos Full</option>
-                  <option value="standard">Vendedor Estándar / Logística propia</option>
-                </select>
-                <small style={{ color: "#6b7280", lineHeight: 1.4 }}>
-                  Full puede reducir el costo del envío gratis en productos desde $ 30.000.
-                </small>
-              </label>
-
-              <NumberField label="Precio de venta" value={inputs.salePrice} onChange={(value) => setField("salePrice", value)} step="1" hint="Base sobre la que se calculan comisión, cuotas e IIBB." />
+    <main style={{ padding: "40px 20px 72px" }}>
+      <div style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gap: 24 }}>
+        <section
+          style={{
+            background: "linear-gradient(135deg, #fffef2 0%, #ffffff 55%, #eef8ff 100%)",
+            border: "1px solid #e7ecf3",
+            borderRadius: 24,
+            padding: 28,
+            boxShadow: "0 10px 30px rgba(15, 23, 42, 0.05)",
+          }}
+        >
+          <div style={{ display: "grid", gap: 12 }}>
+            <span style={{ fontSize: 13, fontWeight: 800, color: "#735c0f", textTransform: "uppercase", letterSpacing: 0.4 }}>
+              Herramienta práctica
+            </span>
+            <h1 style={{ margin: 0, fontSize: "clamp(2rem, 4vw, 3rem)", lineHeight: 1.05, color: "#0f172a" }}>
+              Calculadora de costos real para Mercado Libre
+            </h1>
+            <p style={{ margin: 0, fontSize: 16, color: "#475569", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>
+              Todos los montos se cargan en pesos argentinos (ARS). Esta calculadora te ayuda a ordenar el costo del producto,
+              la llegada a Argentina, los gastos unitarios y los cargos más frecuentes de Mercado Libre para estimar ganancia neta por unidad
+              y ganancia total cuando vendas todo el stock. Para validar el resultado final contra la tabla vigente del marketplace,
+              incluimos el acceso al simulador oficial de Mercado Libre.
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 4 }}>
+              <a
+                href="https://www.mercadolibre.com.ar/simulador-de-costos"
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minHeight: 44,
+                  padding: "0 16px",
+                  borderRadius: 12,
+                  background: "#009ee3",
+                  color: "white",
+                  textDecoration: "none",
+                  fontWeight: 700,
+                }}
+              >
+                Abrir simulador oficial de Mercado Libre
+              </a>
+              <button
+                type="button"
+                onClick={resetMlSuggested}
+                style={{
+                  minHeight: 44,
+                  padding: "0 16px",
+                  borderRadius: 12,
+                  border: "1px solid #d7deea",
+                  background: "#fff",
+                  color: "#172033",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                Usar valores sugeridos de CEA
+              </button>
             </div>
           </div>
+        </section>
 
-          <div style={{ display: "grid", gap: 14 }}>
-            <h2 style={{ margin: 0, fontSize: 24 }}>2. Cargos y retenciones de Mercado Libre</h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14 }}>
-              <NumberField label="Cargo por vender (%)" value={inputs.sellingFeePct} onChange={(value) => setField("sellingFeePct", value)} hint="Varía por categoría y provincia. Usá la alícuota que te corresponda o el simulador oficial de ML." />
-              <NumberField label="Costo fijo por unidad" value={inputs.fixedCharge} onChange={(value) => setField("fixedCharge", value)} step="1" hint="Aplicalo sólo si tu publicación queda alcanzada por el costo fijo adicional." />
-              <NumberField label="Costo por cuotas (%)" value={inputs.installmentsPct} onChange={(value) => setField("installmentsPct", value)} hint="Si ofrecés 3 a 12 cuotas, ML informa un 5% adicional." />
-              <NumberField label="Retención IIBB (%)" value={inputs.iibbPct} onChange={(value) => setField("iibbPct", value)} hint="SIRTAC/COMARB puede variar hasta 5%. Si querés, dejalo en 0 y cargalo luego con tu padrón real." />
-            </div>
-          </div>
-
-          <div style={{ display: "grid", gap: 14 }}>
-            <h2 style={{ margin: 0, fontSize: 24 }}>3. Costos del producto</h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14 }}>
-              <NumberField label="Precio en China" value={inputs.chinaCost} onChange={(value) => setField("chinaCost", value)} step="1" />
-              <NumberField label="Envío a Argentina" value={inputs.freightToArgentina} onChange={(value) => setField("freightToArgentina", value)} step="1" hint="Costo total prorrateado por unidad hasta tu stock en Argentina." />
-              <NumberField label="Costo de embalaje" value={inputs.packagingCost} onChange={(value) => setField("packagingCost", value)} step="1" />
-              <NumberField label="Costo de etiquetado" value={inputs.labelingCost} onChange={(value) => setField("labelingCost", value)} step="1" />
-            </div>
-          </div>
-
-          <div style={{ display: "grid", gap: 14 }}>
-            <h2 style={{ margin: 0, fontSize: 24 }}>4. Medidas y peso</h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14 }}>
-              <NumberField label="Largo (cm)" value={inputs.lengthCm} onChange={(value) => setField("lengthCm", value)} step="0.1" />
-              <NumberField label="Ancho (cm)" value={inputs.widthCm} onChange={(value) => setField("widthCm", value)} step="0.1" />
-              <NumberField label="Alto (cm)" value={inputs.heightCm} onChange={(value) => setField("heightCm", value)} step="0.1" />
-              <NumberField label="Peso (kg)" value={inputs.weightKg} onChange={(value) => setField("weightKg", value)} step="0.01" />
+        <section style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.2fr) minmax(320px, 0.8fr)", gap: 24, alignItems: "start" }}>
+          <div
+            style={{
+              background: "#fff",
+              border: "1px solid #e7ecf3",
+              borderRadius: 24,
+              padding: 24,
+              boxShadow: "0 10px 30px rgba(15, 23, 42, 0.04)",
+              display: "grid",
+              gap: 24,
+            }}
+          >
+            <div style={{ display: "grid", gap: 12 }}>
+              <h2 style={{ margin: 0, fontSize: 24 }}>Datos de entrada</h2>
+              <p style={{ margin: 0, color: "#64748b", lineHeight: 1.7, textAlign: "justify", hyphens: "auto" }}>
+                La idea es cargar primero el costo real de cada unidad en ARS y después completar los cargos del canal de venta. Los conceptos de Mercado Libre se dejan editables porque cambian según categoría, publicación, promociones y logística.
+              </p>
             </div>
 
-            <div style={{ display: "grid", gap: 12, padding: 18, borderRadius: 16, background: "#f8fafc", border: "1px solid #e5e7eb" }}>
-              <label style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 700 }}>
-                <input
-                  type="checkbox"
-                  checked={inputs.useManualLogisticsCost}
-                  onChange={(e) => setField("useManualLogisticsCost", e.target.checked)}
-                />
-                Usar costo logístico manual
-              </label>
+            <div style={{ display: "grid", gap: 14 }}>
+              <span style={{ fontWeight: 800, color: "#172033" }}>Modalidad logística</span>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12 }}>
+                {[
+                  { key: "full", title: "Mercado Envíos Full", text: "Incluye almacenamiento y puede tener descuento en el costo de envío gratis." },
+                  { key: "standard", title: "Vendedor Estándar / Logística propia", text: "Usá esta opción si despachás vos o trabajás con esquema estándar." },
+                ].map((option) => {
+                  const active = mode === option.key;
+                  return (
+                    <button
+                      key={option.key}
+                      type="button"
+                      onClick={() => {
+                        const nextMode = option.key as SalesMode;
+                        setMode(nextMode);
+                        setSellingFeePercent(getSuggestedSellingFeePercent(nextMode));
+                        setMlShippingChargeArs(getSuggestedMlShippingChargeArs(nextMode, salePriceArs));
+                      }}
+                      style={{
+                        textAlign: "left",
+                        borderRadius: 16,
+                        padding: 16,
+                        border: active ? "2px solid #009ee3" : "1px solid #d7deea",
+                        background: active ? "#f1fbff" : "#fff",
+                        cursor: "pointer",
+                        display: "grid",
+                        gap: 6,
+                      }}
+                    >
+                      <span style={{ fontWeight: 800, color: "#0f172a" }}>{option.title}</span>
+                      <span style={{ fontSize: 13, color: "#64748b", lineHeight: 1.5 }}>{option.text}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 18 }}>
               <NumberField
-                label="Costo logístico manual"
-                value={inputs.manualLogisticsCost}
-                onChange={(value) => setField("manualLogisticsCost", value)}
-                step="1"
-                hint="Si ya conocés el valor que te cobrará ML o tu operador, cargalo acá y prevalece sobre la estimación automática."
+                label="Costo del producto en fábrica (ARS)"
+                value={factoryCostArs}
+                onChange={setFactoryCostArs}
+                hint="Costo por unidad, ya expresado en pesos argentinos."
+              />
+              <NumberField
+                label="Costo del envío hacia Argentina (ARS)"
+                value={freightToArgentinaArs}
+                onChange={setFreightToArgentinaArs}
+                hint="Costo por unidad, prorrateado en ARS."
+              />
+              <NumberField
+                label="Costo de embalaje y etiquetado individual (ARS)"
+                value={unitPackagingAndLabelArs}
+                onChange={setUnitPackagingAndLabelArs}
+                hint="Caja, bolsa, etiqueta y preparación de cada unidad."
+              />
+              <NumberField
+                label="Costo del embalaje grande de transporte (ARS)"
+                value={masterCartonCostArs}
+                onChange={setMasterCartonCostArs}
+                hint="Prorrateado por unidad sobre la caja master o bulto final."
+              />
+              <NumberField
+                label="Unidades compradas"
+                value={purchasedUnits}
+                onChange={setPurchasedUnits}
+                hint="Se usa para calcular la ganancia total al vender todo el stock."
+              />
+              <NumberField
+                label="Precio de venta en Mercado Libre (ARS)"
+                value={salePriceArs}
+                onChange={(value) => {
+                  setSalePriceArs(value);
+                  setMlShippingChargeArs(getSuggestedMlShippingChargeArs(mode, value));
+                }}
+                hint="Se usa para estimar cargos, retenciones y resultado final."
               />
             </div>
-          </div>
-        </div>
 
-        <aside style={{ display: "grid", gap: 18, position: "sticky", top: 24 }}>
-          <div style={{ background: result.isPositive ? "#effcf4" : "#fff1f2", border: `1px solid ${result.isPositive ? "#b7ebc6" : "#fecdd3"}`, borderRadius: 20, padding: 24, boxShadow: "0 14px 40px rgba(15,23,42,0.06)" }}>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 800, letterSpacing: 1.2, textTransform: "uppercase", color: result.isPositive ? "#18794e" : "#b42318" }}>
-              Resultado final
-            </p>
-            <div style={{ marginTop: 10, fontSize: 42, lineHeight: 1, fontWeight: 800, color: result.isPositive ? "#18794e" : "#b42318" }}>
-              {formatMoney(result.profit)}
-            </div>
-            <p style={{ margin: "10px 0 0", color: "#475467", lineHeight: 1.6 }}>
-              {result.isPositive ? "Ganancia estimada por unidad" : "Pérdida estimada por unidad"}
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 18 }}>
-              <div style={{ padding: 14, borderRadius: 14, background: "rgba(255,255,255,0.7)" }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: "#667085", textTransform: "uppercase" }}>Margen</div>
-                <div style={{ marginTop: 6, fontSize: 24, fontWeight: 800 }}>{result.marginPct}%</div>
+            <div style={{ display: "grid", gap: 16 }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: 18 }}>Conceptos de Mercado Libre</h3>
+                <p style={{ margin: "8px 0 0", color: "#64748b", lineHeight: 1.7, textAlign: "justify", hyphens: "auto" }}>
+                  Estos campos quedan visibles y editables porque Mercado Libre los modifica según categoría, publicación, logística, cuotas, promociones y reglas impositivas de cada cuenta.
+                </p>
               </div>
-              <div style={{ padding: 14, borderRadius: 14, background: "rgba(255,255,255,0.7)" }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: "#667085", textTransform: "uppercase" }}>Contribución</div>
-                <div style={{ marginTop: 6, fontSize: 24, fontWeight: 800 }}>{result.contributionPct}%</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 18 }}>
+                <NumberField
+                  label="Cargo por vender (%)"
+                  value={sellingFeePercent}
+                  onChange={setSellingFeePercent}
+                  step={0.1}
+                  hint={mode === "full" ? "Sugerido CEA para Full." : "Sugerido CEA para estándar o logística propia."}
+                />
+                <NumberField
+                  label="Costo por cuotas (%)"
+                  value={financingPercent}
+                  onChange={setFinancingPercent}
+                  step={0.1}
+                  hint="Usá 0% si no ofrecés financiación bonificada."
+                />
+                <NumberField
+                  label="Costo logístico cobrado por ML (ARS)"
+                  value={mlShippingChargeArs}
+                  onChange={setMlShippingChargeArs}
+                  hint="Podés ajustar este valor con tu dato real o con el simulador oficial."
+                />
+                <NumberField
+                  label="Retenciones por Ingresos Brutos Provinciales (%)"
+                  value={iibbPercent}
+                  onChange={setIibbPercent}
+                  step={0.1}
+                  hint="Usualmente ronda 3%, pero puede variar según provincia y situación fiscal."
+                />
+                {mode === "full" ? (
+                  <>
+                    <NumberField
+                      label="Costo diario de almacenamiento Full por unidad (ARS)"
+                      value={fullStoragePerUnitArs}
+                      onChange={setFullStoragePerUnitArs}
+                      step={0.1}
+                      hint="Completalo si querés reflejar almacenamiento Full en el costo unitario."
+                    />
+                    <NumberField
+                      label="Días promedio de almacenamiento en Full"
+                      value={averageFullStorageDays}
+                      onChange={setAverageFullStorageDays}
+                      hint="Se multiplica por el costo diario por unidad."
+                    />
+                  </>
+                ) : null}
               </div>
             </div>
           </div>
 
-          <div style={{ background: "#111827", color: "#fff", borderRadius: 20, padding: 24 }}>
-            <h3 style={{ margin: "0 0 14px", fontSize: 22 }}>Desglose</h3>
-            <div style={{ display: "grid", gap: 12 }}>
-              {[
-                ["Cargo por vender", result.sellingFee],
-                ["Costo por cuotas", result.installmentsFee],
-                ["Retención IIBB", result.iibbRetention],
-                ["Costo fijo ML", inputs.fixedCharge],
-                ["Logística", result.logisticsCostCharged],
-                ["Costo producto", result.totalProductCost],
-                ["Costo total", result.totalCosts],
-              ].map(([label, value]) => (
-                <div key={String(label)} style={{ display: "flex", justifyContent: "space-between", gap: 12, paddingBottom: 10, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-                  <span style={{ color: "#d1d5db" }}>{label}</span>
-                  <strong>{formatMoney(Number(value))}</strong>
+          <aside style={{ display: "grid", gap: 20 }}>
+            <section
+              style={{
+                background: "#fff",
+                border: "1px solid #e7ecf3",
+                borderRadius: 24,
+                padding: 24,
+                boxShadow: "0 10px 30px rgba(15, 23, 42, 0.04)",
+                display: "grid",
+                gap: 16,
+              }}
+            >
+              <div style={{ display: "grid", gap: 8 }}>
+                <span style={{ fontWeight: 800, color: "#735c0f", textTransform: "uppercase", fontSize: 12, letterSpacing: 0.5 }}>Resultado</span>
+                <div
+                  style={{
+                    borderRadius: 18,
+                    padding: 18,
+                    background: profitPositive ? "#f0fdf4" : "#fff1f2",
+                    border: profitPositive ? "1px solid #bbf7d0" : "1px solid #fecdd3",
+                  }}
+                >
+                  <div style={{ fontSize: 14, color: profitPositive ? "#166534" : "#b42318", fontWeight: 700 }}>Ganancia neta por unidad</div>
+                  <div style={{ fontSize: 34, fontWeight: 900, color: profitPositive ? "#166534" : "#b42318", lineHeight: 1.1, marginTop: 6 }}>
+                    {formatCurrency(results.unitProfitArs)}
+                  </div>
+                  <div style={{ marginTop: 8, fontSize: 14, color: "#475569" }}>
+                    Margen estimado: {results.unitMarginPercent.toFixed(1)}%
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 20, padding: 22 }}>
-            <h3 style={{ margin: "0 0 12px", fontSize: 22 }}>Lectura operativa</h3>
-            <ul style={{ margin: 0, paddingLeft: 18, color: "#4b5563", lineHeight: 1.7 }}>
-              <li>Si la ganancia queda en rojo, primero revisá precio, costo en China y logística.</li>
-              <li>Usá Full sólo si la velocidad y el costo del envío justifican la operación.</li>
-              <li>El costo logístico automático es una referencia rápida: si ya tenés tu tarifa real, activá el valor manual.</li>
-              <li>Revisá la alícuota de IIBB según tu padrón porque puede mover el margen de forma sensible.</li>
-            </ul>
-          </div>
+              <ResultRow label="Costo unitario puesto en Argentina" value={formatCurrency(results.unitLandedCostArs)} />
+              <ResultRow label="Cargo por vender ML" value={formatCurrency(results.mlSellingFeeArs)} />
+              <ResultRow label="Cargo fijo estimado de ML" value={formatCurrency(results.mlFixedChargeArs)} />
+              <ResultRow label="Costo por cuotas" value={formatCurrency(results.mlFinancingArs)} />
+              <ResultRow label="Costo logístico ML" value={formatCurrency(results.mlShippingChargeArs)} />
+              {mode === "full" ? <ResultRow label="Almacenamiento Full" value={formatCurrency(results.fullStorageArs)} /> : null}
+              <ResultRow label="Retención IIBB" value={formatCurrency(results.iibbArs)} />
+              <ResultRow label="Costo total por unidad" value={formatCurrency(results.totalUnitCostArs)} strong />
+              <ResultRow label="Ganancia total al vender todo el stock" value={formatCurrency(results.totalExpectedProfitArs)} strong />
+            </section>
 
-          <div style={{ background: "#fff9db", border: "1px solid #fde68a", borderRadius: 20, padding: 22 }}>
-            <h3 style={{ margin: "0 0 12px", fontSize: 22 }}>Dato CEA</h3>
-            <p style={{ margin: 0, color: "#5b4a00", lineHeight: 1.7 }}>
-              Si el producto no resiste una comisión de Mercado Libre, logística y una retención moderada de IIBB, probablemente no sea un buen candidato para vender masivamente. Esta calculadora sirve para filtrar antes de comprar stock.
-            </p>
-          </div>
-        </aside>
-      </section>
+            <section
+              style={{
+                background: "#fffef2",
+                border: "1px solid #f1e2a4",
+                borderRadius: 24,
+                padding: 22,
+                display: "grid",
+                gap: 12,
+              }}
+            >
+              <h3 style={{ margin: 0, fontSize: 18 }}>Cómo usar esta calculadora con criterio</h3>
+              <ul style={{ margin: 0, paddingLeft: 20, color: "#475569", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>
+                <li>Ingresá siempre todos los montos en pesos argentinos (ARS).</li>
+                <li>No mezcles costos operativos generales, como internet o alquiler, dentro del costo unitario del producto.</li>
+                <li>Usá el simulador oficial de Mercado Libre para confirmar cargos logísticos y variaciones específicas de tu publicación.</li>
+                <li>Si el margen queda muy fino, normalmente el problema no es sólo la comisión: también suele estar mal calculado el costo puesto en Argentina.</li>
+              </ul>
+              <div style={{ fontSize: 13, color: "#64748b", lineHeight: 1.6 }}>
+                Valor sugerido de cargo fijo automático según precio: <strong>{formatCurrency(autoFixedCharge)}</strong>
+              </div>
+            </section>
+          </aside>
+        </section>
+      </div>
     </main>
   );
 }

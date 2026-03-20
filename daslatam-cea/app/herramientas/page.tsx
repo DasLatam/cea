@@ -1,55 +1,75 @@
-import Link from "next/link";
-
-const published = [
-  {
-    href: "/herramientas/vender-todo-el-anio",
-    title: "Vender todo el año",
-    description: "Agenda comercial para detectar campañas repetibles, comprar con anticipación y ordenar la publicación de productos a tiempo.",
-  },
-  {
-    href: "/herramientas/calculadora-costos",
-    title: "Calculadora de costos real",
-    description: "Modelo práctico para estimar costos, gastos y ganancia neta según modalidad logística, precio y estructura de venta.",
-  },
-];
-
-const upcoming = [
-  "Buscador de productos en Mercado Libre",
-  "Exploración de tendencias",
-  "Validación de demanda y publicidad",
-];
-
 export default function HerramientasPage() {
   return (
-    <main style={{ maxWidth: 1180, margin: "0 auto", padding: "34px 20px 56px" }}>
-      <section style={{ display: "grid", gap: 14, marginBottom: 28 }}>
-        <span style={{ display: "inline-flex", width: "fit-content", padding: "8px 12px", borderRadius: 999, background: "#eef8ff", color: "#0b6db4", fontWeight: 800 }}>Herramientas</span>
-        <h1 style={{ fontSize: "clamp(2rem,4vw,3.4rem)", lineHeight: 1.05, margin: 0 }}>Recursos concretos para planificar, medir y decidir mejor</h1>
-        <p className="reading-block" style={{ margin: 0, maxWidth: 900, color: "#374151", lineHeight: 1.8 }}>
-          Esta sección reúne herramientas simples, orientadas a problemas reales de comercio electrónico: ordenar campañas, revisar costos, anticipar compras y trabajar decisiones con más criterio. La idea es crecer con módulos útiles, no con promesas vacías.
-        </p>
-      </section>
+    <main style={{ padding: "40px 20px 72px" }}>
+      <div style={{ maxWidth: 1120, margin: "0 auto", display: "grid", gap: 24 }}>
+        <section
+          style={{
+            background: "linear-gradient(135deg, #fffef2 0%, #ffffff 55%, #eef8ff 100%)",
+            border: "1px solid #e7ecf3",
+            borderRadius: 24,
+            padding: 28,
+            boxShadow: "0 10px 30px rgba(15, 23, 42, 0.05)",
+            display: "grid",
+            gap: 12,
+          }}
+        >
+          <span style={{ fontSize: 13, fontWeight: 800, color: "#735c0f", textTransform: "uppercase", letterSpacing: 0.4 }}>
+            Herramientas disponibles
+          </span>
+          <h1 style={{ margin: 0, fontSize: "clamp(2rem, 4vw, 3rem)", lineHeight: 1.05, color: "#0f172a" }}>
+            Herramientas concretas para ordenar decisiones comerciales
+          </h1>
+          <p style={{ margin: 0, color: "#475569", lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
+            CEA prioriza herramientas que sirvan para tomar decisiones con criterio. Hoy ya podés usar una agenda comercial anual para campañas recurrentes y una calculadora de costos real para validar si el negocio cierra antes de comprometer capital.
+          </p>
+        </section>
 
-      <section style={{ display: "grid", gap: 18, gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", marginBottom: 30 }}>
-        {published.map((tool) => (
-          <article key={tool.href} style={{ background: "#fff", border: "1px solid #e4e8ef", borderRadius: 18, padding: 22, boxShadow: "0 8px 24px rgba(16,17,20,0.04)", display: "grid", gap: 14 }}>
-            <h2 style={{ margin: 0, fontSize: 24 }}>{tool.title}</h2>
-            <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}>{tool.description}</p>
-            <Link href={tool.href} style={{ color: "#0b6db4", textDecoration: "none", fontWeight: 800 }}>
-              Abrir herramienta
-            </Link>
-          </article>
-        ))}
-      </section>
+        <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 18 }}>
+          <a
+            href="/herramientas/vender-todo-el-anio"
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+              background: "#fff",
+              border: "1px solid #e7ecf3",
+              borderRadius: 22,
+              padding: 22,
+              boxShadow: "0 8px 24px rgba(15, 23, 42, 0.04)",
+              display: "grid",
+              gap: 10,
+            }}
+          >
+            <span style={{ fontSize: 12, fontWeight: 800, color: "#735c0f", textTransform: "uppercase", letterSpacing: 0.4 }}>Herramienta 1</span>
+            <h2 style={{ margin: 0, fontSize: 22 }}>Vender todo el año</h2>
+            <p style={{ margin: 0, color: "#475569", lineHeight: 1.7, textAlign: "justify", hyphens: "auto" }}>
+              Calendario operativo con fechas comerciales, compra sugerida, publicación y campañas repetibles para sostener oportunidades durante todo el año.
+            </p>
+            <strong style={{ color: "#009ee3" }}>Abrir herramienta</strong>
+          </a>
 
-      <section style={{ background: "#ffffff", color: "#111827", borderRadius: 22, padding: 24, display: "grid", gap: 14, border: "1px solid #e4e8ef", boxShadow: "0 8px 24px rgba(16,17,20,0.04)" }}>
-        <h2 style={{ margin: 0, fontSize: 26 }}>Próximamente</h2>
-        <ul style={{ margin: 0, paddingLeft: 20, color: "#4b5563", lineHeight: 1.8 }}>
-          {upcoming.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
+          <a
+            href="/herramientas/calculadora-costos"
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+              background: "#fff",
+              border: "1px solid #e7ecf3",
+              borderRadius: 22,
+              padding: 22,
+              boxShadow: "0 8px 24px rgba(15, 23, 42, 0.04)",
+              display: "grid",
+              gap: 10,
+            }}
+          >
+            <span style={{ fontSize: 12, fontWeight: 800, color: "#735c0f", textTransform: "uppercase", letterSpacing: 0.4 }}>Herramienta 2</span>
+            <h2 style={{ margin: 0, fontSize: 22 }}>Calculadora de costos real</h2>
+            <p style={{ margin: 0, color: "#475569", lineHeight: 1.7, textAlign: "justify", hyphens: "auto" }}>
+              Calculá costo unitario, cargos de Mercado Libre, retenciones, logística y ganancia neta por unidad antes de invertir en stock.
+            </p>
+            <strong style={{ color: "#009ee3" }}>Abrir herramienta</strong>
+          </a>
+        </section>
+      </div>
     </main>
   );
 }
