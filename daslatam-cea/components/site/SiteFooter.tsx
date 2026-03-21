@@ -28,9 +28,9 @@ const legal = [
 
 function LinkList({ items }: { items: { href: string; label: string }[] }) {
   return (
-    <div style={{ display: "grid", gap: 10 }}>
+    <div className="site-footer-link-list">
       {items.map((item) => (
-        <Link key={item.href} href={item.href} style={{ color: "#f3f5f7", textDecoration: "none", lineHeight: 1.55 }}>
+        <Link key={item.href} href={item.href} className="site-footer-link">
           {item.label}
         </Link>
       ))}
@@ -40,79 +40,58 @@ function LinkList({ items }: { items: { href: string; label: string }[] }) {
 
 export default function SiteFooter() {
   return (
-    <footer style={{ background: "#0d1015", color: "#f3f5f7", marginTop: 64 }}>
-      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "38px 20px 28px" }}>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(280px, 1.45fr) repeat(3, minmax(180px, 1fr))",
-            gap: 28,
-            alignItems: "start",
-          }}
-        >
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-              <div aria-hidden style={{ width: 18, height: 18, borderRadius: 4, background: "#ffe600" }} />
+    <footer className="site-footer-dark">
+      <div className="site-footer-shell">
+        <div className="site-footer-top">
+          <div className="site-footer-brand-block">
+            <div className="site-footer-brand-row">
+              <div aria-hidden className="site-footer-brand-mark" />
               <div>
-                <div style={{ fontWeight: 900, letterSpacing: 0.4 }}>CEA</div>
-                <div style={{ color: "#c5cbd3", fontSize: 14 }}>Comercio Electrónico en Argentina</div>
+                <div className="site-footer-brand-title">CEA</div>
+                <div className="site-footer-brand-subtitle">Comercio Electrónico en Argentina</div>
               </div>
             </div>
-            <p
-              className="footer-intro"
-              style={{ color: "#d7dde4", lineHeight: 1.75, margin: 0, textAlign: "justify", hyphens: "auto" }}
-            >
-              CEA reúne guías, metodología, fuentes y herramientas prácticas para ayudar a tomar
-              mejores decisiones comerciales. La propuesta del sitio es ordenar información útil,
-              bajar errores frecuentes y convertir intuiciones en criterios de trabajo más claros.
+            <p className="site-footer-intro">
+              CEA reúne guías, metodología, fuentes y herramientas prácticas para ayudar a tomar mejores
+              decisiones comerciales. La propuesta del sitio es ordenar información útil, bajar errores
+              frecuentes y convertir intuiciones en criterios de trabajo más claros.
             </p>
           </div>
 
-          <div>
-            <h3 style={{ marginTop: 0, marginBottom: 14, fontSize: 18 }}>Secciones</h3>
-            <LinkList items={sections} />
-          </div>
+          <div className="site-footer-links-area">
+            <div className="site-footer-column">
+              <h3>Secciones</h3>
+              <LinkList items={sections} />
+            </div>
 
-          <div>
-            <h3 style={{ marginTop: 0, marginBottom: 14, fontSize: 18 }}>Puntos de partida</h3>
-            <LinkList items={startHere} />
-          </div>
+            <div className="site-footer-column">
+              <h3>Puntos de partida</h3>
+              <LinkList items={startHere} />
+            </div>
 
-          <div>
-            <h3 style={{ marginTop: 0, marginBottom: 14, fontSize: 18 }}>Herramientas publicadas</h3>
-            <LinkList items={tools} />
+            <div className="site-footer-column">
+              <h3>Herramientas publicadas</h3>
+              <LinkList items={tools} />
+            </div>
           </div>
         </div>
 
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.12)", marginTop: 30, paddingTop: 22 }}>
-          <div style={{ fontWeight: 800, marginBottom: 14, textAlign: "center" }}>Legal y SEO</div>
-          <div
-            className="footer-legal-row"
-            style={{ display: "flex", gap: 18, flexWrap: "wrap", justifyContent: "center" }}
-          >
+        <div className="site-footer-legal-block">
+          <div className="site-footer-legal-title">Legal y SEO</div>
+          <div className="site-footer-legal-row">
             {legal.map((item) => (
-              <Link key={item.href} href={item.href} style={{ color: "#f3f5f7", textDecoration: "none" }}>
+              <Link key={item.href} href={item.href} className="site-footer-link">
                 {item.label}
               </Link>
             ))}
           </div>
         </div>
 
-        <div
-          style={{
-            borderTop: "1px solid rgba(255,255,255,0.12)",
-            marginTop: 24,
-            paddingTop: 20,
-            display: "grid",
-            gap: 10,
-          }}
-        >
-          <p style={{ margin: 0, color: "#c5cbd3", textAlign: "center" }}>
-            El contenido es informativo y no reemplaza asesoramiento profesional específico.
-          </p>
-          <p style={{ margin: 0, color: "#c5cbd3", textAlign: "center" }}>
+        <div className="site-footer-bottom">
+          <p>El contenido es informativo y no reemplaza asesoramiento profesional específico.</p>
+          <p>
             Este sitio funciona gracias a{" "}
-            <a href="https://daslatam.org" target="_blank" rel="noreferrer" style={{ color: "#ffe600" }}>
+            <a href="https://daslatam.org" target="_blank" rel="noreferrer">
               DASLATAM.org
             </a>
           </p>

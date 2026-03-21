@@ -55,7 +55,7 @@ export default function YearRoundSalesPlanner() {
   const bonusTracks = buildBonusTracks(year, today);
 
   return (
-    <main style={{ maxWidth: 1160, margin: "0 auto", padding: "38px 20px 80px" }}>
+    <main className="page-shell year-round-shell" style={{ padding: "34px 20px 80px" }}>
       <section
         style={{
           background: "linear-gradient(135deg, #fff8cc 0%, #ffffff 58%, #e9f6ff 100%)",
@@ -83,16 +83,16 @@ export default function YearRoundSalesPlanner() {
           Agenda del Éxito · Un regalo de CEA
         </div>
 
-        <h1 style={{ margin: "0 0 14px", fontSize: 46, lineHeight: 1.03 }}>Vender todo el Año</h1>
+        <h1 style={{ margin: "0 0 14px", fontSize: "clamp(2.2rem,4.3vw,3.25rem)", lineHeight: 1.04 }}>Vender todo el Año</h1>
 
-        <p style={{ margin: "0 0 14px", maxWidth: 860, fontSize: 19, lineHeight: 1.75, color: "#374151" }}>
+        <p style={{ margin: "0 0 14px", fontSize: 19, lineHeight: 1.75, color: "#374151" }}>
           Esta herramienta organiza campañas repetibles alrededor de fechas en las que las personas
           buscan ideas para regalar, renovar o comprar por temporada. La lógica es simple: anticiparse,
           importar con tiempo, publicar antes del pico de demanda y repetir una agenda comercial ordenada
           durante todo el año.
         </p>
 
-        <p style={{ margin: 0, maxWidth: 860, fontSize: 17, lineHeight: 1.75, color: "#4b5563" }}>
+        <p style={{ margin: 0, fontSize: 17, lineHeight: 1.75, color: "#4b5563" }}>
           La propuesta promocional del sitio es clara: si trabajás 12 campañas al año, con 1.000 unidades
           por campaña, hablás de 12.000 unidades anuales. Con una ganancia de $1.000 por unidad, el resultado
           teórico es de $12.000.000. Con una ganancia de $10.000 por unidad, el resultado teórico escala a
@@ -169,7 +169,7 @@ export default function YearRoundSalesPlanner() {
         }}
       >
         <h2 style={{ margin: "0 0 8px", fontSize: 32 }}>Regla operativa sugerida</h2>
-        <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.8, maxWidth: 920 }}>
+        <p style={{ margin: 0, color: "#4b5563", lineHeight: 1.8 }}>
           La agenda se ordena según la fecha en la que conviene comprar. Si hoy estás mirando el plan,
           arriba de todo deberían aparecer primero las campañas cuya compra está más cerca. Así se vuelve
           una herramienta de ejecución y no solo un calendario bonito para leer.
@@ -178,7 +178,7 @@ export default function YearRoundSalesPlanner() {
 
       <section style={{ marginTop: 32 }}>
         <h2 style={{ margin: "0 0 8px", fontSize: 32 }}>Calendario operativo</h2>
-        <p style={{ margin: "0 0 20px", maxWidth: 900, color: "#4b5563", lineHeight: 1.8 }}>
+        <p style={{ margin: "0 0 20px", color: "#4b5563", lineHeight: 1.8 }}>
           Se muestra todo el listado, pero en el orden en el que conviene actuar. Cada campaña incluye
           la próxima fecha de compra sugerida y un botón para descargar sus hitos al calendario.
         </p>
@@ -208,7 +208,7 @@ export default function YearRoundSalesPlanner() {
                     flexWrap: "wrap",
                   }}
                 >
-                  <div style={{ maxWidth: 780 }}>
+                  <div style={{ flex: "1 1 620px" }}>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 14 }}>
                       <span
                         style={{

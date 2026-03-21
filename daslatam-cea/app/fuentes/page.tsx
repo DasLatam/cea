@@ -3,8 +3,29 @@ import type { CSSProperties } from "react";
 export const metadata = {
   title: "Fuentes",
   description:
-    "Fuentes y herramientas concretas que CEA utiliza para detectar nichos, validar productos, revisar proveedores y documentar decisiones comerciales.",
+    "Mercado Libre Tendencias, Google Trends, Meta Ads Library, Alibaba y registro propio para detectar oportunidades y validar ideas con más criterio.",
+  keywords: [
+    "mercado libre tendencias argentina",
+    "google trends argentina",
+    "meta ads library argentina",
+    "alibaba proveedores",
+    "fuentes para validar productos",
+  ],
+  openGraph: {
+    title: "Fuentes · CEA",
+    description:
+      "Mercado Libre Tendencias, Google Trends, Meta Ads Library, Alibaba y registro propio para detectar oportunidades y validar ideas con más criterio.",
+    url: "/fuentes",
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Fuentes · CEA",
+    description:
+      "Mercado Libre Tendencias, Google Trends, Meta Ads Library, Alibaba y registro propio para detectar oportunidades y validar ideas con más criterio.",
+  },
 };
+
 
 const sources = [
   {
@@ -129,7 +150,7 @@ const cardStyle: CSSProperties = {
 
 export default function FuentesPage() {
   return (
-    <main style={{ maxWidth: 1180, margin: "0 auto", padding: "34px 20px 64px" }}>
+    <main className="page-shell" style={{ padding: "34px 20px 64px" }}>
       <section style={{ display: "grid", gap: 16, marginBottom: 28 }}>
         <span
           style={{
@@ -147,7 +168,7 @@ export default function FuentesPage() {
         <h1 style={{ margin: 0, fontSize: "clamp(2rem,4vw,3.2rem)", lineHeight: 1.05 }}>
           Qué fuentes usamos para detectar oportunidades y validar ideas
         </h1>
-        <div className="reading-block" style={{ maxWidth: 930, display: "grid", gap: 14, fontSize: 18, lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
+        <div className="reading-block page-intro-reading" style={{ display: "grid", gap: 14, fontSize: 18, lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
           <p style={{ margin: 0 }}>
             En CEA no intentamos validar productos con una sola señal. Lo más útil es combinar fuentes que muestren demanda potencial, presión comercial, competencia visible, viabilidad económica y, cuando corresponde, consistencia del proveedor.
           </p>

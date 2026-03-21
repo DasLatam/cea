@@ -40,68 +40,25 @@ export default function SiteNav() {
   });
 
   return (
-    <header
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 40,
-        background: "rgba(255,255,255,0.96)",
-        backdropFilter: "blur(10px)",
-        borderBottom: "1px solid #e7ebf1",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: 1180,
-          margin: "0 auto",
-          padding: "14px 20px 10px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            gap: 18,
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-          }}
-        >
-          <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div
-                aria-hidden
-                style={{
-                  width: 18,
-                  height: 18,
-                  borderRadius: 4,
-                  background: "#ffe600",
-                  boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.08)",
-                }}
-              />
-              <div>
-                <div style={{ fontWeight: 900, letterSpacing: 0.4 }}>CEA</div>
-                <div style={{ fontSize: 13, color: "#5d6470" }}>Comercio Electrónico en Argentina</div>
-              </div>
-            </div>
+    <header className="site-nav-header">
+      <div className="site-nav-shell">
+        <div className="site-nav-main">
+          <Link href="/" className="site-nav-brand" aria-label="CEA · Comercio Electrónico en Argentina">
+            <span className="site-nav-brand-mark" aria-hidden />
+            <span className="site-nav-brand-copy">
+              <span className="site-nav-brand-title">CEA</span>
+              <span className="site-nav-brand-subtitle">Comercio Electrónico en Argentina</span>
+            </span>
           </Link>
 
-          <nav style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+          <nav className="site-nav-links" aria-label="Navegación principal">
             {links.map((link) => {
-              const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
+              const active = link.href === "/" ? pathname === "/" : pathname === link.href || pathname.startsWith(`${link.href}/`);
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  style={{
-                    textDecoration: "none",
-                    color: active ? "#101114" : "#445062",
-                    background: active ? "#ffe600" : "transparent",
-                    border: active ? "1px solid rgba(0,0,0,0.08)" : "1px solid transparent",
-                    borderRadius: 999,
-                    padding: "10px 14px",
-                    fontWeight: 700,
-                    fontSize: 15,
-                  }}
+                  className={active ? "site-nav-link site-nav-link--active" : "site-nav-link"}
                 >
                   {link.label}
                 </Link>
@@ -110,21 +67,21 @@ export default function SiteNav() {
           </nav>
         </div>
 
-        <div
-          style={{ marginTop: 10, fontSize: 13, color: "#6c7480", display: "flex", gap: 8, flexWrap: "wrap" }}
-        >
-          <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
-            Inicio
-          </Link>
-          {breadcrumbItems.map((item) => (
-            <span key={item.href} style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
-              <span>/</span>
-              <Link href={item.href} style={{ color: "inherit", textDecoration: "none" }}>
-                {item.label}
-              </Link>
-            </span>
-          ))}
-        </div>
+        {breadcrumbItems.length > 0 ? (
+          <div className="site-breadcrumbs" aria-label="Breadcrumb">
+            <Link href="/" className="site-breadcrumbs-link">
+              Inicio
+            </Link>
+            {breadcrumbItems.map((item) => (
+              <span key={item.href} className="site-breadcrumbs-item">
+                <span className="site-breadcrumbs-separator">/</span>
+                <Link href={item.href} className="site-breadcrumbs-link">
+                  {item.label}
+                </Link>
+              </span>
+            ))}
+          </div>
+        ) : null}
       </div>
     </header>
   );

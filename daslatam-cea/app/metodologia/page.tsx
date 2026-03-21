@@ -4,7 +4,28 @@ export const metadata = {
   title: "Metodología",
   description:
     "Cómo validar productos, registrar señales, revisar proveedores y tomar decisiones comerciales con una metodología práctica para vender mejor en Argentina.",
+  keywords: [
+    "metodología ecommerce argentina",
+    "validar productos mercado libre",
+    "planilla de análisis de productos",
+    "alibaba proveedores verified",
+    "google trends argentina ecommerce",
+  ],
+  openGraph: {
+    title: "Metodología · CEA",
+    description:
+      "Cómo validar productos, registrar señales, revisar proveedores y tomar decisiones comerciales con una metodología práctica para vender mejor en Argentina.",
+    url: "/metodologia",
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Metodología · CEA",
+    description:
+      "Cómo validar productos, registrar señales, revisar proveedores y tomar decisiones comerciales con una metodología práctica para vender mejor en Argentina.",
+  },
 };
+
 
 const principleCards = [
   {
@@ -140,7 +161,7 @@ const cardStyle: CSSProperties = {
 
 export default function MetodologiaPage() {
   return (
-    <main style={{ maxWidth: 1180, margin: "0 auto", padding: "34px 20px 64px" }}>
+    <main className="page-shell" style={{ padding: "34px 20px 64px" }}>
       <section style={{ display: "grid", gap: 16, marginBottom: 28 }}>
         <span
           style={{
@@ -158,7 +179,7 @@ export default function MetodologiaPage() {
         <h1 style={{ margin: 0, fontSize: "clamp(2rem,4vw,3.2rem)", lineHeight: 1.05 }}>
           Cómo ordenamos la validación de productos, nichos y proveedores
         </h1>
-        <div className="reading-block" style={{ maxWidth: 930, display: "grid", gap: 14, fontSize: 18, lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
+        <div className="reading-block page-intro-reading" style={{ display: "grid", gap: 14, fontSize: 18, lineHeight: 1.8, textAlign: "justify", hyphens: "auto" }}>
           <p style={{ margin: 0 }}>
             En comercio electrónico, una buena decisión rara vez nace de una sola fuente. Lo más útil es combinar señales rápidas de demanda, observación directa del marketplace, presión publicitaria, análisis en buscadores y una revisión seria del proveedor si el producto va a importarse.
           </p>

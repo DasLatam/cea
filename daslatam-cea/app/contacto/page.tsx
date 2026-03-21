@@ -1,5 +1,17 @@
 import ContactForm from "@/components/forms/ContactForm";
 
+export const metadata = {
+  title: "Contáctenos",
+  description:
+    "Formulario de contacto para consultas sobre validación de productos, márgenes, importación, campañas y nuevas herramientas de CEA.",
+  keywords: [
+    "contacto CEA",
+    "consultoría comercio electrónico argentina",
+    "consultas mercado libre argentina",
+    "validación de productos contacto",
+  ],
+};
+
 const cardStyle = {
   background: "#fff",
   border: "1px solid #e4e8ef",
@@ -10,7 +22,7 @@ const cardStyle = {
 
 export default function ContactoPage() {
   return (
-    <main style={{ maxWidth: 1100, margin: "0 auto", padding: "34px 20px 56px" }}>
+    <main className="page-shell" style={{ padding: "34px 20px 56px" }}>
       <section style={{ display: "grid", gap: 14, marginBottom: 28 }}>
         <span
           style={{
@@ -29,11 +41,10 @@ export default function ContactoPage() {
           Contanos qué querés resolver y en qué etapa estás
         </h1>
         <div
-          className="reading-block"
+          className="reading-block page-intro-reading"
           style={{
             display: "grid",
             gap: 14,
-            maxWidth: 900,
             color: "#374151",
             fontSize: 18,
             lineHeight: 1.8,
@@ -42,27 +53,19 @@ export default function ContactoPage() {
           }}
         >
           <p style={{ margin: 0 }}>
-            Esta sección está pensada para quienes están evaluando productos, importación,
-            márgenes, campañas o una reorganización más seria de su operación comercial. Si tenés
-            una duda concreta o querés ordenar una decisión antes de invertir, podés escribirnos
-            desde acá.
+            Esta sección está pensada para quienes están evaluando productos, importación, márgenes,
+            campañas o una reorganización más seria de su operación comercial. Si tenés una duda concreta
+            o querés ordenar una decisión antes de invertir, podés escribirnos desde acá.
           </p>
           <p style={{ margin: 0 }}>
-            CEA está pensado como un espacio práctico para quienes quieren vender mejor en
-            Argentina, tomar decisiones con más criterio y evitar errores costosos al momento de
-            elegir productos, calcular márgenes o planificar campañas.
+            CEA está pensado como un espacio práctico para quienes quieren vender mejor en Argentina,
+            tomar decisiones con más criterio y evitar errores costosos al momento de elegir productos,
+            calcular márgenes o planificar campañas.
           </p>
         </div>
       </section>
 
-      <section
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-          gap: 22,
-          alignItems: "start",
-        }}
-      >
+      <section className="two-card-form-grid">
         <div style={cardStyle}>
           <ContactForm />
         </div>
@@ -90,8 +93,8 @@ export default function ContactoPage() {
             className="reading-block"
             style={{ margin: 0, color: "#4b5563", lineHeight: 1.75, textAlign: "justify", hyphens: "auto" }}
           >
-            También podés escribir si querés sugerir nuevas herramientas, proponer temas para las
-            próximas guías o enviarnos observaciones para mejorar la experiencia del sitio.
+            También podés escribir si querés sugerir nuevas herramientas, proponer temas para las próximas
+            guías o enviarnos observaciones para mejorar la experiencia del sitio.
           </p>
           <div
             style={{
@@ -103,8 +106,8 @@ export default function ContactoPage() {
               lineHeight: 1.7,
             }}
           >
-            Respondemos por correo electrónico. Cuanto más concreta sea la consulta, más fácil será
-            darte una respuesta útil.
+            Respondemos por correo electrónico. Cuanto más concreta sea la consulta, más fácil será darte
+            una respuesta útil.
           </div>
         </aside>
       </section>

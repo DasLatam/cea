@@ -1,6 +1,18 @@
 import type { CSSProperties } from "react";
 import NewsletterForm from "@/components/forms/NewsletterForm";
 
+export const metadata = {
+  title: "Suscribirse",
+  description:
+    "Suscripción a novedades de CEA para recibir ideas para vender, campañas estacionales, herramientas nuevas y criterios para validar productos.",
+  keywords: [
+    "newsletter ecommerce argentina",
+    "suscripción mercado libre argentina",
+    "novedades comercio electrónico argentina",
+    "campañas estacionales ecommerce",
+  ],
+};
+
 const cardStyle: CSSProperties = {
   background: "#fff",
   border: "1px solid #e4e8ef",
@@ -11,7 +23,7 @@ const cardStyle: CSSProperties = {
 
 export default function SuscribirsePage() {
   return (
-    <main style={{ maxWidth: 1100, margin: "0 auto", padding: "34px 20px 56px" }}>
+    <main className="page-shell" style={{ padding: "34px 20px 56px" }}>
       <section style={{ display: "grid", gap: 14, marginBottom: 28 }}>
         <span
           style={{
@@ -30,11 +42,10 @@ export default function SuscribirsePage() {
           Recibí ideas para vender, campañas y herramientas nuevas
         </h1>
         <div
-          className="reading-block"
+          className="reading-block page-intro-reading"
           style={{
             display: "grid",
             gap: 14,
-            maxWidth: 900,
             color: "#374151",
             fontSize: 18,
             lineHeight: 1.8,
@@ -43,30 +54,35 @@ export default function SuscribirsePage() {
           }}
         >
           <p style={{ margin: 0 }}>
-            Esta suscripción está pensada para quienes quieren mantenerse cerca de oportunidades estacionales,
-            criterios de validación de productos, nuevas herramientas del sitio y recordatorios útiles para planificar compras e importaciones con más anticipación.
+            Esta suscripción está pensada para quienes quieren mantenerse cerca de oportunidades
+            estacionales, criterios de validación de productos, nuevas herramientas del sitio y
+            recordatorios útiles para planificar compras e importaciones con más anticipación.
           </p>
           <p style={{ margin: 0 }}>
-            La idea no es llenar tu correo de ruido, sino enviarte información concreta cuando haya algo que realmente pueda ayudarte a vender mejor, ordenar campañas o detectar una oportunidad con más tiempo de preparación.
+            La idea no es llenar tu correo de ruido, sino enviarte información concreta cuando haya algo
+            que realmente pueda ayudarte a vender mejor, ordenar campañas o detectar una oportunidad con
+            más tiempo de preparación.
           </p>
         </div>
       </section>
 
-      <section
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-          gap: 22,
-          alignItems: "start",
-        }}
-      >
+      <section className="two-card-form-grid">
         <div style={cardStyle}>
           <NewsletterForm />
         </div>
 
         <aside style={{ ...cardStyle, display: "grid", gap: 16 }}>
           <h2 style={{ margin: 0, fontSize: 24 }}>Qué tipo de novedades vas a recibir</h2>
-          <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.8, color: "#4b5563", textAlign: "justify", hyphens: "auto" }}>
+          <ul
+            style={{
+              margin: 0,
+              paddingLeft: 20,
+              lineHeight: 1.8,
+              color: "#4b5563",
+              textAlign: "justify",
+              hyphens: "auto",
+            }}
+          >
             <li>Ideas para campañas de regalo y venta estacional.</li>
             <li>Criterios para validar productos antes de comprar stock.</li>
             <li>Herramientas nuevas publicadas dentro de CEA.</li>
@@ -83,7 +99,8 @@ export default function SuscribirsePage() {
               lineHeight: 1.7,
             }}
           >
-            Te podés dar de baja cuando quieras. La suscripción está pensada como un canal de utilidad, no como una secuencia automática de correos genéricos.
+            Te podés dar de baja cuando quieras. La suscripción está pensada como un canal de utilidad,
+            no como una secuencia automática de correos genéricos.
           </div>
         </aside>
       </section>
