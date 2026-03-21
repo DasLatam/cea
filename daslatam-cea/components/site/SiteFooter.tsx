@@ -24,8 +24,6 @@ const legal = [
   { href: "/terminos", label: "Términos y condiciones" },
   { href: "/privacidad", label: "Privacidad" },
   { href: "/mapa-del-sitio", label: "Mapa del sitio" },
-  { href: "/sitemap.xml", label: "Sitemap XML" },
-  { href: "/robots.txt", label: "robots.txt" },
 ];
 
 function LinkList({ items }: { items: { href: string; label: string }[] }) {
@@ -47,7 +45,7 @@ export default function SiteFooter() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "minmax(280px, 1.4fr) repeat(3, minmax(180px, 1fr))",
+            gridTemplateColumns: "minmax(280px, 1.45fr) repeat(3, minmax(180px, 1fr))",
             gap: 28,
             alignItems: "start",
           }}

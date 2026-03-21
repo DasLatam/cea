@@ -10,7 +10,6 @@ const links = [
   { href: "/fuentes", label: "Fuentes" },
   { href: "/herramientas", label: "Herramientas" },
   { href: "/suscribirse", label: "Suscribirse" },
-  { href: "/contacto", label: "Contáctenos" },
 ];
 
 const labelByPath: Record<string, string> = {
@@ -23,13 +22,10 @@ const labelByPath: Record<string, string> = {
   "/contacto": "Contáctenos",
   "/oportunidades": "Oportunidades",
   "/temporadas-y-tendencias": "Temporadas y tendencias",
-  "/herramientas/vender-todo-el-anio": "Vender todo el año",
-  "/herramientas/calculadora-costos": "Calculadora de costos real",
 };
 
 function humanizeSegment(segment: string) {
   if (segment === "vender-todo-el-anio") return "Vender todo el año";
-
   return segment.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
@@ -91,10 +87,7 @@ export default function SiteNav() {
 
           <nav style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
             {links.map((link) => {
-              const active = link.href === "/"
-                ? pathname === "/"
-                : pathname === link.href || pathname.startsWith(`${link.href}/`);
-
+              const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
               return (
                 <Link
                   key={link.href}
@@ -117,38 +110,21 @@ export default function SiteNav() {
           </nav>
         </div>
 
-        {pathname !== "/" ? (
-          <div
-            style={{
-              marginTop: 10,
-              fontSize: 13,
-              color: "#6c7480",
-              display: "flex",
-              gap: 8,
-              flexWrap: "wrap",
-            }}
-          >
-            <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
-              Inicio
-            </Link>
-            {breadcrumbItems.map((item, index) => {
-              const isLast = index === breadcrumbItems.length - 1;
-
-              return (
-                <span key={item.href} style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
-                  <span>/</span>
-                  {isLast ? (
-                    <span style={{ color: "#101114", fontWeight: 700 }}>{item.label}</span>
-                  ) : (
-                    <Link href={item.href} style={{ color: "inherit", textDecoration: "none" }}>
-                      {item.label}
-                    </Link>
-                  )}
-                </span>
-              );
-            })}
-          </div>
-        ) : null}
+        <div
+          style={{ marginTop: 10, fontSize: 13, color: "#6c7480", display: "flex", gap: 8, flexWrap: "wrap" }}
+        >
+          <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
+            Inicio
+          </Link>
+          {breadcrumbItems.map((item) => (
+            <span key={item.href} style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
+              <span>/</span>
+              <Link href={item.href} style={{ color: "inherit", textDecoration: "none" }}>
+                {item.label}
+              </Link>
+            </span>
+          ))}
+        </div>
       </div>
     </header>
   );
