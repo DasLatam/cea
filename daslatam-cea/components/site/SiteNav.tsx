@@ -4,10 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/", label: "Inicio" },
+  { href: "/", label: "Inicio", mobileHidden: true },
   { href: "/guias", label: "Guías" },
   { href: "/metodologia", label: "Metodología" },
-  { href: "/fuentes", label: "Fuentes" },
+  { href: "/fuentes", label: "Fuentes", mobileHidden: true },
   { href: "/herramientas", label: "Herramientas" },
   { href: "/suscribirse", label: "Suscribirse" },
 ];
@@ -54,12 +54,16 @@ export default function SiteNav() {
           <nav className="site-nav-links" aria-label="Navegación principal">
             {links.map((link) => {
               const active = link.href === "/" ? pathname === "/" : pathname === link.href || pathname.startsWith(`${link.href}/`);
+              const className = [
+                "site-nav-link",
+                active ? "site-nav-link--active" : "",
+                link.mobileHidden ? "site-nav-link--hide-mobile" : "",
+              ]
+                .filter(Boolean)
+                .join(" ");
+
               return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={active ? "site-nav-link site-nav-link--active" : "site-nav-link"}
-                >
+                <Link key={link.href} href={link.href} className={className}>
                   {link.label}
                 </Link>
               );

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Script from "next/script";
 import "../styles/globals.css";
+import GuidePager from "@/components/guides/GuidePager";
 import SiteFooter from "@/components/site/SiteFooter";
 import SiteNav from "@/components/site/SiteNav";
 import { ADSENSE_ACCOUNT, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -113,6 +114,7 @@ export default function RootLayout({
         />
         <SiteNav />
         {children}
+        <GuidePager />
         <SiteFooter />
       </body>
     </html>

@@ -1130,3 +1130,106 @@ section li + li {
     font-size: 17px;
   }
 }
+
+.guide-pager-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.guide-pager-card {
+  margin-top: 20px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(16, 17, 20, 0.04);
+}
+
+.guide-pager-header {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.guide-pager-eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.guide-pager-title {
+  margin: 0;
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+  line-height: 1.15;
+}
+
+.guide-pager-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.guide-pager-link {
+  display: grid;
+  gap: 10px;
+  min-height: 132px;
+  padding: 20px;
+  text-decoration: none;
+  color: #101114;
+  background: #f8fafc;
+  border: 1px solid #dbe3ee;
+  border-radius: 18px;
+}
+
+.guide-pager-link-kicker {
+  color: #0b6db4;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.guide-pager-link-title {
+  font-size: 1.05rem;
+  line-height: 1.4;
+  font-weight: 800;
+}
+
+.guide-pager-link--placeholder {
+  visibility: hidden;
+}
+
+@media (max-width: 640px) {
+  .site-nav-link--hide-mobile {
+    display: none;
+  }
+
+  .guide-pager-shell {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .guide-pager-card {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .guide-pager-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .guide-pager-link,
+  .guide-pager-link--placeholder {
+    min-height: 0;
+  }
+
+  .guide-pager-link--placeholder {
+    display: none;
+  }
+}
