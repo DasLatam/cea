@@ -1,0 +1,50 @@
+# cea — servido desde hiox.com.ar/cea/
+# Generado por hiox/build.py el 2026-08-25. NO editar acá: se regenera.
+# Va en /public_html/hiox-apps/cea/ y lo sube el deploy del proyecto.
+#
+# Apache hace dos cosas que Vercel resolvía sola, y las dos hacen daño:
+#
+#   1. `mod_dir` responde **301 agregando la barra final**, así que cada URL
+#      del sitio pasa a tener dos formas y el canonical —que va sin barra—
+#      apunta a la que no es. Señales encontradas para el buscador.
+#   2. Ese 301 lo arma con la ruta **ya reescrita**: contesta
+#      `Location: /hiox-apps/cea/loquesea/` y deja a la vista la carpeta
+#      interna del hosting, que además responde 200 y duplica el sitio entero.
+#
+# `DirectorySlash Off` apaga ese redirect y la regla de abajo sirve el
+# index.html por reescritura. `Options -Indexes` es lo que hace seguro
+# apagarlo: sin él, una carpeta sin índice listaría su contenido.
+Options -Indexes -MultiViews
+DirectoryIndex index.html
+DirectorySlash Off
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # La carpeta interna no es una URL. El 301 va ACÁ y no en el .htaccess de la
+  # raíz porque **Apache no hereda las reglas de rewrite del padre cuando el
+  # subdirectorio declara su propio RewriteEngine On** — que es lo que hace
+  # este archivo. Puesto arriba no se dispara nunca.
+  #
+  # `THE_REQUEST` es la línea de pedido original, así que distingue lo que pidió
+  # el visitante de lo que reescribió Apache: sin eso, la reescritura interna
+  # del padre entra acá y redirige en bucle.
+  RewriteCond %{THE_REQUEST} \s/hiox-apps/cea/
+  RewriteRule ^(.*)$ /cea/$1 [R=301,L,NE]
+
+  # /guias/x → guias/x/index.html, sin que cambie la URL.
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.+?)/?$ $1/index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Los assets con hash en el nombre no cambian nunca; el HTML sí.
+  <FilesMatch "\.(js|css|woff2?|svg|png|jpg|webp|json\.gz)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>

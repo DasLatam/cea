@@ -3,6 +3,12 @@
 import { useRef, useState } from "react";
 import type { CSSProperties, FormEvent } from "react";
 
+// El endpoint vive en Ferozo y es PHP, no una ruta de API de Next: el sitio se
+// exporta estático y del otro lado no hay Node. El prefijo sale del build
+// (`basePath`), que desde el cliente sólo se puede leer por esta variable.
+const API = (process.env.NEXT_PUBLIC_BASE_PATH || "") + "/api/";
+
+
 type FormState = "idle" | "loading" | "success" | "error";
 
 export default function ContactForm() {
@@ -25,7 +31,7 @@ export default function ContactForm() {
     setMessage("");
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch(API + "contact.php", {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {

@@ -1,0 +1,7 @@
+{
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/", "destination": "https://hiox.com.ar/cea/", "permanent": true },
+    { "source": "/(.*)", "destination": "https://hiox.com.ar/cea/$1", "permanent": true }
+  ]
+}
